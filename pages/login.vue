@@ -1,52 +1,30 @@
 <template>
-    <div class="min-h-screen flex items-center justify-center bg-gray-100">
-        <div class="w-full max-w-sm bg-white p-6 rounded-lg shadow-lg">
-            <h1 class="text-xl font-bold text-center text-gray-800 mb-4">Login</h1>
+    <div class="flex flex-col min-h-[45vh] items-center justify-center fixed inset-0">
+        <div class="w-full max-w-lg bg-white p-6 rounded-3xl shadow">
+            <h1 class="text-4xl p-5 font-bold text-center text-[#3D3BF3] mb-8">Login</h1>
             
-            <!-- Form Login -->
             <form @submit.prevent="handleLogin">
-                <div class="mb-3">
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        v-model="email" 
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200 text-sm"
-                        placeholder="Email Anda" 
-                        required
-                    />
+                <div class="mt-4">
+                    <label for="">Email</label>
+                    <BaseInput placeholder="Masukan Email Anda" type="email" id="email" v-model="email" required />
                 </div>
-                
-                <div class="mb-3">
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        v-model="password" 
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200 text-sm"
-                        placeholder="Password Anda" 
-                        required
-                    />
+                <div class="mt-4">
+                    <label for="">Password</label>
+                    <BaseInput placeholder="Masukan Password Anda" type="password" id="password" v-model="password" required />
                 </div>
-                
-                <div class="mb-4">
-                    <button 
-                        type="submit" 
-                        class="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300 text-sm">
-                        Login
-                    </button>
+                <p class="mt-2">
+                    <a href="/forgot-password" class="text-blue-500 hover:underline text-xs ">Lupa Password?</a>
+                </p>
+                <div class="text-xs text-center text-gray-600 mt-7">
+                    <p>Belum punya akun? 
+                        <a href="/register" class="text-blue-500 hover:underline">Daftar</a>
+                    </p>
+                </div>
+                <div class="my-5 flex flex-col">
+                    <BaseButtonPrimaryButton type="submit" buttonName="Login" class="text-lg" />
                 </div>
             </form>
 
-            <!-- Link Lupa Password atau Daftar -->
-            <div class="text-xs text-center text-gray-600">
-                <p>Belum punya akun? 
-                    <a href="/register" class="text-blue-500 hover:underline">Daftar</a>
-                </p>
-                <p class="mt-2">
-                    <a href="/forgot-password" class="text-blue-500 hover:underline">Lupa Password?</a>
-                </p>
-            </div>
         </div>
     </div>
 </template>

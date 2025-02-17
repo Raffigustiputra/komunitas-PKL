@@ -11,7 +11,7 @@
         :value="item.value"
         class="py-2"
       >
-        {{ item.label }}
+        {{ item.label }} 
       </option>
     </select>
   </div>
@@ -19,18 +19,30 @@
 
 <script>
 export default {
+  props: {
+    items: {
+      type: Array,
+      required: true,
+    },
+
+    modelValue: {
+      type: [String, Number],
+      required: false,
+    },
+  },
   data() {
     return {
-      selected: "Public", 
-      items: [
-        { label: "Public", value: "Public" },
-        { label: "Private", value: "Private" },
-      ],
+      selected: this.modelValue || (this.items.length > 0 ? this.items[0].value : ''),
     };
   },
   methods: {
     handleSelectChange(event) {
-      this.selected = event.target.value;
+      this.$emit("update:modelValue", this.selected); 
+    },
+  },
+  watch: {
+    modelValue(newVal) {
+      this.selected = newVal; 
     },
   },
 };

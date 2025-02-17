@@ -1,5 +1,5 @@
 <template>
-  <div class="flex gap-3 bg-white p-3 rounded-3xl">
+  <div class="flex gap-3 bg-white p-3 rounded-3xl dark:bg-[#000000] dark:text-white">
     <div>
       <BaseImageIcon />
     </div>
@@ -15,9 +15,8 @@
         <BaseInputTextArea @click="showDropdowns" />
         <BaseDropdownPrimaryDropdown
           v-if="isDropdownVisible"
-          dropdownName="Publik"
-          :items="['Publik', 'Private', 'Lainnya']"
-          class="mt-3"
+          v-model="selectedVisibility"
+          class="mt-3 mb-2"
         />
       </div>
 
