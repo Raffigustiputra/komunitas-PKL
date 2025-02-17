@@ -1,9 +1,12 @@
 <template>
     <BaseLoading :isLoading="loading" />
-    <div class="flex flex-col bg-white rounded-3xl p-5 hover:opacity-80 hover:cursor-pointer" v-for="(komunitas, index) in komunitasList" :key="komunitas.id">
-        <div class="flex items-center gap-3" @click="goToDetail(komunitas.id)">
-            <BaseImageIcon :image="komunitas.image"  />
-            <p class="font-bold">{{ komunitas.nama_komunitas }}</p>
+    <div class="flex flex-col bg-white rounded-3xl p-5 hover:opacity-80 hover:cursor-pointer shadow-sm" v-for="(komunitas, index) in komunitasList" :key="komunitas.id">
+        <div class="flex items-center gap-3 justify-between">
+            <div class="flex items-center gap-4">
+                <BaseImageIcon :image="komunitas.image" />
+                <p class="font-bold" @click="goToDetail(komunitas.id)">{{ komunitas.nama_komunitas }}</p>
+            </div>
+            <BaseButtonDeleteButton :icon="Trash" @click="handleDeleted(komunitas.id)" v-if="komunitas.member.includes(userData?.value?.id)"/>
         </div>
     </div>
     <div v-if="!komunitasList || komunitasList.length === 0" class="text-center text-gray-500">
@@ -16,6 +19,7 @@
     import { useRouter } from "vue-router";
     import { useKomunitas } from "../stores/Komunitas";
     import BaseLoading from "@/components/base/Loading.vue";
+    import Trash from '~/components/icons/Trash.vue';
 
     const loading = ref(true);
     const userData = ref(null);

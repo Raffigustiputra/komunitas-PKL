@@ -1,10 +1,10 @@
 <template>
-  <div class="flex gap-3 bg-white p-5 rounded-3xl">
+  <div class="flex gap-3 bg-white p-5 rounded-3xl dark:bg-[#000000]">
     <div>
       <BaseImageIcon />
     </div>
 
-    <div class="flex flex-col w-full gap-3">
+    <div class="flex flex-col w-full gap-3 dark:text-white">
         <div class="flex items-center justify-between">
             <div class="flex gap-2 items-center">
               <p class="font-bold">User 1</p>

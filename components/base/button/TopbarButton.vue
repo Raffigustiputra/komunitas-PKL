@@ -1,6 +1,6 @@
 <template>
   <button
-    class="flex bg-transparent items-center gap-5 px-6 py-2 rounded-full text-black font-bold transition-all ease-in-out hover:opacity-80"
+    class="flex bg-transparent items-center gap-5 px-6 py-2 rounded-full text-black font-bold transition-all ease-in-out hover:opacity-80 dark:text-white"
     :class="{ 'text-white': isActive }"
     :style="{ backgroundColor: isActive ? '#3D3BF3' : 'transparent' }"
     @click="handleClick"

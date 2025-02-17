@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-2">
+  <div class="mt-2 dark:text-white">
     <div class="flex flex-col gap-3 p-8 rounded-3xl">
       <h3 class="font-bold">Rekomendasi Komunitas</h3>
       <hr />
@@ -65,7 +65,7 @@
       </div>
     </div>
 </div>
-<div class="flex flex-col gap-3 p-8 rounded-3xl sticky top-5 ">
+<div class="flex flex-col gap-3 p-8 rounded-3xl sticky top-5 dark:text-white">
   <h3 class="font-bold">Taglist Teratas</h3>
   <div class="space-y-4">
     <table class="w-full border-collapse">
