@@ -1,5 +1,6 @@
 <template>
-    <div class="flex flex-col">
+    <title>Homepage / KomunitasApp</title>
+    <div class="flex flex-col gap-5">
         <!-- Header -->
 
 
@@ -17,7 +18,12 @@
         </div> -->
 
         <!-- Footer -->
-        
+             <AppTopbar />
+             <AppFeedInput />   
+             <AppFeed />
+             <AppFeed />
+             <AppFeed />
+             <AppFeed />
     </div>
 </template>
 

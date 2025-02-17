@@ -1,5 +1,5 @@
 <template>
-    <h1 class="text-[20px] font-bold text-[#3D3BF3] hover:cursor-pointer" @click="handleClick" >KomunitasApp</h1>
+    <h1 class="text-[20px] font-bold text-[#3D3BF3] hover:cursor-pointer dark:text-white" @click="handleClick" >KomunitasApp</h1>
 </template>
 
 <script>

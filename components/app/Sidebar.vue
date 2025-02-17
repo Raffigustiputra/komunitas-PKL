@@ -1,29 +1,32 @@
 <template>
-  <nav class="w-64 h-screen p-4 flex flex-col fixed" v-if="useAuth().userToken.value">
-    <div>
+  <nav class="w-64 h-screen p-4 flex flex-col fixed">
+    <div class="mx-3">
       <AppLogo />
     </div>
 
-    <div class="mt-10">
-      <BaseSidebarButton @click="navigateTo('/')" buttonName="Homepage" :icon="Homepage" />
-      <BaseSidebarButton @click="navigateTo('/listkomunitas-admin')" buttonName="Komunitas" :icon="Community" />
-      <BaseSidebarButton buttonName="Pencarian" :icon="Search" />
-      <BaseSidebarButton buttonName="Bookmark" :icon="Bookmark" />
-      <BaseSidebarButton buttonName="Notifikasi" :icon="Notification" />
-      <BaseSidebarButton buttonName="Pengaturan" :icon="Setting" />
-      <BaseSidebarButton @click="useAuth().logout()" buttonName="Logout" :icon="Logout"/>
+    <div class="mt-8 space-y-1">
+      <BaseButtonSidebarButton :onClick="() => navigateTo('/')" buttonName="Homepage" :icon="Homepage" path="/" />
+      <BaseButtonSidebarButton :onClick="() => navigateTo('/listkomunitas-admin')" buttonName="Komunitas" :icon="Community" path="/listkomunitas-admin" />
+      <BaseButtonSidebarButton buttonName="Pencarian" :icon="Search" />
+      <BaseButtonSidebarButton buttonName="Bookmark" :icon="Bookmark" />
+      <BaseButtonSidebarButton buttonName="Notifikasi" :icon="Notification" />
+      <BaseButtonSidebarButton :onClick="() => navigateTo('/pengaturan')" path="/pengaturan" buttonName="Pengaturan" :icon="Setting" />
+      <BaseButtonSidebarButton :onClick="() => useAuth().logout()" buttonName="Logout" :icon="Logout"/>
+    </div>
+    
+    <div class="flex flex-col mt-12">
+      <BaseButtonPrimaryButton buttonName="Posting" :icon="Add" />
     </div>
 
     <div class="mt-auto flex flex-col gap-4">
-      <SidebarPostButton />
       <div class="flex gap-4 items-center">
-        <ImageIcon />
+        <BaseImageIcon />
         <div class="flex flex-col">
-          <TextRegular regularText="User 1" />
-          <TextRegular smallText="user1@gmail.com" textColor="#414141" />
+          <BaseText text="User 1" />
+          <BaseText text="user1@gmail.com" textColor="text-[#414141]" fontSize="text-sm" />
         </div>
         <div>
-          <IconButton :svg="options" />
+          <BaseButtonIconButton :icon="Option" />
         </div>
       </div>
     </div>
@@ -38,4 +41,6 @@
     import Notification from '~/components/icons/Notification.vue';
     import Setting from '~/components/icons/Setting.vue';
     import Logout from '~/components/icons/Logout.vue';
+    import Option from '~/components/icons/Option.vue';
+    import Add from '~/components/icons/Add.vue';
 </script>

@@ -111,8 +111,6 @@ function handleImageUpload(event) {
     }
 }
 
-
-
 // Submit form
 async function submitForm() {
     console.log('Name:', name.value);

@@ -1,8 +1,8 @@
 <template>
   <button
-    class="flex p-3 gap-5 justify-center rounded-full hover:opacity-90 hover:cursor-pointer transition-all border border-[#3D3BF3] text-[#3D3BF3] font-medium" @click="handleClick"
+    class="flex p-3 gap-5 justify-center rounded-full hover:opacity-90 hover:cursor-pointer transition-all border border-red-500 text-red-500 font-medium" @click="handleClick"
   >
-   haii
+   Delete
   </button>
 </template>
 
