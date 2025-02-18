@@ -3,7 +3,7 @@
     v-model="tweet"
     class="w-full resize-none bg-transparent border border-gray-300 rounded-2xl p-3 focus:outline-none focus:ring-1 focus:ring-blue-500"
     :placeholder="placeholder"
-    rows="1"
+    :rows="rows"
     @input="adjustHeight"
     ref="textarea"
   ></textarea>
@@ -21,10 +21,15 @@ const adjustHeight = () => {
     textarea.value.style.height = `${textarea.value.scrollHeight}px`;
   });
 };
+
 defineProps({
   placeholder: {
     type: String,
     default: "lorem", 
+  },
+  rows: {
+    type: Number,
+    default: 1, // Default 3 baris
   },
 });
 </script>

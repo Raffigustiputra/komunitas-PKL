@@ -11,13 +11,11 @@
             <div class="flex items-center mb-4 gap-2">
                 <div class="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
                 <BaseDropdownPrimaryDropdown v-model="selectedVisibility" />
-                <BaseDropdownPrimaryDropdown dropdownName="Komunitas" />
+                <BaseDropdownCategoryDropdown :items="dropdownItems" v-model="category" dropdownName="Kategori" />
             </div>
 
             <div class="flex flex-col mb-4">
-                <textarea v-model="postContent" placeholder="Apa yang sedang terjadi??"
-                    class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-lg resize-none dark:bg-[#1A1A1A] dark:text-white"
-                    rows="4"></textarea>
+                <BaseInputTextArea :rows="3" placeholder="Ada Keseruan apa hari ini ??" />
             </div>
 
             <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-4">
@@ -42,13 +40,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import Cancel from '~/components/icons/Cancel.vue';
 import Attachment from '~/components/icons/Attachment.vue';
 import Image from "~/components/icons/Image.vue";
 import Emot from "~/components/icons/Emot.vue";
 import EmojiPicker from 'vue3-emoji-picker';
 import 'vue3-emoji-picker/css';
+import { useKomunitas } from '../stores/Komunitas';
 
 const isOpen = ref(false);
 const postContent = ref('');
@@ -56,10 +55,26 @@ const fileInput = ref(null);
 const imageInput = ref(null);
 const docInput = ref(null);
 const showEmojiPicker = ref(false);
+const komunitasStore = useKomunitas();
+const category = ref('');
+const dropdownItems = ref([]);
 
 
 const openModal = () => { isOpen.value = true; };
 const closeModal = () => { isOpen.value = false; };
+
+
+const fetchCategories = async () => {
+    try {
+        const categoryData = await komunitasStore.CategoryKomunitas();
+        dropdownItems.value = categoryData.map((item) => ({
+            label: item.name,
+            value: item.id,
+        }));
+    } catch (error) {
+        console.error('Error fetching categories:', error);
+    }
+};
 
 const saveDraft = () => {
     console.log('Draft saved:', postContent.value);
@@ -89,5 +104,7 @@ const handleEmojiSelect = (emoji) => {
     console.log('Emoji dipilih:', emoji);
     showEmojiPicker.value = false; // Tutup picker setelah memilih emoji
 };
+
+onMounted(fetchCategories);
 defineExpose({ openModal });
 </script>
