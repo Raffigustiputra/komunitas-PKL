@@ -1,8 +1,6 @@
 <template>
     <div v-if="isOpen" @click.self="closeModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-        <div
-            class="bg-white dark:bg-[#1A1A1A] p-6 rounded-3xl w-[350px] md:w-[450px] lg:w-[500px] shadow-lg flex flex-col">
-
+        <div class="bg-white dark:bg-[#1A1A1A] p-6 rounded-3xl w-[350px] md:w-[450px] lg:w-[500px] shadow-lg flex flex-col">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="font-bold text-lg dark:text-white">Buat Postingan</h2>
                 <BaseButtonIconButton :icon="Cancel" @click="closeModal" />
@@ -10,17 +8,13 @@
 
             <div class="flex items-center mb-4 gap-2">
                 <BaseDropdownPrimaryDropdown  />
-                <BaseDropdownCategoryDropdown :items="dropdownItems" v-model="category" dropdownName="Kategori" />
+                <BaseDropdownCategoryDropdown :items="dropdownItems" v-model="community" dropdownName="Kategori" />
             </div>
             
             <div class="flex mb-4 gap-4">
-                <BaseImageIcon />
+                <BaseImageIcon :image="account.profile_photo ? `http://192.168.19.251:8000${account.profile_photo}` : ''" />
                 <BaseInputTextArea :rows="3" placeholder="Ada Keseruan apa hari ini ??" />
             </div>
-
-            <!-- <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-4">
-                <span class="mr-2">🌐</span> <span>Semua bisa berkomentar</span>
-            </div> -->
 
             <div class="flex gap-3">
                 <input type="file" accept=".pdf,.doc,.docx,.txt" hidden ref="docInput" @change="handleFileSelect" />
@@ -48,7 +42,11 @@ import Emot from "~/components/icons/Emot.vue";
 import EmojiPicker from 'vue3-emoji-picker';
 import 'vue3-emoji-picker/css';
 import { useKomunitas } from '../stores/Komunitas';
+import { useAuth } from "~/stores/Auth.js";
 
+const accountStore = useAuth();
+const account = ref([]);
+const loading = ref(true);
 const isOpen = ref(false);
 const postContent = ref('');
 const fileInput = ref(null);
@@ -56,13 +54,23 @@ const imageInput = ref(null);
 const docInput = ref(null);
 const showEmojiPicker = ref(false);
 const komunitasStore = useKomunitas();
-const category = ref('');
+const community = ref('');
 const dropdownItems = ref([]);
-
-
 const openModal = () => { isOpen.value = true;   document.body.style.overflow = "hidden";  };
 const closeModal = () => { isOpen.value = false;   document.body.style.overflow = "";  };
 
+const fetchData = async () => {
+  loading.value = true;
+  try {
+    const auth = await accountStore.profile();
+    account.value = auth; 
+    console.log("Auth Response:", account.value);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  } finally {
+    loading.value = false;
+  }
+};
 
 const fetchKomunitas = async () => {
     try {
@@ -105,6 +113,9 @@ const handleEmojiSelect = (emoji) => {
     showEmojiPicker.value = false; // Tutup picker setelah memilih emoji
 };
 
-onMounted(fetchKomunitas);
+onMounted(() => {
+  fetchData()
+  fetchKomunitas()
+});
 defineExpose({ openModal });
 </script>

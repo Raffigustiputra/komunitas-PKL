@@ -36,20 +36,22 @@ export const useAuth = () => {
 
     async function profile(token) {
         try {
-            const response = await fetch('http://192.168.19.251:8000/api/users/profile/', {
-                method: 'GET',
+            const response = await fetch(
+              "http://192.168.19.251:8000/api/users/profile/",
+              {
+                method: "GET",
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Token ${token}`, // Kirim token dalam header Authorization
+                  "Content-Type": "application/json",
+                  "Authorization": `Token ${useAuth().userToken.value}`,
                 },
-            });
+              }
+            );
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.message || 'Profile gagal diambil.');
             }
             const user = await response.json();
-            console.log(user.id);
-            return JSON.stringify(user);
+            return user
 
     } 
     catch (error) {
@@ -120,6 +122,7 @@ export const useAuth = () => {
         login,
         logout,
         verifyToken, 
+        profile,
         userData,
         userToken,
     };

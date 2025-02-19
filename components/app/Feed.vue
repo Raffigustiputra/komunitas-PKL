@@ -9,11 +9,11 @@
       <BaseImageIcon :image="[post.user_profile]" />
     </div>
 
-    <div class="flex flex-col w-full gap-3 dark:text-white">
+    <div class="flex flex-col w-full dark:text-white">
       <div class="flex items-center justify-between">
         <div class="flex gap-2 items-center">
           <p class="font-bold">{{ post.user.username }}</p>
-          <p class="text-sm">{{ post.user.email }}</p>
+          <p class="text-sm text-gray-500">{{ post.user.email }}</p>
           |
           <p class="font-bold">{{ post.community.name }}</p>
         </div>
@@ -24,7 +24,7 @@
       <p>
         {{ post.description }}
       </p>
-      <div class="flex">
+      <div class="flex mt-3">
         <BaseImagePost :images="[post.image]" />
       </div>
     </div>
@@ -37,17 +37,20 @@
 <script setup>
 import { ref } from "vue";
 import BaseImagePost from "~/components/base/ImagePost.vue";
-import { usePosts } from "~/stores/Posts";
+import { usePosts } from "~/stores/Posts.js";
 import BaseLoading from "@/components/base/Loading.vue";
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
 dayjs.extend(relativeTime)
 
+definePageMeta({
+      middleware: 'auth',
+  });
+
 const postStore = usePosts();
 const postList = ref([]);
 const loading = ref(true);
-
 
 const fetchData = async () => {
   loading.value = true;
@@ -75,6 +78,23 @@ const fetchData = async () => {
     loading.value = false;
   }
 };
+
+// const handleDeleted = async (id) => {
+//     try {
+//         const success = await komunitasStore.removeKomunitas(id);
+//         if (success) {
+//             komunitasList.value = komunitasList.value.filter((komunitas) => komunitas.id !== id);
+//             alert("Komunitas berhasil dihapus.");
+//         }
+//     } catch (error) {
+//         console.error("Error deleting community:", error);
+//         alert("Gagal menghapus komunitas.");
+//     }
+// };
+
+// const goToDetail = (id) => {
+//     router.push(`/communitydetail/chat/${id}`);
+// };
 
 onMounted(() => {
   fetchData();

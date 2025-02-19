@@ -83,11 +83,12 @@
         }
     };
 
+    const goToDetail = (id) => {
+        router.push(`/communitydetail/chat/${id}`);
+    };
+    
     const handleJoin = (id) => {
         router.push(`/communitydetail/chat/${id}`);
     };
 
-    const goToDetail = (id) => {
-        router.push(`/communitydetail/chat/${id}`);
-    };
 </script>
