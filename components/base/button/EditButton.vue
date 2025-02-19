@@ -1,6 +1,6 @@
 <template>
   <button
-    class="flex p-2 gap-5 justify-center rounded-full hover:opacity-80 hover:cursor-pointer transition-all border border-red-500 text-red-500 font-light" @click="handleClick"
+    class="flex p-2 gap-5 justify-center rounded-full hover:opacity-80 hover:cursor-pointer transition-all border border-green-500 text-green-500 font-light" @click="handleClick"
   >
     <component :is="iconComponent" />
   </button>

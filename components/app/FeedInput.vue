@@ -12,7 +12,7 @@
           :items="['Option 1', 'Option 2', 'Option 3']"
           class="mb-3"
         />
-        <BaseInputTextArea @click="showDropdowns" />
+        <BaseInputTextArea @click="showDropdowns" placeholder="Hai, ada apa?" />
         <BaseDropdownPrimaryDropdown
           v-if="isDropdownVisible"
           v-model="selectedVisibility"

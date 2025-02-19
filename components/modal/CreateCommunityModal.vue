@@ -1,5 +1,9 @@
 <template>
-  <div v-if="isOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+  <div 
+    v-if="isOpen" 
+    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+    @click.self="closeModal"
+  >
     <div class="bg-white dark:bg-[#1A1A1A] p-6 rounded-3xl w-[300px] md:w-[450px] lg:w-[500px] shadow-lg flex">
       
       <div class="relative flex flex-col items-center justify-center w-7 mr-4">
@@ -22,7 +26,7 @@
         <div class="space-y-4">
           <div>
             <label for="name">Nama Komunitas</label>
-            <BaseInput v-model="name" />
+            <BaseInput v-model="name" placeholder="Apa nama dari komunitas ini?" />
           </div>
 
           <div>
@@ -59,8 +63,15 @@ const visibility = ref('PUBLIC');
 const category = ref('');
 const dropdownItems = ref([]);
 
-const openModal = () => { isOpen.value = true; };
-const closeModal = () => { isOpen.value = false; };
+const openModal = () => {
+  isOpen.value = true;
+  document.body.style.overflow = "hidden";
+};
+
+const closeModal = () => {
+  isOpen.value = false;
+  document.body.style.overflow = ""; 
+};
 
 const handleImageUpload = (event) => {
   const file = event.target.files[0];
@@ -92,8 +103,6 @@ const submitForm = async () => {
       visibility.value,
       category.value
     );
-
-    alert('Komunitas berhasil dibuat.');
 
     name.value = '';
     description.value = '';

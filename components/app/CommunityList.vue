@@ -1,12 +1,21 @@
 <template>
     <BaseLoading :isLoading="loading" />
-    <div class="flex flex-col bg-white rounded-3xl p-5 hover:opacity-80 hover:cursor-pointer shadow-sm" v-for="(komunitas, index) in komunitasList" :key="komunitas.id">
+    <div 
+        class="flex flex-col bg-white rounded-3xl px-5 py-3 hover:shadow-md hover:cursor-pointer shadow-sm" 
+        v-for="(komunitas, index) in komunitasList" 
+        :key="komunitas.id"
+        @mouseenter="hoveredIndex = index"
+        @mouseleave="hoveredIndex = null"
+    >
         <div class="flex items-center gap-3 justify-between">
-            <div class="flex items-center gap-4">
+            <div @click="goToDetail(komunitas.id)" class="flex items-center gap-4">
                 <BaseImageIcon :image="komunitas.image" />
-                <p class="font-bold" @click="goToDetail(komunitas.id)">{{ komunitas.nama_komunitas }}</p>
+                <p class="font-bold">{{ komunitas.nama_komunitas }}</p>
             </div>
-            <BaseButtonDeleteButton :icon="Trash" @click="handleDeleted(komunitas.id)" v-if="komunitas.member.includes(userData?.value?.id)"/>
+            <div class="flex gap-3" v-if="hoveredIndex === index">
+                <BaseButtonDeleteButton :icon="Trash" @click="handleDeleted(komunitas.id)" v-if="komunitas.member.includes(userData?.value?.id)"/>
+                <BaseButtonEditButton :icon="Pencil" @click="handleEdit(komunitas.id)" v-if="komunitas.member.includes(userData?.value?.id)"/>
+            </div>
         </div>
     </div>
     <div v-if="!komunitasList || komunitasList.length === 0" class="text-center text-gray-500">
@@ -17,15 +26,17 @@
 <script setup>
     import { ref, onMounted } from "vue";
     import { useRouter } from "vue-router";
-    import { useKomunitas } from "../stores/Komunitas";
+    import { useKomunitas } from "~/stores/Komunitas";
     import BaseLoading from "@/components/base/Loading.vue";
     import Trash from '~/components/icons/Trash.vue';
+    import Pencil from '~/components/icons/Pencil.vue';
 
     const loading = ref(true);
     const userData = ref(null);
     const router = useRouter();
     const komunitasStore = useKomunitas();
     const komunitasList = ref([]);
+    const hoveredIndex = ref(null);
 
     definePageMeta({
         middleware: 'auth',
@@ -43,8 +54,6 @@
                 komunitasStore.fetchKomunitas(),
                 komunitasStore.CategoryKomunitas(),
             ]);
-            console.log(communities);
-            console.log(categories);
             komunitasList.value = communities.map((item) => ({
                 id: item.id,
                 nama_komunitas: item.name, 

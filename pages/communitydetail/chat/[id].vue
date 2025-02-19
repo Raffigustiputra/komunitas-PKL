@@ -34,10 +34,8 @@
             <button @click="createPost" class="bg-blue-600 text-white px-4 py-2 rounded w-full text-sm">Bikin Postingan</button>
         </div>
 
-        <!-- Chat Box -->
         <div class="flex-1 overflow-y-auto p-4 space-y-4" ref="chatBox">
             <div v-for="msg in messages" :key="msg.id" class="flex flex-col space-y-2">
-                <!-- Jika ini postingan, tampilkan dalam bentuk card kecil -->
                 <div v-if="msg.title" class="bg-white p-3 rounded-lg shadow-md border max-w-sm self-start">
                     <p class="font-bold text-sm">{{ msg.username }}</p>
                     <p class="text-gray-700 text-sm">{{ msg.text }}</p>
@@ -49,7 +47,6 @@
                     </div>
                 </div>
                 
-                <!-- Jika ini chat biasa -->
                 <div v-else class="bg-gray-200 p-3 rounded-lg max-w-xs self-start">
                     <p class="font-bold text-sm">{{ msg.username }}</p>
                     <p v-if="msg.text" class="text-gray-700 text-sm">{{ msg.text }}</p>
@@ -60,17 +57,27 @@
             </div>
         </div>
 
-        <!-- Input Chat -->
-        <div class="p-4 flex items-center border-t">
-            <input
-                type="text"
-                v-model="newMessage"
-                placeholder="Tulis pesan..."
-                class="flex-1 border rounded p-2 mr-2 text-sm"
-                @keyup.enter="sendMessage"
-            />
-            <input type="file" @change="handleImageUpload" class="hidden" ref="fileInput" />
-            <button @click="triggerFileUpload" class="bg-gray-200 p-2 rounded text-sm">📷</button>
+        <div class="p-4 flex items-center border-t gap-2">
+            <div class="flex">
+                <input
+                type="file"
+                accept=".pdf,.doc,.docx,.txt"
+                hidden
+                ref="docInput"
+                @change="handleImageUpload"
+              />
+              <BaseButtonIconButton :icon="Attachment" @click="openDocPicker" @change="handleImageUpload"  />
+              <input
+                type="file"
+                accept="image/*"
+                hidden
+                ref="imageInput"
+                @change="triggerFileUpload"
+              />
+              <BaseButtonIconButton :icon="Image" @click="openImagePicker" />
+            </div>
+            <BaseInputTextArea :rows="1" placeholder="Ketik sesuatu..." @keyup.enter="sendMessage" v-model="newMessage"/>
+            <BaseButtonIconButton :icon="Image" @click="openImagePicker" />
             <button @click="sendMessage" class="bg-blue-600 text-white px-4 py-2 rounded ml-2 text-sm">Kirim</button>
         </div>
     </div>
@@ -80,7 +87,11 @@
 import { ref, onMounted, onUnmounted, nextTick } from "vue";
 import { useRoute } from "vue-router";
 import { useKomunitas } from "../stores/Komunitas";
+import Attachment from "~/components/icons/Attachment.vue";
+import Image from "~/components/icons/Image.vue";
 
+const docInput = ref(null) 
+const imageInput = ref(null) 
 const route = useRoute();
 const komunitasStore = useKomunitas();
 const komunitasId = ref(route.params.id);
@@ -99,6 +110,13 @@ const postLogo = ref(null);
 const postFileInput = ref(null);
 const logoInkFile = ref(null);
 
+const openImagePicker = () => {
+  imageInput.value.click();
+};
+
+const openDocPicker = () => {
+  docInput.value.click();
+};
 // Fetch Komunitas Details
 const fetchKomunitasDetails = async () => {
     try {

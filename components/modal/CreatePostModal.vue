@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div v-if="isOpen" @click.self="closeModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
         <div
             class="bg-white dark:bg-[#1A1A1A] p-6 rounded-3xl w-[350px] md:w-[450px] lg:w-[500px] shadow-lg flex flex-col">
 
@@ -9,20 +9,20 @@
             </div>
 
             <div class="flex items-center mb-4 gap-2">
-                <div class="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
-                <BaseDropdownPrimaryDropdown v-model="selectedVisibility" />
+                <BaseDropdownPrimaryDropdown  />
                 <BaseDropdownCategoryDropdown :items="dropdownItems" v-model="category" dropdownName="Kategori" />
             </div>
-
-            <div class="flex flex-col mb-4">
+            
+            <div class="flex mb-4 gap-4">
+                <BaseImageIcon />
                 <BaseInputTextArea :rows="3" placeholder="Ada Keseruan apa hari ini ??" />
             </div>
 
-            <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-4">
+            <!-- <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-4">
                 <span class="mr-2">🌐</span> <span>Semua bisa berkomentar</span>
-            </div>
+            </div> -->
 
-            <div class="flex gap-3 mb-4">
+            <div class="flex gap-3">
                 <input type="file" accept=".pdf,.doc,.docx,.txt" hidden ref="docInput" @change="handleFileSelect" />
                 <BaseButtonIconButton :icon="Attachment" @click="openDocPicker" class="text-[#3D3BF3]" />
                 <input type="file" accept="image/*" hidden ref="imageInput" @change="handleFileSelect" />
@@ -60,14 +60,14 @@ const category = ref('');
 const dropdownItems = ref([]);
 
 
-const openModal = () => { isOpen.value = true; };
-const closeModal = () => { isOpen.value = false; };
+const openModal = () => { isOpen.value = true;   document.body.style.overflow = "hidden";  };
+const closeModal = () => { isOpen.value = false;   document.body.style.overflow = "";  };
 
 
-const fetchCategories = async () => {
+const fetchKomunitas = async () => {
     try {
-        const categoryData = await komunitasStore.CategoryKomunitas();
-        dropdownItems.value = categoryData.map((item) => ({
+        const dataKomunitas = await komunitasStore.fetchKomunitas();
+        dropdownItems.value = dataKomunitas.map((item) => ({
             label: item.name,
             value: item.id,
         }));
@@ -105,6 +105,6 @@ const handleEmojiSelect = (emoji) => {
     showEmojiPicker.value = false; // Tutup picker setelah memilih emoji
 };
 
-onMounted(fetchCategories);
+onMounted(fetchKomunitas);
 defineExpose({ openModal });
 </script>

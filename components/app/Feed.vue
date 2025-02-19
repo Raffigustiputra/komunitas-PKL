@@ -1,35 +1,83 @@
 <template>
-  <div class="flex gap-3 bg-white p-5 rounded-3xl dark:bg-[#000000]">
+    <BaseLoading :isLoading="loading" />
+  <div
+    class="flex gap-3 bg-white p-5 rounded-3xl dark:bg-[#000000]"
+    v-for="(post, index) in postList"
+    :key="post.id"
+  >
     <div>
-      <BaseImageIcon />
+      <BaseImageIcon :image="[post.user_profile]" />
     </div>
 
     <div class="flex flex-col w-full gap-3 dark:text-white">
-        <div class="flex items-center justify-between">
-            <div class="flex gap-2 items-center">
-              <p class="font-bold">User 1</p>
-              <p class="text-sm">@user1</p>
-              |
-              <p class="font-bold">Komunitas 1</p>
-            </div>
-            <div>
-                <p>5 menit yang lalu</p>
-            </div>
+      <div class="flex items-center justify-between">
+        <div class="flex gap-2 items-center">
+          <p class="font-bold">{{ post.user.username }}</p>
+          <p class="text-sm">{{ post.user.email }}</p>
+          |
+          <p class="font-bold">{{ post.community.name }}</p>
         </div>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-          <BaseImagePost :images="Images" />
+        <div>
+          <p>{{ dayjs(post.created_at).fromNow() }}</p>
+        </div>
+      </div>
+      <p>
+        {{ post.description }}
+      </p>
+      <div class="flex">
+        <BaseImagePost :images="[post.image]" />
+      </div>
     </div>
+  </div>
+  <div v-if="!postList || postList.length === 0" class="flex flex-col items-center text-gray-500">
+        Tidak ada Postingan untuk ditampilkan.
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import BaseImagePost from "~/components/base/ImagePost.vue";
+import { usePosts } from "~/stores/Posts";
+import BaseLoading from "@/components/base/Loading.vue";
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 
-const Images = ref([
-  "https://placehold.co/400x400", 
-  "https://placehold.co/400x400", 
-  "https://placehold.co/200x400", 
-  "https://placehold.co/400x400", 
-]);
+dayjs.extend(relativeTime)
+
+const postStore = usePosts();
+const postList = ref([]);
+const loading = ref(true);
+
+
+const fetchData = async () => {
+  loading.value = true;
+  try {
+    const [posts] = await Promise.all([postStore.fetchPosts()]);
+    postList.value = posts.map((item) => ({
+      id: item.id,
+      description: item.description,
+      image: item.image
+        ? `http://192.168.19.251:8000${item.image}`
+        : "",
+      attachment: item.attachment
+        ? `http://192.168.19.251:8000${item.attachment}`
+        : "",
+      user: item.user_detail,
+      user_profile: item.user_detail.profile_photo ? `http://192.168.19.251:8000${item.user_detail.profile_photo}` : "",
+      community: item.community_detail,
+      visibility: item.visibility,
+      created_at: item.created_at,
+      updated_at: item.updated_at,
+    }));
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+onMounted(() => {
+  fetchData();
+});
+
 </script>
