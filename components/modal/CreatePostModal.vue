@@ -72,7 +72,7 @@ const visibility = ref('');
 const openModal = () => { isOpen.value = true;   document.body.style.overflow = "hidden";  };
 const closeModal = () => { isOpen.value = false;   document.body.style.overflow = "";  };
 
-const fetchData = async () => {
+const fetchAccount = async () => {
   loading.value = true;
   try {
     const auth = await accountStore.profile();
@@ -166,7 +166,7 @@ const handleEmojiSelect = (emoji) => {
 
 
 onMounted(() => {
-  fetchData()
+  fetchAccount()
   fetchKomunitas()
 });
 defineExpose({ openModal });

@@ -36,7 +36,6 @@
 import { ref } from "vue";
 import { useRouter } from 'vue-router';
 import { useAuth } from "../stores/Auth";
-import { BaseAlertSignIn } from "#components";
 
 const { login } = useAuth();
 const router = useRouter();
