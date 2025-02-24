@@ -1,20 +1,3 @@
-<<<<<<< HEAD
-// import { defineStore } from 'pinia';
-
-export const useKomunitas = defineStore('komunitas', () => {
-    // Fungsi untuk mengambil daftar komunitas
-    async function fetchKomunitas() {
-        try {
-            const response = await fetch('http://192.168.19.251:8000/api/communities/');
-            if (!response.ok) {
-                throw new Error(`Gagal mengambil komunitas. Status: ${response.status}`);
-            }
-            const data = await response.json();
-            return data;
-        } catch (err) {
-            console.error('Error fetching communities:', err);
-            throw err;
-=======
 export const useKomunitas = defineStore("komunitas", () => {
   // Fungsi untuk mengambil daftar komunitas
   async function fetchKomunitas() {
@@ -25,7 +8,6 @@ export const useKomunitas = defineStore("komunitas", () => {
           headers: {
             Authorization: `Token ${useAuth().userToken.value}`,
           },
->>>>>>> 77a6c2e6ef47cbefefc695f5e924ec8db0a4b015
         }
       );
       if (!response.ok) {

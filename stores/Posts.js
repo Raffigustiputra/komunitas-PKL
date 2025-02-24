@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-// import { defineStore } from "pinia";
-=======
->>>>>>> 77a6c2e6ef47cbefefc695f5e924ec8db0a4b015
 
 export const usePosts = defineStore("Posts", () => {
   async function fetchPosts() {
