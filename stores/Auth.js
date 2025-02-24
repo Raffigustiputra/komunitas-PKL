@@ -4,7 +4,6 @@ export const useAuth = () => {
 
     const userData = useCookie('user');
     const userToken = useCookie('token');
-    // Fungsi untuk Login
     async function login(email, password) {
         try {
             const response = await fetch('http://192.168.19.251:8000/api/users/login/', {

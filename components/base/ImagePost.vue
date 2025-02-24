@@ -51,7 +51,6 @@ const props = defineProps({
   },
 });
 
-// Filter gambar yang null atau kosong
 const validImages = computed(() => props.images.filter(img => img !== null && img !== ""));
 
 const isModalOpen = ref(false);

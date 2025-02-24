@@ -20,6 +20,7 @@
           <label class="w-28 h-28 flex items-center justify-center border border-black bg-[#ECECEC] rounded-full cursor-pointer">
             <input type="file" class="hidden" id="image" accept="image/*" @change="handleImageUpload" />
             <img v-if="imageUrl" :src="imageUrl" class="w-full h-full object-cover rounded-full" />
+            <p v-if="!imageUrl">📷</p>
           </label>
         </div>
 
@@ -35,8 +36,8 @@
           </div>
 
           <div class="flex flex-col gap-3">
-            <BaseDropdownCategoryDropdown :items="dropdownItems" v-model="category" dropdownName="Kategori" />
-            <BaseDropdownPrimaryDropdown v-model="selectedVisibility" />
+            <BaseDropdownPrimaryDropdown :items="categoryItems" v-model="category" dropdownName="Kategori" />
+            <BaseDropdownPrimaryDropdown v-model="visibility" :items="visibilities" />
           </div>
         </div>
 
@@ -61,7 +62,7 @@ const description = ref('');
 const image = ref(null);
 const visibility = ref('PUBLIC');
 const category = ref('');
-const dropdownItems = ref([]);
+const categoryItems = ref([]);
 
 const openModal = () => {
   isOpen.value = true;
@@ -85,7 +86,7 @@ const komunitasStore = useKomunitas();
 const fetchCategories = async () => {
   try {
     const categoryData = await komunitasStore.CategoryKomunitas();
-    dropdownItems.value = categoryData.map((item) => ({
+    categoryItems.value = categoryData.map((item) => ({
       label: item.name, 
       value: item.id,    
     }));
@@ -96,7 +97,7 @@ const fetchCategories = async () => {
 
 const submitForm = async () => {
   try {
-    await komunitasStore.CreateKomunitas(
+    await komunitasStore.CreateKomunitas( 
       name.value,
       description.value,
       image.value,
@@ -116,6 +117,11 @@ const submitForm = async () => {
     alert('Gagal membuat komunitas. Silakan coba lagi.');
   }
 };
+
+const visibilities = [
+  { label: "Publik", value: "PUBLIC"},
+  { label: "Privasi", value: "PRIVATE"}
+]
 
 onMounted(fetchCategories);
 defineExpose({ openModal });

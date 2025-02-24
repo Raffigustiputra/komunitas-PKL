@@ -1,38 +1,15 @@
 <template>
+    <title> Chat / KomunitasApp</title>
     <div class="container mx-auto p-5 h-screen flex flex-col">
-        <!-- Header Komunitas dengan Logo & Button "+" -->
-        <div class="bg-blue-700 text-white p-4 text-center font-bold text-lg flex items-center justify-between">
+        <div class="bg-white rounded-3xl p-4 text-center font-bold text-lg flex items-center justify-between shadow">
             <div class="flex items-center">
-                <img v-if="komunitasImage" :src="komunitasImage" alt="Logo" class="w-10 h-10 rounded-full mr-3">
+                <BaseButtonIconButton :icon="Back" class="mr-3" @click="navigateTo('/community-list')" />
+                <BaseImageIcon v-if="komunitasImage" :image="komunitasImage" class="mr-3" />
                 <span>{{ komunitasNama || "Loading..." }}</span>
             </div>
-            <button @click="toggleForm" class="bg-white text-blue-700 px-3 py-1 rounded-full text-lg shadow-md">+</button>
         </div>
 
-        <!-- Formulir Postingan dalam Bentuk Card Kecil -->
-        <div v-if="showForm" class="p-4 border bg-white shadow-md rounded-lg mt-3 max-w-md self-end">
-            <textarea v-model="postDescription" placeholder="Deskripsi" class="w-full border p-2 rounded mb-2 text-sm"></textarea>
-
-            <!-- Upload Logo Gambar (hanya menerima gambar) -->
-            <input type="file" @change="handleLogoUpload" class="hidden" ref="logoFileInput" accept="image/*">
-            <button v-if="!postLogo" @click="triggerLogoUpload" class="bg-gray-200 text-sm p-2 rounded mb-2 w-full">
-                Upload Logo Gambar
-            </button>
-            <div v-else class="flex justify-center mb-2">
-                <img :src="postLogo" class="w-16 h-16 rounded-full shadow-md">
-            </div>
-
-            <!-- Upload File PDF/JPG dll (hanya menerima PDF, Word, dll) -->
-            <input type="file" @change="handleLogoInkUpload" class="hidden" ref="logoInkFileInput" accept=".pdf,.docx,.doc,.pptx,.jpg,.jpeg,.png">
-            <button @click="triggerLogoInkUpload" class="bg-gray-200 text-sm p-2 rounded mb-2 w-full">
-                Upload File (PDF, Word, JPG, dll)
-            </button>
-            <div v-if="logoInkFile" class="text-sm text-gray-600 mt-2">
-                <span>File: {{ logoInkFile.name }}</span>
-            </div>
-
-            <button @click="createPost" class="bg-blue-600 text-white px-4 py-2 rounded w-full text-sm">Bikin Postingan</button>
-        </div>
+        <AppTopbar class="mt-2 mx-14 shadow" />
 
         <div class="flex-1 overflow-y-auto p-4 space-y-4" ref="chatBox">
             <div v-for="msg in messages" :key="msg.id" class="flex flex-col space-y-2">
@@ -57,7 +34,7 @@
             </div>
         </div>
 
-        <div class="p-4 flex items-center border-t gap-2">
+        <div class="p-4 flex items-center gap-2">
             <div class="flex">
                 <input
                 type="file"
@@ -77,8 +54,7 @@
               <BaseButtonIconButton :icon="Image" @click="openImagePicker" />
             </div>
             <BaseInputTextArea :rows="1" placeholder="Ketik sesuatu..." @keyup.enter="sendMessage" v-model="newMessage"/>
-            <BaseButtonIconButton :icon="Image" @click="openImagePicker" />
-            <button @click="sendMessage" class="bg-blue-600 text-white px-4 py-2 rounded ml-2 text-sm">Kirim</button>
+            <BaseButtonIconButton :icon="Send" @click="sendMessage" />
         </div>
     </div>
 </template>
@@ -86,9 +62,12 @@
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick } from "vue";
 import { useRoute } from "vue-router";
-import { useKomunitas } from "../stores/Komunitas";
+import { useKomunitas } from "~/stores/Komunitas.js";
+import { useChats } from "~/stores/Chats.js";
 import Attachment from "~/components/icons/Attachment.vue";
 import Image from "~/components/icons/Image.vue";
+import Send from "~/components/icons/Send.vue";
+import Back from "~/components/icons/Back.vue";
 
 const docInput = ref(null) 
 const imageInput = ref(null) 

@@ -6,16 +6,16 @@
 
     <div class="mt-8 space-y-1">
       <BaseButtonSidebarButton
-        :onClick="() => navigateTo('/')"
+        :onClick="() => navigateTo('/homepage')"
         buttonName="Homepage"
         :icon="Homepage"
-        path="/"
+        path="/homepage"
       />
       <BaseButtonSidebarButton
-        :onClick="() => navigateTo('/listkomunitas-admin')"
+        :onClick="() => navigateTo('/community-list')"
         buttonName="Komunitas"
         :icon="Community"
-        path="/listkomunitas-admin"
+        path="/community-list"
       />
       <BaseButtonSidebarButton buttonName="Pencarian" :icon="Search" />
       <BaseButtonSidebarButton buttonName="Bookmark" :icon="Bookmark" />
@@ -33,7 +33,7 @@
       />
     </div>
 
-    <div class="flex flex-col mt-12">
+    <div class="flex flex-col mt-12 max-w-[30vh]">
       <BaseButtonPrimaryButton
         buttonName="Posting"
         :icon="Add"
@@ -45,7 +45,7 @@
         <div class="flex gap-4 items-center">
           <BaseLoading :isLoading="loading" />
           <BaseImageIcon :image="account.profile_photo ? `http://192.168.19.251:8000${account.profile_photo}` : ''" />
-          <div class="flex flex-col">
+          <div class="flex flex-col max-w-[20vh]">
             <p class="font-bold">{{ account.username }}</p>
             <p class="text-sm text-gray-500">{{ account.email }}</p>
           </div>
