@@ -7,27 +7,36 @@
             </div>
 
             <div class="flex items-center mb-4 gap-2">
-                <BaseDropdownPrimaryDropdown  />
-                <BaseDropdownCategoryDropdown :items="dropdownItems" v-model="community" dropdownName="Kategori" />
+                <BaseDropdownPrimaryDropdown v-model="visibility" :items="visibilities" />
+                <BaseDropdownPrimaryDropdown v-model="community" :items="communityItems" dropdownName="Pilih Komunitas" />
             </div>
             
             <div class="flex mb-4 gap-4">
                 <BaseImageIcon :image="account.profile_photo ? `http://192.168.19.251:8000${account.profile_photo}` : ''" />
-                <BaseInputTextArea :rows="3" placeholder="Ada Keseruan apa hari ini ??" />
+                <BaseInputTextArea :rows="3" placeholder="Ada Keseruan apa hari ini ??" v-model="description" />
+            </div>
+
+            <div v-if="imagePreview || attachment" class="mb-4">
+                <div v-if="imagePreview">
+                    <BaseImagePost :images="[imagePreview]" class="max-w-[10vh]"/> 
+                </div>
+                <div v-if="attachment">
+                    <p class="text-sm text-gray-600">Attachment: {{ attachment.name }}</p>
+                </div>
             </div>
 
             <div class="flex gap-3">
-                <input type="file" accept=".pdf,.doc,.docx,.txt" hidden ref="docInput" @change="handleFileSelect" />
+                <input type="file" accept=".pdf,.doc,.docx,.txt" hidden ref="docInput" @change="(e) => handleFileSelect('attachment', e)" />
                 <BaseButtonIconButton :icon="Attachment" @click="openDocPicker" class="text-[#3D3BF3]" />
-                <input type="file" accept="image/*" hidden ref="imageInput" @change="handleFileSelect" />
-                <BaseButtonIconButton :icon="Image" @click="openImagePicker" class="text-[#3D3BF3]" />
+                <input type="file" accept="image/*" hidden ref="imageInput" @change="(e) => handleFileSelect('image', e)" />
+                <BaseButtonIconButton :icon="Image" @click="openImagePicker" class="text-[#3D3BF3]" />  
                 <BaseButtonIconButton :icon="Emot" @click="showEmojiPicker = !showEmojiPicker" class="text-[#3D3BF3]" />
                 <EmojiPicker v-if="showEmojiPicker" @select="handleEmojiSelect" />
             </div>
 
             <div class="flex justify-end gap-3">
                 <BaseButtonSecondaryButton buttonName="Draft" @click="saveDraft" />
-                <BaseButtonPrimaryButton buttonName="Buat" @click="createPost" />
+                <BaseButtonPrimaryButton buttonName="Buat" @click="submitForm" />
             </div>
         </div>
     </div>
@@ -48,14 +57,18 @@ const accountStore = useAuth();
 const account = ref([]);
 const loading = ref(true);
 const isOpen = ref(false);
-const postContent = ref('');
-const fileInput = ref(null);
 const imageInput = ref(null);
-const docInput = ref(null);
 const showEmojiPicker = ref(false);
 const komunitasStore = useKomunitas();
-const community = ref('');
-const dropdownItems = ref([]);
+const community = ref(null);
+const communityItems = ref([]);  
+const postStore = usePosts();
+const docInput = ref(null);
+const imagePreview = ref(null);
+const description = ref('');
+const image = ref(null);
+const attachment = ref(null);
+const visibility = ref('');
 const openModal = () => { isOpen.value = true;   document.body.style.overflow = "hidden";  };
 const closeModal = () => { isOpen.value = false;   document.body.style.overflow = "";  };
 
@@ -75,7 +88,7 @@ const fetchData = async () => {
 const fetchKomunitas = async () => {
     try {
         const dataKomunitas = await komunitasStore.fetchKomunitas();
-        dropdownItems.value = dataKomunitas.map((item) => ({
+        communityItems.value = dataKomunitas.map((item) => ({
             label: item.name,
             value: item.id,
         }));
@@ -84,14 +97,40 @@ const fetchKomunitas = async () => {
     }
 };
 
-const saveDraft = () => {
-    console.log('Draft saved:', postContent.value);
+const submitForm = async () => {
+    try {
+        await postStore.createPost(
+            description.value,
+            image.value,
+            attachment.value,
+            visibility.value,
+            community.value,
+            account.value.id
+        );
+
+        description.value = '';
+        image.value = null;
+        attachment.value = null;
+        visibility.value = '';
+        community.value = '';
+
+        window.location.reload();
+        closeModal();
+    } catch (error) {
+        console.log({
+            description: description.value,
+            image: image.value,
+            visibility: visibility.value,
+            attachment: attachment.value,
+            community: community.value,
+            user: account.value.id
+        });
+
+        console.error('Kenapa ini:', error);
+        alert('Gagal membuat postingan');
+    }
 };
 
-const createPost = () => {
-    console.log('Post created:', postContent.value);
-    closeModal();
-};
 
 const openDocPicker = () => {
     docInput.value.click();
@@ -101,17 +140,30 @@ const openImagePicker = () => {
     imageInput.value.click();
 };
 
-const handleFileSelect = (event) => {
-    const file = event.target.files[0];
+const handleFileSelect = (type) => {
+    const fileInput = type === 'image' ? imageInput.value : docInput.value;
+    const file = fileInput.files[0];
     if (file) {
-        console.log("Selected file:", file);
+        if (type === 'image') {
+            image.value = file;
+            imagePreview.value = URL.createObjectURL(file); 
+        } else {
+            attachment.value = file;
+        }
+        console.log(`Selected ${type}:`, file);
     }
 };
 
+const visibilities = [
+  { label: "Publik", value: "PUBLIC"},
+  { label: "Privasi", value: "PRIVATE"}
+]
+
 const handleEmojiSelect = (emoji) => {
     console.log('Emoji dipilih:', emoji);
-    showEmojiPicker.value = false; // Tutup picker setelah memilih emoji
+    showEmojiPicker.value = false; 
 };
+
 
 onMounted(() => {
   fetchData()

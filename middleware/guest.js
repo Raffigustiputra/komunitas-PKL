@@ -7,7 +7,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
         console.log(token);
         if (token.value)
 
-            return navigateTo('/');
+            return navigateTo('/homepage');
         
     }
 })

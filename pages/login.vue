@@ -1,22 +1,20 @@
 <template>
     <div class="flex flex-col min-h-[45vh] items-center justify-center fixed inset-0">
-        <div class="w-full max-w-lg bg-white p-6 rounded-3xl shadow">
-            <h1 class="text-4xl p-5 font-bold text-center text-[#3D3BF3] mb-8">Login</h1>
-            
+        <div class="w-full max-w-lg bg-white p-20 rounded-3xl shadow">
+            <h1 class="text-4xl p-5 font-bold text-center text-[#3D3BF3] mb-8">Sign In Here</h1>
+
             <form @submit.prevent="handleLogin">
                 <div class="mt-4">
-                    <label for="">Email</label>
-                    <BaseInput placeholder="Masukan Email Anda" type="email" id="email" v-model="email" required />
+                    <BaseInput placeholder="Masukan Email Anda" type="email" id="email" v-model="email"  />
                 </div>
                 <div class="mt-4">
-                    <label for="">Password</label>
-                    <BaseInput placeholder="Masukan Password Anda" type="password" id="password" v-model="password" required />
+                    <BaseInput placeholder="Masukan Password Anda" type="password" id="password" v-model="password"  />
                 </div>
                 <p class="mt-2">
-                    <a href="/forgot-password" class="text-blue-500 hover:underline text-xs ">Lupa Password?</a>
+                    <a href="/forgot-password" class="text-blue-500 hover:underline text-xs">Lupa Password?</a>
                 </p>
                 <div class="text-xs text-center text-gray-600 mt-7">
-                    <p>Belum punya akun? 
+                    <p>Belum punya akun?
                         <a href="/register" class="text-blue-500 hover:underline">Daftar</a>
                     </p>
                 </div>
@@ -27,48 +25,63 @@
 
         </div>
     </div>
+    <BaseAlertPrimaryAlert
+        v-if="alertVisible"
+        :message="alertMessage"
+        :type="alertColor"
+    />
 </template>
 
 <script setup>
 import { ref } from "vue";
-import { useRouter } from 'vue-router'; // Import Vue Router
+import { useRouter } from 'vue-router';
 import { useAuth } from "../stores/Auth";
-// import { useToast } from "vue-toastification"
+import { BaseAlertSignIn } from "#components";
 
-const { login } = useAuth(); // Import fungsi login dari auth.js
-const router = useRouter(); // Inisialisasi router untuk navigasi
+const { login } = useAuth();
+const router = useRouter();
 
-// State untuk email dan password
 const email = ref("");
 const password = ref("");
 
-    // const toast = useToast();
-    // toast.success("Hello world!");
+
+const alertVisible = ref(false);
+const alertMessage = ref("");
+const alertColor = ref(""); 
 
 definePageMeta({
     middleware: 'guest',
+    layout: "base",
 });
 
-// Fungsi untuk menangani login
 const handleLogin = async () => {
     if (!email.value || !password.value) {
-        alert("Harap isi email dan password!");
+        showAlert("Harap isi email dan password!", "error");
         return;
     }
 
     try {
-        const result = await login(email.value, password.value); // Panggil API login
+        const result = await login(email.value, password.value);
         if (result.success) {
-            alert("Login berhasil!");
-            // Redirect ke halaman dashboard menggunakan router
-            router.push('/'); // Menggunakan Vue Router untuk navigasi
+            showAlert("Login berhasil!", "success"); 
+            setTimeout(() => router.push('/homepage'), 1000); 
         } else {
-            alert("Login gagal: " + result.message);
+            showAlert(result.message, "error");
         }
     } catch (error) {
         console.error("Error during login:", error);
-        alert("Terjadi kesalahan saat login.");
+        showAlert("Terjadi kesalahan saat login.", "error");
     }
+};
+
+const showAlert = (message, type) => {
+    alertMessage.value = message;
+    alertColor.value = type;
+    alertVisible.value = true;
+
+    setTimeout(() => {
+        alertVisible.value = false;
+    }, 5000);
 };
 </script>
 
@@ -76,4 +89,4 @@ const handleLogin = async () => {
 body {
     font-family: 'Inter', sans-serif;
 }
-</style> 
+</style>
