@@ -12,7 +12,12 @@
         <AppTopbar class="mt-2 mx-14 shadow" />
 
         <div class="flex-1 overflow-y-auto p-4 space-y-4" ref="chatBox">
-            
+            <div>
+                <p>{{ account.username }}</p>
+                <div v-for="(chat, index) in chatBox" :key="chat.id">
+                    <p>{{ chat.description }}</p>
+                </div>
+            </div>
         </div>
 
         <div class="p-4 flex items-center gap-2">
@@ -41,11 +46,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from "vue";
+import { ref, onMounted} from "vue";
 import { useRoute } from "vue-router";
 import { useKomunitas } from "~/stores/Komunitas.js";
 import { useChats } from "~/stores/Chats.js";
 import Attachment from "~/components/icons/Attachment.vue";
+import { useAuth } from "~/stores/Auth.js";
 import Image from "~/components/icons/Image.vue";
 import Send from "~/components/icons/Send.vue";
 import Back from "~/components/icons/Back.vue";
@@ -58,12 +64,14 @@ const komunitasId = ref(route.params.id);
 const komunitasNama = ref("");
 const komunitasImage = ref("");
 const chatStore = useChats()
-const chatBox = ref(null);
+const chatBox = ref([]);
 const description = ref('');
 const image = ref(null);
 const attachment = ref(null);
 const accountStore = useAuth();
 const account = ref([]);
+const loading = ref(true);
+
 
 const openImagePicker = () => {
   imageInput.value.click();
@@ -85,6 +93,21 @@ const fetchAccount = async () => {
     loading.value = false;
   }
 };
+
+const fetchChats = async () => {
+    try {
+        const [chats] = await Promise.all([chatStore.fetchChatingan()]) 
+        chatBox.value = chats.map((item) => ({
+            id: item.id,
+            description: item.description,
+            // id: item.id,
+            // id: item.id,
+        }))
+        console.log("chatnya ada:", chatBox.value)
+    } catch (error) {
+        console.error(error)
+    } 
+}
 
 const fetchKomunitasDetails = async () => {
     try {
@@ -109,7 +132,7 @@ const submitForm = async () => {
             description.value,
             attachment.value,
             image.value,
-            komunitasId,
+            komunitasId.value,
             account.value.id,
         )
 
@@ -121,7 +144,7 @@ const submitForm = async () => {
             description: description.value,
             image: image.value,
             attachment: attachment.value,
-            community: komunitasId,
+            community: komunitasId.value,
             user: account.value.id
         });
 
@@ -132,5 +155,7 @@ const submitForm = async () => {
 
 onMounted(() => {
     fetchKomunitasDetails();
+    fetchChats();
+    fetchAccount();
 });
 </script>

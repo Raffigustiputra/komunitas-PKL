@@ -1,6 +1,5 @@
 <template>
-    <div class="flex justify-between items-center">
-        <BaseCheckboxTertiaryCheck label="Pilih semua" v-model="isChecked" :onClick="handleCheckboxClick"/>
+    <div class="flex justify-end items-center">
         <BaseButtonPrimaryButton buttonName="Buat Komunitas" :icon="Add" @click="openModal"/>
     </div>
     <CreateCommunityModal ref="modalRef" />
