@@ -53,7 +53,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useKomunitas } from '../stores/Komunitas';
-import Cancel from '~/components/icons/Cancel.vue';
+import Image from '~/components/icons/Image.vue';
 
 const isOpen = ref(false);
 const imageUrl = ref(null);

@@ -12,7 +12,7 @@
             </div>
             
             <div class="flex mb-4 gap-4">
-                <BaseImageIcon :image="account.profile_photo ? `http://192.168.19.251:8000${account.profile_photo}` : ''" />
+                <BaseImageIcon :image="account.profile_photo ? `http://192.168.19.251:8000${account.profile_photo}` : '/assets/default_user_profile_photo.jpg'" />
                 <BaseInputTextArea :rows="3" placeholder="Ada Keseruan apa hari ini ??" v-model="description" />
             </div>
 
@@ -36,7 +36,7 @@
 
             <div class="flex justify-end gap-3">
                 <BaseButtonSecondaryButton buttonName="Draft" @click="saveDraft" />
-                <BaseButtonPrimaryButton buttonName="Buat" @click="submitForm" />
+                <BaseButtonPrimaryButton :disabled="!isFormValid" buttonName="Buat" @click="submitForm" />
             </div>
         </div>
     </div>
@@ -87,7 +87,7 @@ const fetchAccount = async () => {
 
 const fetchKomunitas = async () => {
     try {
-        const dataKomunitas = await komunitasStore.fetchKomunitas();
+        const dataKomunitas = await komunitasStore.fetchJoinedKomunitas();
         communityItems.value = dataKomunitas.map((item) => ({
             label: item.name,
             value: item.id,
@@ -131,7 +131,6 @@ const submitForm = async () => {
     }
 };
 
-
 const openDocPicker = () => {
     docInput.value.click();
 };
@@ -164,6 +163,9 @@ const handleEmojiSelect = (emoji) => {
     showEmojiPicker.value = false; 
 };
 
+const isFormValid = computed(() => {
+  return description.value.trim() !== '' && visibility.value !== '' && community.value !== '';
+});
 
 onMounted(() => {
   fetchAccount()

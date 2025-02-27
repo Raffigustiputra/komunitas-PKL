@@ -51,7 +51,7 @@
         userData.value = useCookie("user");
         try {
             const [communities, categories] = await Promise.all([
-                komunitasStore.fetchKomunitas(),
+                komunitasStore.fetchJoinedKomunitas(),
                 komunitasStore.CategoryKomunitas(),
             ]);
             komunitasList.value = communities.map((item) => ({
@@ -63,6 +63,7 @@
                 visibility: item.visibility,
                 category: categories.find((cat) => cat.id === item.category)?.name || "Tidak ada kategori",
             })); 
+            console.log( komunitasList.value)
         } catch (error) {
             console.error("Error fetching data:", error);
         } finally {

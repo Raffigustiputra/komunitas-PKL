@@ -40,11 +40,11 @@
         @click="openModal"
       />
     </div>
-    <CreatePostModal ref="modalRef" />
+    <ModalCreatePostModal ref="modalRef" />
       <div v-if="account" :key="account.id" class="mt-auto flex flex-col gap-4">
         <div class="flex gap-4 items-center">
           <BaseLoading :isLoading="loading" />
-          <BaseImageIcon :image="account.profile_photo ? `http://192.168.19.251:8000${account.profile_photo}` : ''" />
+          <BaseImageIcon :image="account.profile_photo ? `http://192.168.19.251:8000${account.profile_photo}` : '/assets/default_user_profile_photo.jpg'" />
           <div class="flex flex-col max-w-[20vh]">
             <p class="font-bold">{{ account.username }}</p>
             <p class="text-sm text-gray-500">{{ account.email }}</p>
@@ -68,7 +68,6 @@ import Logout from "~/components/icons/Logout.vue";
 import Option from "~/components/icons/Option.vue";
 import Add from "~/components/icons/Add.vue";
 import BaseLoading from "@/components/base/Loading.vue";
-import CreatePostModal from "@/components/modal/CreatePostModal.vue";
 import { ref, onMounted } from "vue";
 import { useAuth } from "~/stores/Auth.js";
 

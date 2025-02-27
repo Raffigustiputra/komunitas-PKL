@@ -5,23 +5,25 @@
     :key="post.id"
     v-if="useAuth().userToken.value"
   >
-    <div>
+    <div class="space-y-2">
+      <BaseCommunityIcon :image="[post.community_image]" />
       <BaseImageIcon :image="[post.user_profile]" />
     </div>
 
     <div class="flex flex-col w-full dark:text-white">
-      <div class="flex items-center justify-between">
-        <div class="flex gap-2 items-center">
-          <p class="font-bold">{{ post.user.username }}</p>
-          <p class="text-sm text-gray-500">{{ post.user.email }}</p>
-          |
-          <p class="font-bold">{{ post.community.name }}</p>
+      <div class="flex justify-between">
+        <div class="flex flex-col items-start">
+          <div class="flex gap-3">
+            <p class="font-bold">{{ post.community.name }}</p>
+            <BaseButtonSecondaryButton buttonName="Gabung" v-if="!isUserJoined(post.community.id)" @click="openModal(post.community.id)" />
+          </div>
+          <p class="text-sm">Dikirim oleh <span class="font-bold"> {{ post.user.username }}</span></p>
         </div>
         <div>
           <p>{{ dayjs(post.created_at).fromNow() }}</p>
         </div>
       </div>
-      <p>
+      <p class="mt-2">
         {{ post.description }}
       </p>
       <div v-if="post.image" class="flex my-3">
@@ -33,52 +35,78 @@
       <div class="flex items-end justify-end">
         <BaseDropdownIconDropdown
           :icon="Option"
-          :dropdownItems="[
-            { label: 'Laporkan', onClick: () => console.log('Profile clicked') },
-            {
-              label: 'Hapus',
-              onClick: () => handleDeleted(post.id),
-            }
-          ]"
+          :dropdownItems="getDropdownItems(post)"
         />
       </div>
     </div>
-    <div
-      v-if="!postList || postList.length === 0"
-      class="flex flex-col items-center text-gray-500"
-    >
-      Tidak ada Postingan untuk ditampilkan.
-    </div>
-    <BaseLoading :isLoading="loading" />
   </div>
-     <BaseAlertPrimaryAlert
-        v-if="alertVisible"
-        :message="alertMessage"
-        :type="alertColor"
-      />
+  
+  <div
+    v-if="!postList || postList.length === 0"
+    class="flex flex-col items-center text-gray-500"
+  >
+    Tidak ada Postingan untuk ditampilkan.
+  </div>
+
+  <BaseLoading :isLoading="loading" />
+
+  <BaseAlertPrimaryAlert
+    v-if="alertVisible"
+    :message="alertMessage"
+    :type="alertColor"
+  />
+  <ModalAlertModal buttonName="Tetap Gabung" header="Yakin ingin bergabung?" paragraph="Lorem Ipsum Dolor Sit amet" ref="modalRef" :clicking="JoinCommunity"  />
 </template>
 
 <script setup>
-import { ref } from "vue";
-import BaseImagePost from "~/components/base/ImagePost.vue";
+import { ref, computed, onMounted } from "vue";
+import { useAuth } from "~/stores/Auth";
 import { usePosts } from "~/stores/Posts.js";
+import { useKomunitas } from "~/stores/Komunitas.js";
+import BaseImagePost from "~/components/base/ImagePost.vue";
 import BaseLoading from "@/components/base/Loading.vue";
 import Option from "@/components/icons/Option.vue";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { useRouter } from 'vue-router'; 
 
 dayjs.extend(relativeTime);
 
+const router = useRouter();
 const alertVisible = ref(false);
 const alertMessage = ref("");
 const alertColor = ref("");
 const postStore = usePosts();
 const postList = ref([]);
 const loading = ref(true);
+const authStore = useAuth();
+const komunitasStore = useKomunitas();
+const account = ref(null);
+const currentUserId = computed(() => account.value?.id || null);
+const modalRef = ref(null);
+const selectedKomunitasId = ref(null); 
+
+const openModal = (komunitasId) => {
+  selectedKomunitasId.value = komunitasId;
+  modalRef.value.openModal();
+};
+
+const fetchAccount = async () => {
+  try {
+    loading.value = true;
+    const auth = await authStore.profile();
+    account.value = auth;
+    console.log("User yang sedang login:", account.value);
+  } catch (error) {
+    console.error("Error fetching account:", error);
+  } finally {
+    loading.value = false;
+  }
+};
 
 const fetchData = async () => {
-  loading.value = true;
   try {
+    loading.value = true;
     const [posts] = await Promise.all([postStore.fetchPosts()]);
     postList.value = posts.map((item) => ({
       id: item.id,
@@ -88,53 +116,78 @@ const fetchData = async () => {
         ? `http://192.168.19.251:8000${item.attachment}`
         : "",
       user: item.user_detail,
+      user_id: item.user_detail.id,
       user_profile: item.user_detail.profile_photo
         ? `http://192.168.19.251:8000${item.user_detail.profile_photo}`
-        : "",
+        : "/assets/default_user_profile_photo.jpg",
       community: item.community_detail,
+      community_image: item.community_detail.image ? `http://192.168.19.251:8000${item.community_detail.image}`
+        : "/assets/default_user_profile_photo.jpg",
       visibility: item.visibility,
       created_at: item.created_at,
       updated_at: item.updated_at,
     }));
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error("Error fetching posts:", error);
   } finally {
     loading.value = false;
   }
 };
 
-const handleDeleted = async (id) => {
-    try {
-        const success = await postStore.removePost(id);
-        if (success) {
-            postList.value = postList.value.filter((post) => post.id !== id);
-            alertMessage.value = "Berhasil menghapus Postingan.";
-            alertColor.value = "success";  
-            alertVisible.value = true;
-        } else {
-            alertMessage.value = "Gagal menghapus Postingan.";
-            alertColor.value = "error";
-            alertVisible.value = true;
-        }
-    } catch (error) {
-        console.error("Error deleting Post:", type);
-        alertMessage.value = "Terjadi kesalahan saat menghapus.";
-        alertColor.value = type;
-        alertVisible.value = true;
-    } finally {
-        // Sembunyikan alert setelah 3 detik
-        setTimeout(() => {
-            alertVisible.value = false;
-        }, 3000);
-    }
+const getDropdownItems = (post) => {
+  let items = [{ label: "Laporkan", onClick: () => console.log("Laporkan diklik") }];
+  if (post.user_id === currentUserId.value) {
+    items.push({
+      label: "Hapus",
+      onClick: () => handleDeleted(post.id),
+    });
+  }
+  return items;
 };
 
+const handleDeleted = async (id) => {
+  try {
+    const success = await postStore.removePost(id);
+    if (success) {
+      postList.value = postList.value.filter((post) => post.id !== id);
+      alertMessage.value = "Berhasil menghapus Postingan.";
+      alertColor.value = "success";
+      alertVisible.value = true;
+    } else {
+      alertMessage.value = "Gagal menghapus Postingan.";
+      alertColor.value = "error";
+      alertVisible.value = true;
+    }
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    alertMessage.value = "Terjadi kesalahan saat menghapus.";
+    alertColor.value = "error";
+    alertVisible.value = true;
+  } finally {
+    setTimeout(() => {
+      alertVisible.value = false;
+    }, 3000);
+  }
+};
 
-// const goToDetail = (id) => {
-//     router.push(`/communitydetail/chat/${id}`);
-// };
+const JoinCommunity = async () => {
+  if (!selectedKomunitasId.value) return;
+  try {
+    await komunitasStore.fetchJoiningKomunitas(selectedKomunitasId.value);
+    console.log("Berhasil bergabung dengan komunitas!");
+    router.push(`/communitydetail/chat/${selectedKomunitasId.value}`);
+  } catch (error) {
+    console.error("Gagal bergabung:", error);
+  }
+};
 
-onMounted(() => {
-  fetchData();
+const isUserJoined = (communityId) => {
+  return account.value?.role_detail?.some(role => role.community === communityId);
+};
+
+onMounted(async () => {
+  await fetchAccount();
+  await fetchData();
+  isUserJoined()
 });
 </script>

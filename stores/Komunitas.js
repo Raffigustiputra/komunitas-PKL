@@ -23,6 +23,52 @@ export const useKomunitas = defineStore("komunitas", () => {
     }
   }
 
+  async function fetchJoinedKomunitas() {
+    try {
+      const response = await fetch(
+        "http://192.168.19.251:8000/api/communities/joined/",
+        {
+          headers: {
+            Authorization: `Token ${useAuth().userToken.value}`,
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error(
+          `Gagal mengambil komunitas. Status: ${response.status}`
+        );
+      }
+      const data = await response.json();
+      return data;
+    } catch (err) {
+      console.error("Error fetching communities:", err);
+      throw err;
+    }
+  }
+
+  async function fetchJoiningKomunitas(komunitasId) {
+    try {
+      const response = await fetch(
+        `http://192.168.19.251:8000/api/communities/join/${komunitasId}/`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Token ${useAuth().userToken.value}`,
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error(
+          `Gagal mengirim komunitas. Status: ${response.status}`
+        );
+      }
+      const responseData = await response.json();
+    } catch (err) {
+      console.error("Error fetching communities:", err);
+      throw err;
+    }
+  }
+
   // Fungsi untuk mengambil detail komunitas berdasarkan ID
   const fetchKomunitasDetail = async (komunitasId) => {
     try {
@@ -205,5 +251,7 @@ export const useKomunitas = defineStore("komunitas", () => {
     editKomunitas,
     fetchKomunitasDetail,
     removeImage,
+    fetchJoinedKomunitas,
+    fetchJoiningKomunitas,
   };
 });

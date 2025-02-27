@@ -2,70 +2,12 @@
   <div class="mt-2 dark:text-white">
     <div class="flex flex-col gap-3 p-8 rounded-3xl">
       <h3 class="font-bold">Rekomendasi Komunitas</h3>
-      <hr />
-      <div class="space-y-4">
-        <div class="flex gap-3 items-center">
-          <BaseImageIcon />
-          <div class="flex flex-col">
-            <p class="font-bold">Komunitas 1</p>
-            <div class="flex gap-1 items-center justify-center">
-              <BaseButtonCategoryButton buttonName="Hiburan" />
-              <BaseButtonCategoryButton buttonName="Olahraga" />
-              <BaseButtonCategoryButton buttonName="Kuliner" />
-            </div>
-          </div>
-          <BaseButtonOutlinedButton buttonName="Gabung" />
-        </div>
-        <hr />
-      </div>
-      <div class="space-y-4">
-        <div class="flex gap-3 items-center">
-          <BaseImageIcon />
-          <div class="flex flex-col">
-            <p class="font-bold">Komunitas 1</p>
-            <div class="flex gap-1 items-center justify-center">
-              <BaseButtonCategoryButton buttonName="Hiburan" />
-              <BaseButtonCategoryButton buttonName="Olahraga" />
-              <BaseButtonCategoryButton buttonName="Kuliner" />
-            </div>
-          </div>
-          <BaseButtonOutlinedButton buttonName="Gabung" />
-        </div>
-        <hr />
-      </div>
-      <div class="space-y-4">
-        <div class="flex gap-3 items-center">
-          <BaseImageIcon />
-          <div class="flex flex-col">
-            <p class="font-bold">Komunitas 1</p>
-            <div class="flex gap-1 items-center justify-center">
-              <BaseButtonCategoryButton buttonName="Hiburan" />
-              <BaseButtonCategoryButton buttonName="Olahraga" />
-              <BaseButtonCategoryButton buttonName="Kuliner" />
-            </div>
-          </div>
-          <BaseButtonOutlinedButton buttonName="Gabung" />
-        </div>
-        <hr />
-      </div>
-      <div class="space-y-4">
-        <div class="flex gap-3 items-center">
-          <BaseImageIcon />
-          <div class="flex flex-col">
-            <p class="font-bold">Komunitas 1</p>
-            <div class="flex gap-1 items-center justify-center">
-              <BaseButtonCategoryButton buttonName="Hiburan" />
-              <BaseButtonCategoryButton buttonName="Olahraga" />
-              <BaseButtonCategoryButton buttonName="Kuliner" />
-            </div>
-          </div>
-          <BaseButtonOutlinedButton buttonName="Gabung" />
-        </div>
-        <hr />
-      </div>
+    <AppCardCommunityCard description="lorem ispum dolor sit amet, constrecturer sdajdhasdlasjdklsajdlkasjdklsajdklj" />
+    <AppCardCommunityCard />
+    <AppCardCommunityCard />
     </div>
 </div>
-<div class="flex flex-col gap-3 p-8 rounded-3xl sticky top-5 dark:text-white">
+<div class="flex flex-col gap-3 px-8 rounded-3xl sticky top-5 dark:text-white">
   <h3 class="font-bold">Taglist Teratas</h3>
   <div class="space-y-4">
     <table class="w-full border-collapse">
