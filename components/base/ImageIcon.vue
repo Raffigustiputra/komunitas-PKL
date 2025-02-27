@@ -15,5 +15,5 @@ defineProps({
     type: String,
     default: defaultImage, 
   },
-});
+}); 
 </script>

@@ -25,8 +25,8 @@ export const useAuth = () => {
             userData.value = user;
             userToken.value = data.token;
 
-            console.log(user);   
-            
+            console.log(user);
+
             return { success: true, message: 'Login berhasil.' };
         } catch (error) {
             return { success: false, message: error.message };
@@ -36,14 +36,14 @@ export const useAuth = () => {
     async function profile(token) {
         try {
             const response = await fetch(
-              "http://192.168.19.251:8000/api/users/profile/",
-              {
-                method: "GET",
-                headers: {
-                  "Content-Type": "application/json",
-                  "Authorization": `Token ${useAuth().userToken.value}`,
-                },
-              }
+                "http://192.168.19.251:8000/api/users/profile/",
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Token ${useAuth().userToken.value}`,
+                    },
+                }
             );
             if (!response.ok) {
                 const errorData = await response.json();
@@ -52,10 +52,37 @@ export const useAuth = () => {
             const user = await response.json();
             return user
 
-    } 
-    catch (error) {
-        return { success: false, message: error.message };
-    }}
+        }
+        catch (error) {
+            return { success: false, message: error.message };
+        }
+    }
+
+    async function updateProfile(updatedData) {
+        try {
+            if (!userToken.value || !userData.value?.id) {
+                throw new Error("Token atau ID pengguna tidak ditemukan.");
+            }
+
+            const response = await fetch(`http://192.168.19.251:8000/api/users/detail/${userData.value.id}/`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Token ${userToken.value}`,
+                },
+                body: JSON.stringify(updatedData),
+            });
+
+            if (!response.ok) throw new Error("Gagal memperbarui profil.");
+
+            const updatedUser = await response.json();
+            userData.value = updatedUser;
+
+            return { success: true, message: "Profil berhasil diperbarui." };
+        } catch (error) {
+            return { success: false, message: error.message };
+        }
+    }
 
     // Fungsi untuk Logout
     async function logout() {
@@ -63,7 +90,7 @@ export const useAuth = () => {
             if (!userToken.value) {
                 throw new Error('userToken.value tidak ditemukan. Anda perlu login terlebih dahulu.');
             }
-            
+
             const response = await fetch('http://192.168.19.251:8000/api/users/logout/', {
                 method: 'POST',
                 headers: {
@@ -89,7 +116,7 @@ export const useAuth = () => {
 
     // Fungsi untuk memverifikasi atau memperbarui token
     async function verifyToken() {
-        try {   
+        try {
             const token = userToken.value;
 
             if (!token) {
@@ -120,8 +147,9 @@ export const useAuth = () => {
     return {
         login,
         logout,
-        verifyToken, 
+        verifyToken,
         profile,
+        updateProfile,
         userData,
         userToken,
     };
