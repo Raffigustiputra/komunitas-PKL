@@ -25,7 +25,7 @@
         class="px-12 text-[#96E2AF] border-[#96E2AF]"
       />
       <h1
-        class="text-8xl max-w-[76vh] font-bold bg-gradient-to-r from-[#96E2AF] to-[#3D3BF3] bg-clip-text text-transparent"
+        class="text-8xl max-w-[80vh] font-bold bg-gradient-to-r from-[#96E2AF] to-[#3D3BF3] bg-clip-text text-transparent"
       >
         Build Your Community
       </h1>
