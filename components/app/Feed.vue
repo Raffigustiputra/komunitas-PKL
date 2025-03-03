@@ -26,7 +26,7 @@
       <p class="mt-2">
         {{ post.description }}
       </p>
-      <div v-if="post.image" class="flex my-3">
+      <div v-if="post.image" class="flex mb-3">
         <BaseImagePost :images="[post.image]" />
       </div>
       <div v-if="post.attachment">
