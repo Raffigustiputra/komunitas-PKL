@@ -91,31 +91,37 @@ export const useAuth = () => {
         }
     }
 
-    async function updateProfile(updatedData) {
-        try {
-            if (!userToken.value || !userData.value?.id) {
-                throw new Error("Token atau ID pengguna tidak ditemukan.");
+        async function updateProfile(updatedData) {
+            try {
+                if (!userToken.value || !userData.value?.id) {
+                    throw new Error("Token atau ID pengguna tidak ditemukan.");
+                }
+        
+                const response = await fetch(`http://192.168.19.251:8000/api/users/detail/${userData.value.id}/`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Token ${userToken.value}`,
+                    },
+                    body: JSON.stringify(updatedData),
+                });
+        
+                const responseData = await response.json();
+        
+                if (!response.ok) {
+                    throw new Error(responseData?.message || "Gagal memperbarui profil.");
+                }
+        
+                // Perbarui data user setelah update berhasil
+                userData.value = responseData;
+        
+                return { success: true, message: "Profil berhasil diperbarui." };
+            } catch (error) {
+                console.error("Error updating profile:", error);
+                return { success: false, message: error.message };
             }
-
-            const response = await fetch(`http://192.168.19.251:8000/api/users/detail/${userData.value.id}/`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Token ${userToken.value}`,
-                },
-                body: JSON.stringify(updatedData),
-            });
-
-            if (!response.ok) throw new Error("Gagal memperbarui profil.");
-
-            const updatedUser = await response.json();
-            userData.value = updatedUser;
-
-            return { success: true, message: "Profil berhasil diperbarui." };
-        } catch (error) {
-            return { success: false, message: error.message };
         }
-    }
+    
 
     // Fungsi untuk Logout
     async function logout() {
