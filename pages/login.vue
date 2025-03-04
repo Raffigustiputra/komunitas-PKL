@@ -5,10 +5,24 @@
 
             <form @submit.prevent="handleLogin">
                 <div class="mt-4">
-                    <BaseInput placeholder="Masukan Email Anda" type="email" id="email" v-model="email"  />
+                    <BaseInput placeholder="Masukan Email Anda" type="email" id="email" v-model="email" />
                 </div>
-                <div class="mt-4">
-                    <BaseInput placeholder="Masukan Password Anda" type="password" id="password" v-model="password"  />
+                <div class="mt-4 relative">
+                    <BaseInput 
+                        :type="showPassword ? 'text' : 'password'"
+                        placeholder="Masukan Password Anda"
+                        id="password"
+                        v-model="password"
+                        class="pr-10"
+                    />
+                    <button 
+                        type="button"
+                        @click="showPassword = !showPassword"
+                        class="absolute inset-y-0 right-3 flex items-center text-gray-500"
+                    >
+                        <Eye v-if="!showPassword" class="w-5 h-5" />
+                        <EyeOff v-else class="w-5 h-5" />
+                    </button>
                 </div>
                 <p class="mt-2">
                     <a href="/forgot-password" class="text-blue-500 hover:underline text-xs">Lupa Password?</a>
@@ -22,7 +36,6 @@
                     <BaseButtonPrimaryButton type="submit" buttonName="Login" class="text-lg" />
                 </div>
             </form>
-
         </div>
     </div>
     <BaseAlertPrimaryAlert
@@ -36,13 +49,14 @@
 import { ref } from "vue";
 import { useRouter } from 'vue-router';
 import { useAuth } from "../stores/Auth";
+import { Eye, EyeOff } from "lucide-vue-next"; // Import ikon mata
 
 const { login } = useAuth();
 const router = useRouter();
 
 const email = ref("");
 const password = ref("");
-
+const showPassword = ref(false);
 
 const alertVisible = ref(false);
 const alertMessage = ref("");
@@ -61,11 +75,20 @@ const handleLogin = async () => {
 
     try {
         const result = await login(email.value, password.value);
+        console.log("Login Response:", result); // Debugging output
+
         if (result.success) {
             showAlert("Login berhasil!", "success"); 
             setTimeout(() => router.push('/homepage'), 1000); 
         } else {
-            showAlert(result.message, "error");
+            // Menentukan error berdasarkan pesan dari server
+            if (result.status === 404) {
+                showAlert("Email tidak cocok!", "error");
+            } else if (result.status === 401) {
+                showAlert("Password tidak cocok!", "error");
+            } else {
+                showAlert(result.message || "Terjadi kesalahan saat login.", "error");
+            }
         }
     } catch (error) {
         console.error("Error during login:", error);
@@ -83,9 +106,3 @@ const showAlert = (message, type) => {
     }, 5000);
 };
 </script>
-
-<style scoped>
-body {
-    font-family: 'Inter', sans-serif;
-}
-</style>

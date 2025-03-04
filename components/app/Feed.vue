@@ -55,7 +55,7 @@
     :message="alertMessage"
     :type="alertColor"
   />
-  <ModalAlertModal buttonName="Tetap Gabung" header="Yakin ingin bergabung?" paragraph="Lorem Ipsum Dolor Sit amet" ref="modalRef" :clicking="JoinCommunity"  />
+  <ModalAlertModal buttonName="Tetap Gabung" header="Yakin ingin bergabung?" paragraph="Isinya orang jamet  " ref="modalRef" :clicking="JoinCommunity"  />
 </template>
 
 <script setup>
