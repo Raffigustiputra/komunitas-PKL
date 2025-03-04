@@ -5,12 +5,12 @@
 
             <form @submit.prevent="handleLogin">
                 <div class="mt-4">
-                    <BaseInput placeholder="Masukan Email Anda" type="email" id="email" v-model="email" />
+                    <BaseInput placeholder="Masukkan Email atau Username" type="text" id="email" v-model="identifier" />
                 </div>
                 <div class="mt-4 relative">
                     <BaseInput 
                         :type="showPassword ? 'text' : 'password'"
-                        placeholder="Masukan Password Anda"
+                        placeholder="Masukkan Password Anda"
                         id="password"
                         v-model="password"
                         class="pr-10"
@@ -49,12 +49,12 @@
 import { ref } from "vue";
 import { useRouter } from 'vue-router';
 import { useAuth } from "../stores/Auth";
-import { Eye, EyeOff } from "lucide-vue-next"; // Import ikon mata
+import { Eye, EyeOff } from "lucide-vue-next"; 
 
 const { login } = useAuth();
 const router = useRouter();
 
-const email = ref("");
+const identifier = ref(""); // Bisa berupa email atau username
 const password = ref("");
 const showPassword = ref(false);
 
@@ -68,26 +68,25 @@ definePageMeta({
 });
 
 const handleLogin = async () => {
-    if (!email.value || !password.value) {
-        showAlert("Harap isi email dan password!", "error");
+    if (!identifier.value || !password.value) {
+        showAlert("Harap isi email/username dan password!", "error");
         return;
     }
 
     try {
-        const result = await login(email.value, password.value);
-        console.log("Login Response:", result); // Debugging output
+        const result = await login(identifier.value, password.value);
 
         if (result.success) {
             showAlert("Login berhasil!", "success"); 
             setTimeout(() => router.push('/homepage'), 1000); 
         } else {
-            // Menentukan error berdasarkan pesan dari server
-            if (result.status === 404) {
-                showAlert("Email tidak cocok!", "error");
-            } else if (result.status === 401) {
-                showAlert("Password tidak cocok!", "error");
+            // Menentukan jenis error berdasarkan respon server
+            if (result.error_code === "WRONG_PASSWORD") {
+                showAlert("Password salah, silakan coba lagi", "error");
+            } else if (result.error_code === "USER_NOT_FOUND") {
+                showAlert("Gmail salah, silakan coba lagi", "error");
             } else {
-                showAlert(result.message || "Terjadi kesalahan saat login.", "error");
+                showAlert("Email atau password salah, silakan coba lagi", "error");
             }
         }
     } catch (error) {
