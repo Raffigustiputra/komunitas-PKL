@@ -33,6 +33,39 @@ export const useAuth = () => {
         }
     }
 
+    async function register(username, email, password) {
+        try {
+            const response = await fetch('http://192.168.19.251:8000/api/users/register/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, email, password }),
+            });
+
+            const data = await response.json(); // Parsing response dulu
+
+            console.log("Response API Register:", data); // Debugging response
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Registrasi gagal.');
+            }
+
+            // Simpan token ke dalam useCookie
+            userToken.value = data.token;
+
+            // Ambil data profil setelah registrasi
+            const user = await profile(data.token);
+            userData.value = user;
+
+            return { success: true, message: 'Registrasi berhasil.' };
+        } catch (error) {
+            console.error("Error saat registrasi:", error);
+            return { success: false, message: error.message };
+        }
+    }
+    
+
     async function profile(token) {
         try {
             const response = await fetch(
@@ -146,6 +179,7 @@ export const useAuth = () => {
 
     return {
         login,
+        register,
         logout,
         verifyToken,
         profile,
