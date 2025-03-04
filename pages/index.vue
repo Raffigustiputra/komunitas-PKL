@@ -79,7 +79,7 @@
   </div>
 
   <footer class="bg-[#1A1625] text-white py-10 mt-32">
-  <div class="flex justify-between items-center bg-[#F1F1F1]/80  backdrop-blur-sm  rounded-xl p-8 mx-72 -mt-24 shadow-lg">
+  <div class="flex justify-between items-center bg-[#F1F1F1]/80  backdrop-blur-sm  rounded-xl p-8 mx-56 -mt-24 shadow-lg">
     <div>
       <h2 class="text-3xl font-bold text-[#3D3BF3] leading-tight">
         Get <br />Started Now!
