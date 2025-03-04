@@ -13,7 +13,7 @@
           buttonName="Sign In"
           class="px-5"
         />
-        <BaseButtonTertiaryButton buttonName="Sign Up" class="p-3" />
+        <BaseButtonTertiaryButton buttonName="Sign Up" class="p-3" :onClick="() => navigateTo('/register')" />
       </div>
     </ul>
   </nav>

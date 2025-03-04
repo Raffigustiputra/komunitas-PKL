@@ -39,8 +39,32 @@ export const usePosts = defineStore("Posts", () => {
       throw err;
     }
   }
-  
 
+  async function fetchCommunityPosts(postId) {
+    try {
+      const response = await fetch(
+        `http://192.168.19.251:8000/api/posts/community/${postId}/`,
+        {
+          headers: {
+            Authorization: `Token ${useAuth().userToken.value}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          `Gagal mengambil postingan user. Status: ${response.status}`
+        );
+      }
+
+      const data = await response.json();
+      return data; // Mengembalikan data postingan user
+    } catch (err) {
+      console.error("Error fetching user posts:", err);
+      throw err;
+    }
+  }
+  
   async function createPost(description, image, attachment, visibility, community, userId) {
     const formData = new FormData();
 
@@ -109,6 +133,7 @@ export const usePosts = defineStore("Posts", () => {
     fetchPosts,
     fetchUserPosts,
     createPost,
-    removePost
+    removePost,
+    fetchCommunityPosts,
   };
 });

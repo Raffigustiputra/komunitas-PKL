@@ -7,7 +7,7 @@
       <div class="flex items-center gap-2">
         <BaseButtonIconButton
           :icon="Back"
-          @click="navigateTo('/community-list')"
+          @click="goBack(komunitasId)"
         />
         <BaseImageIcon
           v-if="komunitasImage"
@@ -93,6 +93,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { useKomunitas } from "~/stores/Komunitas.js";
 import { useChats } from "~/stores/Chats.js";
 import { useAuth } from "~/stores/Auth.js";
@@ -106,6 +107,7 @@ const hoveredChat = ref(null);
 const docInput = ref(null);
 const imageInput = ref(null);
 const route = useRoute();
+const router = useRouter();
 const komunitasStore = useKomunitas();
 const komunitasId = ref(route.params.id);
 const communityId = route.params.id;
@@ -241,6 +243,11 @@ const submitForm = async () => {
     alert("Gagal membuat chatingan");
   }
 };
+
+const goBack = (id) => {
+    router.push(`/communitydetail/${id}`);
+};
+
 
 onMounted(() => {
   fetchKomunitasDetails();

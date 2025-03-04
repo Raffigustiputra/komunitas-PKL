@@ -85,7 +85,7 @@
     };
 
     const goToDetail = (id) => {
-        router.push(`/communitydetail/chat/${id}`);
+        router.push(`/communitydetail/${id}`);
     };
     
     const handleJoin = (id) => {
