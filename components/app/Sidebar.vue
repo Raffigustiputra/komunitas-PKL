@@ -27,7 +27,7 @@
         <BaseLoading :isLoading="loading" />
         <BaseImageIcon :image="account.profile_photo ? `http://192.168.19.251:8000${account.profile_photo}` : ''" />
         <div class="flex flex-col max-w-[20vh]">
-          <p class="font-bold">{{ account.username }}</p>
+          <p class="font-bold dark:text-white">{{ account.username }}</p>
           <p class="text-sm text-gray-500">{{ account.email }}</p>
         </div>
         <div>

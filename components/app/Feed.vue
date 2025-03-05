@@ -14,7 +14,7 @@
       <div class="flex justify-between">
         <div class="flex flex-col items-start">
           <div class="flex gap-3">
-            <p class="font-bold">{{ post.community.name }}</p>
+            <a @click="goBack(komunitasId)" class="font-bold cursor-pointer">{{ post.community.name }}</a>
             <BaseButtonSecondaryButton buttonName="Gabung" v-if="!isUserJoined(post.community.id)" @click="openModal(post.community.id)" />
           </div>
           <p class="text-sm">Dikirim oleh <span class="font-bold"> {{ post.user.username }}</span></p>

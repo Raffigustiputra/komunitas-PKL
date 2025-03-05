@@ -1,16 +1,21 @@
 <template>
   <div class="my-5 dark:text-white">
     <div class="flex flex-col gap-3 rounded-3xl">
-      <div class="bg-white rounded-xl w-full overflow-hidden">
-        <div class="bg-gray-200 h-24"></div>
+      <div class="bg-white dark:bg-black rounded-xl w-full overflow-hidden">
+        <img 
+          :src="user.banner ? `http://192.168.19.251:8000${user.banner}` : defaultImage" 
+          alt="Banner"
+          class="max-h-40 min-w-full object-cover"
+        />
         <div class="px-6 -mt-12 flex items-center gap-4 justify-between">
           <img :src="user.profile_photo ? `http://192.168.19.251:8000${user.profile_photo}` : defaultImage"
-            class="w-24 h-24 rounded-full border-4 border-white shadow-md object-cover" alt="Profile Photo" />
+          class="w-28 h-28 rounded-full border-4 border-white shadow-md object-cover" alt="Profile Photo" />
           <BaseButtonOutlinedButton buttonName="Edit Profile" @click="openModal" class="mt-16" />
         </div>
         <div class="p-7">
           <div class="flex-1">
             <h1 class="text-xl font-semibold">{{ user.username }}</h1>
+            <p>{{ user.user_banner }}</p>
             <p class="text-gray-500">{{ user.email }}</p>
           </div>
           <p class="text-gray-600 text-sm">{{ user.bio || 'Belum ada bio.' }}</p>

@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col bg-white p-6 rounded-3xl overflow-hidden my-8">
         <div class="relative">
-          <img :src="komunitasBanner" alt="" class="w-full rounded-3xl" />
+          <img :src="komunitasBanner" alt="" class="max-h-64 w-full rounded-3xl object-cover" />
           <div class="absolute -bottom-11 left-8">
             <img :src="komunitasImage" alt="" class="w-28 h-28 rounded border-4 border-white shadow-md object-cover">
           </div>
