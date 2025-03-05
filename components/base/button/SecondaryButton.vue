@@ -1,6 +1,6 @@
 <template>
   <button
-    class="flex bg-transparent font-bold text-black items-center rounded-full hover:opacity-80 hover:cursor-pointer focus:text-[#3D3BF3]"
+    class="flex bg-transparent font-bold text-black items-center rounded-full hover:opacity-80 hover:cursor-pointer focus:text-[#3D3BF3] dark:text-white"
     @click="handleClick">
     {{ buttonName }}
   </button>

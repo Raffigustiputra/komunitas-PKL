@@ -1,5 +1,5 @@
 <template>
-  <div class="relative max-w-72 bg-[#F4F7FD] rounded-xl overflow-hidden">
+  <div class="relative max-w-72 bg-[#F4F7FD] rounded-xl overflow-hidden  dark:bg-[#1d1d25]">
     <div class="relative">
       <img :src="bannerImage" alt="" />
       <div class="absolute -bottom-6 left-4">

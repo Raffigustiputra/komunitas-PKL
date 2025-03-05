@@ -1,7 +1,7 @@
 <template>
   <textarea
     v-model="tweet"
-    class="w-full resize-none bg-transparent border bg-white border-gray-300 rounded-2xl p-3 focus:outline-none focus:ring-1 focus:ring-blue-500"
+    class="w-full resize-none bg-transparent border bg-white dark:bg-black border-gray-300 rounded-2xl p-3 focus:outline-none focus:ring-1 focus:ring-blue-500"
     :placeholder="placeholder"
     :rows="rows"
     @input="adjustHeight"
