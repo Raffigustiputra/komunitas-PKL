@@ -14,7 +14,7 @@
             <p class="text-gray-500">{{ user.email }}</p>
           </div>
           <p class="text-gray-600 text-sm">{{ user.bio || 'Belum ada bio.' }}</p>
-          <p>{{ user.created_at }}</p>
+          <p>{{ formatTime(user.created_at) }}</p>
           <div class="mt-4 flex justify-start gap-3 text-sm font-semibold text-gray-700">
             <span>{{ user.followers || 0 }} Pengikut</span>
             <span>{{ user.following || 0 }} Ngikutin</span>
@@ -89,6 +89,15 @@ const activeTab = ref('postingan');
 const modalRef = ref(null);
 const openModal = () => {
   modalRef.value.openModal();
+};
+const formatTime = (timestamp) => {
+  if (!timestamp) return "";
+  const date = new Date(timestamp);
+  return date.toLocaleDateString("id-ID", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric", 
+  });
 };
 
 const fetchUser = async () => {
