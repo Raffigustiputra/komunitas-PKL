@@ -1,27 +1,36 @@
 export const useKomunitas = defineStore("komunitas", () => {
+  const auth = useAuth(); // Pastikan useAuth() sudah terdefinisi
+  const token = auth.userToken.value; // Ambil token dari auth
   // Fungsi untuk mengambil daftar komunitas
-  async function fetchKomunitas() {
-    try {
-      const response = await fetch(
-        "http://192.168.19.251:8000/api/communities/",
-        {
-          headers: {
-            Authorization: `Token ${useAuth().userToken.value}`,
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error(
-          `Gagal mengambil komunitas. Status: ${response.status}`
-        );
-      }
-      const data = await response.json();
-      return data;
-    } catch (err) {
-      console.error("Error fetching communities:", err);
-      throw err;
+async function fetchKomunitas() {
+  try {
+
+    if (!token) {
+      throw new Error("Token tidak ditemukan. Harap login ulang.");
     }
+
+    const response = await fetch(
+      "http://192.168.19.251:8000/api/communities/",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Gagal mengambil komunitas. Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error("Error fetching communities:", err);
+    throw err;
   }
+}
 
   async function fetchJoinedKomunitas() {
     try {
@@ -29,7 +38,7 @@ export const useKomunitas = defineStore("komunitas", () => {
         "http://192.168.19.251:8000/api/communities/joined/",
         {
           headers: {
-            Authorization: `Token ${useAuth().userToken.value}`,
+            Authorization: `Token ${token}`,
           },
         }
       );

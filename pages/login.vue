@@ -5,7 +5,7 @@
 
             <form @submit.prevent="handleLogin">
                 <div class="mt-4">
-                    <BaseInput placeholder="Masukkan Email atau Username" type="text" id="email" v-model="identifier" />
+                    <BaseInput placeholder="Masukkan username atau Username" type="text" id="username" v-model="identifier" />
                 </div>
                 <div class="mt-4 relative">
                     <BaseInput 
@@ -54,7 +54,7 @@ import { Eye, EyeOff } from "lucide-vue-next";
 const { login } = useAuth();
 const router = useRouter();
 
-const identifier = ref(""); // Bisa berupa email atau username
+const identifier = ref(""); // Bisa berupa username atau username
 const password = ref("");
 const showPassword = ref(false);
 
@@ -69,7 +69,7 @@ definePageMeta({
 
 const handleLogin = async () => {
     if (!identifier.value || !password.value) {
-        showAlert("Harap isi email/username dan password!", "error");
+        showAlert("Harap isi username/username dan password!", "error");
         return;
     }
 
@@ -86,7 +86,7 @@ const handleLogin = async () => {
             } else if (result.error_code === "USER_NOT_FOUND") {
                 showAlert("Gmail salah, silakan coba lagi", "error");
             } else {
-                showAlert("Email atau password salah, silakan coba lagi", "error");
+                showAlert("username atau password salah, silakan coba lagi", "error");
             }
         }
     } catch (error) {
