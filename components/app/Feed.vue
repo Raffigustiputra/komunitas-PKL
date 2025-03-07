@@ -1,21 +1,25 @@
 <template>
-  <div
-    class="flex gap-3 bg-white p-5 rounded-3xl dark:bg-[#000000]"
-    v-for="(post, index) in postList"
-    :key="post.id"
-    v-if="useAuth().userToken.value"
-  >
+  <div class="flex gap-3 bg-white p-5 rounded-3xl dark:bg-[#000000]" v-for="(post, index) in postList" :key="post.id"
+    v-if="useAuth().userToken.value">
     <div class="space-y-2">
-      <BaseCommunityIcon :image="[post.community_image]" />
-      <BaseImageIcon :image="[post.user_profile]" />
+      <div @click="goToCommunityPage(post.community.id)" class="cursor-pointer">
+        <BaseCommunityIcon :image="[post.community_image]" />
+      </div>
+      <div @click="goToUserProfile(post.user.id)" class="cursor-pointer">
+        <BaseImageIcon :image="[post.user_profile]" />
+      </div>
+
     </div>
 
     <div class="flex flex-col w-full dark:text-white">
       <div class="flex justify-between">
         <div class="flex flex-col items-start">
           <div class="flex gap-3">
-            <a @click="goBack(komunitasId)" class="font-bold cursor-pointer">{{ post.community.name }}</a>
-            <BaseButtonSecondaryButton buttonName="Gabung" v-if="!isUserJoined(post.community.id)" @click="openModal(post.community.id)" />
+            <a @click="goToCommunityPage(post.community.id)" class="font-bold cursor-pointer text-black no-underline">
+              {{ post.community.name }}
+            </a>
+            <BaseButtonSecondaryButton buttonName="Gabung" v-if="!isUserJoined(post.community.id)"
+              @click="openModal(post.community.id)" />
           </div>
           <p class="text-sm">Dikirim oleh <span class="font-bold"> {{ post.user.username }}</span></p>
         </div>
@@ -33,29 +37,20 @@
         <BaseFilePreview :documents="[post.attachment]" />
       </div>
       <div class="flex items-end justify-end">
-        <BaseDropdownIconDropdown
-          :icon="Option"
-          :dropdownItems="getDropdownItems(post)"
-        />
+        <BaseDropdownIconDropdown :icon="Option" :dropdownItems="getDropdownItems(post)" />
       </div>
     </div>
   </div>
-  
-  <div
-    v-if="!postList || postList.length === 0"
-    class="flex flex-col items-center text-gray-500"
-  >
+
+  <div v-if="!postList || postList.length === 0" class="flex flex-col items-center text-gray-500">
     Tidak ada Postingan untuk ditampilkan.
   </div>
 
   <BaseLoading :isLoading="loading" />
 
-  <BaseAlertPrimaryAlert
-    v-if="alertVisible"
-    :message="alertMessage"
-    :type="alertColor"
-  />
-  <ModalAlertModal buttonName="Tetap Gabung" header="Yakin ingin bergabung?" paragraph="Isinya orang jamet  " ref="modalRef" :clicking="JoinCommunity"  />
+  <BaseAlertPrimaryAlert v-if="alertVisible" :message="alertMessage" :type="alertColor" />
+  <ModalAlertModal buttonName="Tetap Gabung" header="Yakin ingin bergabung?" paragraph="Isinya orang jamet  "
+    ref="modalRef" :clicking="JoinCommunity" />
 </template>
 
 <script setup>
@@ -68,7 +63,7 @@ import BaseLoading from "@/components/base/Loading.vue";
 import Option from "@/components/icons/Option.vue";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { useRouter } from 'vue-router'; 
+import { useRouter } from 'vue-router';
 
 dayjs.extend(relativeTime);
 
@@ -84,7 +79,7 @@ const komunitasStore = useKomunitas();
 const account = ref(null);
 const currentUserId = computed(() => account.value?.id || null);
 const modalRef = ref(null);
-const selectedKomunitasId = ref(null); 
+const selectedKomunitasId = ref(null);
 
 const openModal = (komunitasId) => {
   selectedKomunitasId.value = komunitasId;
@@ -133,6 +128,15 @@ const fetchData = async () => {
     loading.value = false;
   }
 };
+
+const goToCommunityPage = (communityId) => {
+  router.push(`/communitydetail/${communityId}`);
+};
+
+const goToUserProfile = (userId) => {
+  router.push(`#`);
+};
+
 
 const getDropdownItems = (post) => {
   let items = [{ label: "Laporkan", onClick: () => console.log("Laporkan diklik") }];

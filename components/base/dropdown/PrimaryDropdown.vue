@@ -1,5 +1,5 @@
 <template>
-  <div class=" text-left">
+  <div class="relative text-left">
     <button
       @click="toggleDropdown"
       class="px-4 py-2 rounded-full border border-[#3D3BF3] text-[#3D3BF3] hover:bg-[#3D3BF3] hover:text-white transition-all"
@@ -9,7 +9,7 @@
 
     <div
       v-if="dropdownOpen"
-      class="absolute mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10"
+      class="absolute top-full left-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10"
     >
       <ul>
         <li
@@ -24,6 +24,7 @@
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';

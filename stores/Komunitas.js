@@ -55,8 +55,8 @@ async function fetchKomunitas() {
     }
   }
 
-  async function fetchJoiningKomunitas(komunitasId) {
-    try {
+    async function fetchJoiningKomunitas(komunitasId) {
+      try {
       const response = await fetch(
         `http://192.168.19.251:8000/api/communities/join/${komunitasId}/`,
         {
@@ -120,6 +120,7 @@ async function fetchKomunitas() {
     name,
     description,
     image,
+    banner,
     visibility,
     category
   ) {
@@ -129,8 +130,9 @@ async function fetchKomunitas() {
       formData.append("name", name);
       formData.append("description", description);
 
-      if (image) {
+      if (image, banner) {
         formData.append("image", image);
+        formData.append("banner", banner);
       }
 
       formData.append("visibility", visibility);
