@@ -1,8 +1,5 @@
 <template>
-  <button
-    :class="buttonClass"
-    class="text-xs hover:cursor-pointer py-1 px-2 rounded-3xl hover:opacity-90"
-  >
+  <button :class="buttonClass" class="text-xs hover:cursor-pointer py-1 px-2 rounded-3xl hover:opacity-90">
     {{ buttonName }}
   </button>
 </template>
@@ -19,11 +16,18 @@ export default {
     buttonClass() {
       switch (this.buttonName) {
         case "Hiburan":
-          return "bg-pink-400 text-white";
+          return "bg-pink-500 text-white"; 
         case "Olahraga":
-          return "bg-blue-400 text-white";
+          return "bg-blue-500 text-white"; 
         case "Kuliner":
-          return "bg-orange-400 text-white";
+          return "bg-amber-500 text-white"; 
+        case "Musik":
+          return "bg-emerald-500 text-white";  
+        case "Seni Lukis":
+          return "bg-lime-500 text-white"; 
+        case "Seni Tari":
+          return "bg-indigo-500 text-white"; 
+
         default:
           return "bg-gray-300 text-black";
       }
@@ -31,4 +35,3 @@ export default {
   },
 };
 </script>
-

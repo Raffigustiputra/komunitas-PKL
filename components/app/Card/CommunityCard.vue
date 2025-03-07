@@ -1,7 +1,7 @@
 <template>
   <div class="relative max-w-72 bg-[#F4F7FD] rounded-xl overflow-hidden  dark:bg-[#1d1d25]">
     <div class="relative">
-      <img :src="bannerImage" alt="" class="max-h-[8vh] object-cover min-w-full"/>
+      <img :src="bannerImage" alt="" class="max-h-[8vh] object-cover min-w-full" />
       <div class="absolute -bottom-6 left-4">
         <BaseImageIcon :image="iconImage" />
       </div>
@@ -13,8 +13,8 @@
             {{ communityName }}
           </a>
           <div class="flex items-center gap-2 my-2">
-            <BaseButtonCategoryButton @click="categoryClick" :buttonName="Category"/>
-            <BaseButtonCategoryButton :buttonName="Member"/>
+            <BaseButtonCategoryButton @click="categoryClick" :buttonName="Category" />
+            <BaseButtonCategoryButton :buttonName="Member" />
           </div>
           <p class="text-sm text-gray-600">
             {{ description.slice(0, 50)
@@ -43,11 +43,11 @@ export default {
     },
     headerClick: {
       type: Function,
-      default: () => () => {},
+      default: () => () => { },
     },
     categoryClick: {
       type: Function,
-      default: () => () => {},
+      default: () => () => { },
     },
     iconImage: {
       type: String,
@@ -64,6 +64,10 @@ export default {
     Member: {
       type: String,
       default: "member",
+    },
+    buttonClick: {
+      type: Function,
+      default: () => () => { },
     },
   },
 };
