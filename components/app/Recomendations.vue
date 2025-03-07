@@ -4,17 +4,17 @@
         <h3 class="font-bold">Rekomendasi Komunitas</h3>
 
         <!-- Looping komunitas dari API -->
-        <AppCardCommunityCard  
-          v-for="community in communityList" 
-          :key="community.id"
-          :communityName="community.name || 'Nama Komunitas'"
-          :description="community.description || ''"
-          :iconImage="getCommunityIcon(community.icon)"
-          :bannerImage="getCommunityBanner(community.banner)"
-          :Category="community.category"
-          :isJoined="community.isJoined"
+        <AppCardCommunityCard 
+        v-for="community in communityList" 
+        :key="community.id"
+        :communityName="community.name || 'Nama Komunitas'"
+        :description="community.description || ''"
+        :iconImage="getCommunityIcon(community.icon)"
+        :bannerImage="getCommunityBanner(community.banner)"
+        :Category="community.category"
+        :Member="community.members_count ? `${community.members_count} Anggota` : '0 Anggota'"
+        @click="goToDetail(community.id)"
         />
-
         <!-- Tampilkan pesan jika komunitas kosong atau error -->
         <p v-if="loading" class="text-gray-500">Memuat komunitas...</p>
         <p v-else-if="communityList.length === 0" class="text-gray-500">
@@ -33,15 +33,8 @@
               <td class="px-4 py-2 text-gray-600">{{ index + 1 }}.</td>
               <td class="px-4 py-2 text-blue-500 font-medium">#{{ tag }}</td>
               <td class="px-4 py-2 text-blue-500 text-right">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                  class="w-5 h-5"
-                >
-                  <path
-                    d="M12 2l2.89 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l7.11-1.01z"
-                  />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-5 h-5">
+                  <path d="M12 2l2.89 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l7.11-1.01z" />
                 </svg>
               </td>
             </tr>
@@ -50,22 +43,24 @@
       </div>
     </div>
   </template>
-  <script setup>
-  import { ref, onMounted } from "vue";
-  import { useAuth } from "../stores/Auth";
+<script setup>
+import { ref, onMounted } from "vue";
+import { useAuth } from "../stores/Auth";
 
-  const defaultCommunityIcon = "/assets/default_user_profile_photo.jpg";
-  const defaultCommunityBanner = "/assets/default_banner.jpg";
+const router = useRouter(); 
 
-  const communityList = ref([]);
-  const topTags = ref(["taglistone", "taglisttwo", "taglistthree", "taglistfour"]);
-  const loading = ref(false);
-  const errorMessage = ref("");
+const defaultCommunityIcon = "/assets/default_user_profile_photo.jpg";
+const defaultCommunityBanner = "/assets/default_banner.jpg";
 
-  const getCommunityIcon = (icon) => icon ? `http://192.168.19.251:8000${icon}` : defaultCommunityIcon;
-  const getCommunityBanner = (banner) => banner ? `http://192.168.19.251:8000${banner}` : defaultCommunityBanner;
+const communityList = ref([]);
+const topTags = ref(["taglistone", "taglisttwo", "taglistthree", "taglistfour"]);
+const loading = ref(false);
+const errorMessage = ref("");
 
-  const fetchCommunityData = async () => {
+const getCommunityIcon = (icon) => icon ? `http://192.168.19.251:8000${icon}` : defaultCommunityIcon;
+const getCommunityBanner = (banner) => banner ? `http://192.168.19.251:8000${banner}` : defaultCommunityBanner;
+
+const fetchCommunityData = async () => {
   loading.value = true;
   errorMessage.value = "";
 
@@ -98,7 +93,8 @@
       icon: item.image,
       banner: item.banner,
       category: categories.find((cat) => cat.id === item.category)?.name || "Tidak ada kategori",
-      isJoined: joinedCommunities.some((joined) => joined.id === item.id),
+      member: item.members,
+      members_count: item.members_count,  
     }));
   } catch (error) {
     console.error("Error fetching community data:", error);
@@ -108,6 +104,10 @@
   }
 };
 
+const goToDetail = (id) => {
+  router.push(`/communitydetail/${id}`);
+};
 
-  onMounted(fetchCommunityData);
-  </script>
+
+onMounted(fetchCommunityData);
+</script>

@@ -105,14 +105,14 @@ const handleImageUpload = (event) => {
 
 const removeBanner = () => {
     bannerFile.value = null;
-    bannerUrl.value = null; 
+    bannerUrl.value = "/assets/default_banner.jpg"; 
 };
-
 
 const removeImage = () => {
     imageFile.value = null;
-    imageUrl.value = null;
+    imageUrl.value = "/assets/default_user_profile_photo.jpg"; 
 };
+
 
 const closeModal = () => {
     isOpen.value = false;

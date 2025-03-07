@@ -1,7 +1,7 @@
 <template>
   <div class="relative max-w-72 bg-[#F4F7FD] rounded-xl overflow-hidden  dark:bg-[#1d1d25]">
     <div class="relative">
-      <img :src="bannerImage" alt="" />
+      <img :src="bannerImage" alt="" class="max-h-[8vh] object-cover min-w-full"/>
       <div class="absolute -bottom-6 left-4">
         <BaseImageIcon :image="iconImage" />
       </div>
@@ -14,14 +14,14 @@
           </a>
           <div class="flex items-center gap-2 my-2">
             <BaseButtonCategoryButton @click="categoryClick" :buttonName="Category"/>
-            <BaseButtonCategoryButton />
+            <BaseButtonCategoryButton :buttonName="Member"/>
           </div>
           <p class="text-sm text-gray-600">
             {{ description.slice(0, 50)
             }}{{ description.length > 50 ? "..." : "" }}
           </p>
         </div>
-        <BaseButtonOutlinedButton buttonName="Gabung" @click="buttonClick" />
+        <BaseButtonOutlinedButton buttonName="Lihat" @click="buttonClick" />
       </div>
     </div>
   </div>
@@ -60,6 +60,10 @@ export default {
     Category: {
       type: String,
       default: "cateogry",
+    },
+    Member: {
+      type: String,
+      default: "member",
     },
   },
 };
