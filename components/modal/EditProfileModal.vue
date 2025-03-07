@@ -38,7 +38,7 @@
                     </div>
                     <div>
                         <label for="bio">Bio</label>
-                        <BaseInputTextArea v-model="user.bio" placeholder="Tulis bio Anda" />
+                        <BaseInput v-model="user.bio" placeholder="Tulis bio Anda" />
                     </div>
                 </div>
 

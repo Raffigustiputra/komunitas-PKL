@@ -1,72 +1,113 @@
 <template>
-    <div class="flex flex-col bg-white p-6 rounded-3xl overflow-hidden my-8">
-        <div class="relative">
-          <img :src="komunitasBanner" alt="" class="max-h-64 w-full rounded-3xl object-cover" />
-          <div class="absolute -bottom-11 left-8">
-            <img :src="komunitasImage" alt="" class="w-28 h-28 rounded border-4 border-white shadow-md object-cover">
-          </div>
-        </div>
-        <div class="p-4 pt-16">
-            <div class="flex items-end justify-between gap-7">
-                <div class="space-y-3">
-                    <h1 class="font-bold text-xl">{{ komunitasNama }}</h1>
-                    <p>{{ komunitasDescription }}</p>
-                    <div class="flex gap-3 font-bold">
-                        <span>0 Admin</span>
-                        <span>0 Bergabung</span>
-                    </div>
-                </div>
-                <div class="flex items-center gap-3">
-                    <BaseDropdownIconDropdown :icon="Option" :dropdownItems="getDropdown(komunitasId)"/>
-                    <BaseButtonIconButton :icon="Notification" />
-                    <BaseButtonOutlinedButton buttonName="Chat" @click="goToDetail(komunitasId)"/>
-                    <BaseButtonOutlinedButton buttonName="Bergabung"  @click="openModal(komunitasId)"/>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div
-    class="flex gap-3 mt-4 bg-white p-5 rounded-3xl dark:bg-[#000000]"
-    v-for="(post, index) in postList"
-    :key="post.id"
-    v-if="useAuth().userToken.value"
-  >
-    <div class="space-y-2">
-      <BaseCommunityIcon :image="[post.community_image]" />
-      <BaseImageIcon :image="[post.user_profile]" />
-    </div>
-
-    <div class="flex flex-col w-full dark:text-white">
-      <div class="flex justify-between">
-        <div class="flex flex-col items-start">
-          <div class="flex gap-3">
-            <p class="font-bold">{{ post.community.name }}</p>
-          </div>
-          <p class="text-sm">Dikirim oleh <span class="font-bold"> {{ post.user.username }}</span></p>
-        </div>
-        <div>
-          <p>{{ dayjs(post.created_at).fromNow() }}</p>
-        </div>
-      </div>
-      <p class="mt-2">
-        {{ post.description }}
-      </p>
-      <div v-if="post.image" class="flex mb-3">
-        <BaseImagePost :images="[post.image]" />
-      </div>
-      <div v-if="post.attachment">
-        <BaseFilePreview :documents="[post.attachment]" />
-      </div>
-      <div class="flex items-end justify-end">
-        <BaseDropdownIconDropdown
-          :icon="Option"
-          :dropdownItems="getDropdownItems(post)"
+  <div class="flex flex-col bg-white p-6 rounded-3xl overflow-hidden mt-8">
+    <div class="relative">
+      <img
+        :src="komunitasBanner"
+        alt=""
+        class="max-h-64 w-full rounded-3xl object-cover"
+      />
+      <div class="absolute -bottom-11 left-8">
+        <img
+          :src="komunitasImage"
+          alt=""
+          class="w-28 h-28 rounded border-4 border-white shadow-md object-cover"
         />
       </div>
     </div>
+    <div class="p-4 pt-16">
+      <div class="flex items-end justify-between gap-7">
+        <div class="space-y-3">
+          <h1 class="font-bold text-xl">{{ komunitasNama }}</h1>
+          <p>{{ komunitasDescription }}</p>
+          <div class="flex gap-3 font-bold">
+            <span>0 Admin</span>
+            <span>0 Bergabung</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <BaseDropdownIconDropdown
+            :icon="Option"
+            :dropdownItems="getDropdown(komunitasId)"
+          />
+          <BaseButtonIconButton :icon="Notification" />
+          <BaseButtonOutlinedButton
+            buttonName="Chat"
+            @click="goToDetail(komunitasId)"
+          />
+          <BaseButtonOutlinedButton
+            buttonName="Bergabung"
+            @click="openModal(komunitasId)"
+          />
+        </div>
+      </div>
+    </div>
   </div>
-  
+  <div class="flex justify-center space-x-10 my-5">
+    <BaseButtonSecondaryButton
+      class="text-lg"
+      buttonName="Postingan"
+      @click="activeTab = 'postingan'"
+      :class="{ focus: activeTab === 'postingan' }"
+    />
+    <BaseButtonSecondaryButton
+      class="text-lg"
+      buttonName="Anggota"
+      @click="activeTab = 'anggota'"
+    />
+  </div>
+
+  <div class="flex gap-5">
+  <div class="flex flex-col w-3/4 space-y-4">
+    <div
+      class="flex gap-3 bg-white p-5 rounded-3xl dark:bg-[#000000]"
+      v-for="(post, index) in postList"
+      :key="post.id"
+      v-if="useAuth().userToken.value"
+    >
+      <div class="space-y-2">
+        <BaseCommunityIcon :image="[post.community_image]" />
+        <BaseImageIcon :image="[post.user_profile]" />
+      </div>
+
+      <div class="flex flex-col w-full dark:text-white">
+        <div class="flex justify-between">
+          <div class="flex flex-col items-start">
+            <div class="flex gap-3">
+              <p class="font-bold">{{ post.community.name }}</p>
+            </div>
+            <p class="text-sm">
+              Dikirim oleh <span class="font-bold"> {{ post.user.username }}</span>
+            </p>
+          </div>
+          <div>
+            <p>{{ dayjs(post.created_at).fromNow() }}</p>
+          </div>
+        </div>
+        <p class="mt-2">{{ post.description }}</p>
+        <div v-if="post.image" class="flex mb-3">
+          <BaseImagePost :images="[post.image]" />
+        </div>
+        <div v-if="post.attachment">
+          <BaseFilePreview :documents="[post.attachment]" />
+        </div>
+        <div class="flex items-end justify-end">
+          <BaseDropdownIconDropdown :icon="Option" :dropdownItems="getDropdownItems(post)" />
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sticky flex flex-col gap-5 top-4 w-1/3 max-h-fit  dark:bg-gray-800 dark:text-white">
+    <div class="bg-white rounded-3xl p-5">
+      <h3 class="font-bold text-lg mb-2">Peraturan Komunitas</h3>
+      <p>{{ komunitasRules || 'Belum ada Peraturan yang dibuat' }}</p>
+    </div>
+    <div class="bg-white rounded-3xl p-5">
+      <h3 class="font-bold text-lg mb-2">Konstributor Teratas</h3>
+    </div>
+  </div>
+</div>
+
+
   <div
     v-if="!postList || postList.length === 0"
     class="flex flex-col items-center text-gray-500"
@@ -81,9 +122,20 @@
     :message="alertMessage"
     :type="alertColor"
   />
-  <ModalAlertModal buttonName="Tetap Gabung" header="Yakin ingin bergabung?" paragraph="Isinya orang jamet  " ref="modalRef" :clicking="JoinCommunity"  />
-  <ModalAlertModal buttonName="Hapus" header="Konfirmasi Hapus" paragraph="Apakah Anda yakin ingin menghapus komunitas ini?" ref="modalDeleteRef":clicking="confirmDeleteCommunity"/>
-
+  <ModalAlertModal
+    buttonName="Tetap Gabung"
+    header="Yakin ingin bergabung?"
+    paragraph="Isinya orang jamet  "
+    ref="modalRef"
+    :clicking="JoinCommunity"
+  />
+  <ModalAlertModal
+    buttonName="Hapus"
+    header="Konfirmasi Hapus"
+    paragraph="Apakah Anda yakin ingin menghapus komunitas ini?"
+    ref="modalDeleteRef"
+    :clicking="confirmDeleteCommunity"
+  />
 </template>
 
 <script setup>
@@ -104,6 +156,7 @@ const router = useRouter();
 const komunitasStore = useKomunitas();
 const komunitasId = ref(route.params.id);
 const komunitasNama = ref("");
+const komunitasRules = ref("");
 const komunitasBanner = ref("");
 const komunitasDescription = ref("");
 const komunitasImage = ref("");
@@ -141,14 +194,15 @@ const fetchKomunitasDetails = async () => {
 
     if (komunitas) {
       komunitasNama.value = komunitas.name;
+      komunitasRules.value = komunitas.rules;
       komunitasId.value = komunitas.id;
       komunitasDescription.value = komunitas.description;
       komunitasImage.value = komunitas.image
         ? `http://192.168.19.251:8000/${komunitas.image}`
-        : '';
+        : "";
       komunitasBanner.value = komunitas.banner
         ? `http://192.168.19.251:8000/${komunitas.banner}`
-        : '';
+        : "";
     } else {
       komunitasNama.value = "Komunitas Tidak Ditemukan";
       komunitasImage.value = null;
@@ -157,7 +211,6 @@ const fetchKomunitasDetails = async () => {
     console.error("Error fetching komunitas:", error);
   }
 };
-
 
 const fetchPosts = async () => {
   try {
@@ -193,18 +246,15 @@ const goToDetail = (id) => {
 
 const getDropdown = (komunitasId) => {
   console.log("Komunitas ID sebelum hapus:", komunitasId);
-  return [
-    { label: "Hapus", onClick: () => deleteCommunity(komunitasId) }
-  ];
+  return [{ label: "Hapus", onClick: () => deleteCommunity(komunitasId) }];
 };
-
 
 const deleteCommunity = () => {
   // Buka modal konfirmasi hapus sebelum benar-benar menghapus
   modalDeleteRef.value.openModal();
 };
 
-const confirmDeleteCommunity = async () => { 
+const confirmDeleteCommunity = async () => {
   if (!komunitasId.value) {
     console.error("Error: komunitasId tidak valid atau undefined.");
     return;
@@ -220,14 +270,17 @@ const confirmDeleteCommunity = async () => {
       console.error("Gagal menghapus komunitas.");
     }
   } catch (error) {
-    console.error(`Error deleting community with ID ${komunitasId.value}:`, error);
+    console.error(
+      `Error deleting community with ID ${komunitasId.value}:`,
+      error
+    );
   }
 };
 
-
-
 const getDropdownItems = (post) => {
-  let items = [{ label: "Laporkan", onClick: () => console.log("Laporkan diklik") }];
+  let items = [
+    { label: "Laporkan", onClick: () => console.log("Laporkan diklik") },
+  ];
   if (post.user_id === currentUserId.value) {
     items.push({
       label: "Hapus",

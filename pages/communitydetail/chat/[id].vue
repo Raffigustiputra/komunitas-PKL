@@ -248,6 +248,10 @@ const goBack = (id) => {
     router.push(`/communitydetail/${id}`);
 };
 
+definePageMeta({
+  middleware: "auth",
+  layout: "community",
+});
 
 onMounted(() => {
   fetchKomunitasDetails();
