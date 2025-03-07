@@ -46,8 +46,8 @@ export const useKomunitas = defineStore("komunitas", () => {
     }
   }
 
-  async function fetchJoiningKomunitas(komunitasId) {
-    try {
+    async function fetchJoiningKomunitas(komunitasId) {
+      try {
       const response = await fetch(
         `http://192.168.19.251:8000/api/communities/join/${komunitasId}/`,
         {
@@ -111,6 +111,7 @@ export const useKomunitas = defineStore("komunitas", () => {
     name,
     description,
     image,
+    banner,
     visibility,
     category
   ) {
@@ -120,8 +121,9 @@ export const useKomunitas = defineStore("komunitas", () => {
       formData.append("name", name);
       formData.append("description", description);
 
-      if (image) {
+      if (image, banner) {
         formData.append("image", image);
+        formData.append("banner", banner);
       }
 
       formData.append("visibility", visibility);

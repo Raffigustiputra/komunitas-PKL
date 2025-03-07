@@ -64,7 +64,7 @@ export const useAuth = () => {
             return { success: false, message: error.message };
         }
     }
-    
+
 
     async function profile(token) {
         try {
@@ -83,45 +83,50 @@ export const useAuth = () => {
                 throw new Error(errorData.message || 'Profile gagal diambil.');
             }
             const user = await response.json();
+            console.log("User Profile:", user);
             return user
 
         }
         catch (error) {
+            console.error("Error saat ambil profile:", error);
             return { success: false, message: error.message };
         }
     }
 
-        async function updateProfile(updatedData) {
-            try {
-                if (!userToken.value || !userData.value?.id) {
-                    throw new Error("Token atau ID pengguna tidak ditemukan.");
-                }
-        
-                const response = await fetch(`http://192.168.19.251:8000/api/users/detail/${userData.value.id}/`, {
-                    method: "PUT",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Token ${userToken.value}`,
-                    },
-                    body: JSON.stringify(updatedData),
-                });
-        
-                const responseData = await response.json();
-        
-                if (!response.ok) {
-                    throw new Error(responseData?.message || "Gagal memperbarui profil.");
-                }
-        
-                // Perbarui data user setelah update berhasil
-                userData.value = responseData;
-        
-                return { success: true, message: "Profil berhasil diperbarui." };
-            } catch (error) {
-                console.error("Error updating profile:", error);
-                return { success: false, message: error.message };
+    const updateProfile = async () => {
+        try {
+            const auth = useAuth();
+            const userId = await auth.profile(); // Ambil ID user dari fungsi profile()
+            
+            const formData = new FormData();
+            formData.append("id", userId); // Kirim ID user
+            if (imageFile) {
+                formData.append("profile_photo", imageFile.value); // Hanya kirim foto kalau ada
             }
-        }
     
+            const response = await fetch(`http://192.168.19.251:8000/api/users/detail/${userId}/`, {
+                method: "PATCH",
+                headers: {
+                    "Authorization": `Token ${auth.userToken.value}`,
+                },
+                body: formData,
+            });
+    
+            const result = await response.json();
+    
+            if (!response.ok) throw new Error(result.message || "Gagal memperbarui profil.");
+    
+            alert("Profil berhasil diperbarui.");
+            closeModal();
+        } catch (error) {
+            alert("Gagal memperbarui profil: " + error.message);
+            console.error("Error update profile:", error);
+        }
+    };
+    
+    
+
+
 
     // Fungsi untuk Logout
     async function logout() {

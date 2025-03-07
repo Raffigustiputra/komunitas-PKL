@@ -17,7 +17,7 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
-                    <BaseDropdownIconDropdown :icon="Option" />
+                    <BaseDropdownIconDropdown :icon="Option" :dropdownItems="getDropdown(komunitas)"/>
                     <BaseButtonIconButton :icon="Notification" />
                     <BaseButtonOutlinedButton buttonName="Chat" @click="goToDetail(komunitasId)"/>
                     <BaseButtonOutlinedButton buttonName="Bergabung"  @click="openModal(komunitasId)"/>
@@ -82,18 +82,20 @@
     :type="alertColor"
   />
   <ModalAlertModal buttonName="Tetap Gabung" header="Yakin ingin bergabung?" paragraph="Isinya orang jamet  " ref="modalRef" :clicking="JoinCommunity"  />
+  <ModalAlertModal buttonName="Hapus" header="Konfirmasi Hapus" paragraph="Apakah Anda yakin ingin menghapus komunitas ini?" ref="modalDeleteRef":clicking="confirmDeleteCommunity"/>
+
 </template>
 
 <script setup>
 import Option from "~/components/icons/Option.vue";
 import Notification from "~/components/icons/Notification.vue";
-import { useRoute } from "vue-router";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useKomunitas } from "~/stores/Komunitas.js";
 import { usePosts } from "~/stores/Posts.js";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useAuth } from "~/stores/Auth";
+import { ref, computed, onMounted } from "vue";
 
 const postStore = usePosts();
 const postList = ref([]);
@@ -101,7 +103,6 @@ const route = useRoute();
 const router = useRouter();
 const komunitasStore = useKomunitas();
 const komunitasId = ref(route.params.id);
-const communityId = route.params.id;
 const komunitasNama = ref("");
 const komunitasBanner = ref("");
 const komunitasDescription = ref("");
@@ -109,9 +110,13 @@ const komunitasImage = ref("");
 const authStore = useAuth();
 const account = ref(null);
 const currentUserId = computed(() => account.value?.id || null);
+const alertVisible = ref(false);
+const alertMessage = ref("");
+const alertColor = ref("");
 dayjs.extend(relativeTime);
 const modalRef = ref(null);
-const selectedKomunitasId = ref(null); 
+const selectedKomunitasId = ref(null);
+const modalDeleteRef = ref(null);
 
 const openModal = (komunitasId) => {
   selectedKomunitasId.value = komunitasId;
@@ -132,7 +137,7 @@ const fetchKomunitasDetails = async () => {
   try {
     const communities = await komunitasStore.fetchKomunitas();
     const komunitas = communities.find((k) => k.id == komunitasId.value);
-    console.log(komunitasId)
+    console.log(komunitasId); // Debugging
 
     if (komunitas) {
       komunitasNama.value = komunitas.name;
@@ -153,9 +158,10 @@ const fetchKomunitasDetails = async () => {
   }
 };
 
-const fetchPosts = async (communityId) => {
+
+const fetchPosts = async () => {
   try {
-    const posts = await postStore.fetchCommunityPosts(communityId);
+    const posts = await postStore.fetchCommunityPosts(komunitasId.value);
     postList.value = posts.map((item) => ({
       id: item.id,
       description: item.description,
@@ -169,21 +175,55 @@ const fetchPosts = async (communityId) => {
         ? `http://192.168.19.251:8000${item.user_detail.profile_photo}`
         : "/assets/default_user_profile_photo.jpg",
       community: item.community_detail,
-      community_image: item.community_detail.image ? `http://192.168.19.251:8000${item.community_detail.image}`
+      community_image: item.community_detail.image
+        ? `http://192.168.19.251:8000${item.community_detail.image}`
         : "/assets/default_user_profile_photo.jpg",
       visibility: item.visibility,
       created_at: item.created_at,
       updated_at: item.updated_at,
     }));
-    console.log(postList.value);
   } catch (error) {
     console.error(error);
   }
 };
 
 const goToDetail = (id) => {
-    router.push(`/communitydetail/chat/${id}`);
+  router.push(`/communitydetail/chat/${id}`);
 };
+
+const getDropdown = (komunitasId) => {
+  console.log("Komunitas ID sebelum hapus:", komunitasId);
+  return [
+    { label: "Hapus", onClick: () => deleteCommunity(komunitasId) }
+  ];
+};
+
+const deleteCommunity = () => {
+  // Buka modal konfirmasi hapus sebelum benar-benar menghapus
+  modalDeleteRef.value.openModal();
+};
+
+const confirmDeleteCommunity = async () => { 
+  if (!komunitasId.value) {
+    console.error("Error: komunitasId tidak valid atau undefined.");
+    return;
+  }
+
+  try {
+    const success = await komunitasStore.removeKomunitas(komunitasId.value);
+
+    if (success) {
+      // Langsung redirect setelah komunitas berhasil dihapus
+      router.push("/community-list");
+    } else {
+      console.error("Gagal menghapus komunitas.");
+    }
+  } catch (error) {
+    console.error(`Error deleting community with ID ${komunitasId.value}:`, error);
+  }
+};
+
+
 
 const getDropdownItems = (post) => {
   let items = [{ label: "Laporkan", onClick: () => console.log("Laporkan diklik") }];
@@ -197,9 +237,9 @@ const getDropdownItems = (post) => {
 };
 
 onMounted(() => {
-    fetchKomunitasDetails();
-    fetchPosts(communityId);
-    fetchAccount()
+  fetchKomunitasDetails();
+  fetchPosts();
+  fetchAccount();
 });
 
 const handleDeleted = async (id) => {
@@ -237,7 +277,6 @@ const JoinCommunity = async () => {
     console.error("Gagal bergabung:", error);
   }
 };
-
 
 definePageMeta({
   middleware: "auth",
