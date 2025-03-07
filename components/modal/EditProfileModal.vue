@@ -130,7 +130,7 @@ const updateProfile = async () => {
         const formData = new FormData();
         formData.append("username", user.value.username);
         formData.append("email", user.value.email);
-        formData.append("bio", user.value.bio || "");
+        formData.append("bio", user.value.bio);
         if (imageFile.value) formData.append("profile_photo", imageFile.value);
         if (bannerFile.value) formData.append("banner", bannerFile.value);
 

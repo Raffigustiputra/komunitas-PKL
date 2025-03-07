@@ -144,11 +144,11 @@ const fetchKomunitasDetails = async () => {
       komunitasId.value = komunitas.id;
       komunitasDescription.value = komunitas.description;
       komunitasImage.value = komunitas.image
-        ? `http://192.168.19.251:8000${komunitas.image}`
-        : null;
+        ? `http://192.168.19.251:8000/${komunitas.image}`
+        : '';
       komunitasBanner.value = komunitas.banner
-        ? `http://192.168.19.251:8000${komunitas.banner}`
-        : null;
+        ? `http://192.168.19.251:8000/${komunitas.banner}`
+        : '';
     } else {
       komunitasNama.value = "Komunitas Tidak Ditemukan";
       komunitasImage.value = null;
