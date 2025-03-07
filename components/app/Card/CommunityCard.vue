@@ -13,7 +13,7 @@
             {{ communityName }}
           </a>
           <div class="flex items-center gap-2 my-2">
-            <BaseButtonCategoryButton @click="categoryClick" />
+            <BaseButtonCategoryButton @click="categoryClick" :buttonName="Category"/>
             <BaseButtonCategoryButton />
           </div>
           <p class="text-sm text-gray-600">
@@ -39,7 +39,7 @@ export default {
     },
     description: {
       type: String,
-      default: "deskripsi komunitas",
+      default: "",
     },
     headerClick: {
       type: Function,
@@ -56,6 +56,10 @@ export default {
     bannerImage: {
       type: String,
       default: defaultBanner,
+    },
+    Category: {
+      type: String,
+      default: "cateogry",
     },
   },
 };
