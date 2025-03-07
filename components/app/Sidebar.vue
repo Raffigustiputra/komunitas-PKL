@@ -1,7 +1,8 @@
 <template>
   <nav class="w-64 h-screen p-4 flex flex-col fixed">
     <div class="mx-3">
-      <AppLogo />
+      <AppLogo :onClick="() => navigateTo('/homepage')" buttonName="Homepage" :icon="Homepage"
+      path="/homepage" />
     </div>
 
     <div class="mt-8 space-y-1">

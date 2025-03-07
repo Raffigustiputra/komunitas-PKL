@@ -17,7 +17,7 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
-                    <BaseDropdownIconDropdown :icon="Option" :dropdownItems="getDropdown(komunitas)"/>
+                    <BaseDropdownIconDropdown :icon="Option" :dropdownItems="getDropdown(komunitasId)"/>
                     <BaseButtonIconButton :icon="Notification" />
                     <BaseButtonOutlinedButton buttonName="Chat" @click="goToDetail(komunitasId)"/>
                     <BaseButtonOutlinedButton buttonName="Bergabung"  @click="openModal(komunitasId)"/>
@@ -197,6 +197,7 @@ const getDropdown = (komunitasId) => {
     { label: "Hapus", onClick: () => deleteCommunity(komunitasId) }
   ];
 };
+
 
 const deleteCommunity = () => {
   // Buka modal konfirmasi hapus sebelum benar-benar menghapus
