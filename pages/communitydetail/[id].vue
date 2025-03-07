@@ -42,6 +42,8 @@
       </div>
     </div>
   </div>
+
+  <!-- Tabs -->
   <div class="flex justify-center space-x-10 my-5">
     <BaseButtonSecondaryButton
       class="text-lg"
@@ -53,67 +55,80 @@
       class="text-lg"
       buttonName="Anggota"
       @click="activeTab = 'anggota'"
+      :class="{ focus: activeTab === 'anggota' }"
     />
   </div>
 
-  <div class="flex gap-5">
-  <div class="flex flex-col w-3/4 space-y-4">
-    <div
-      class="flex gap-3 bg-white p-5 rounded-3xl dark:bg-[#000000]"
-      v-for="(post, index) in postList"
-      :key="post.id"
-      v-if="useAuth().userToken.value"
-    >
-      <div class="space-y-2">
-        <BaseCommunityIcon :image="[post.community_image]" />
-        <BaseImageIcon :image="[post.user_profile]" />
-      </div>
-
-      <div class="flex flex-col w-full dark:text-white">
-        <div class="flex justify-between">
-          <div class="flex flex-col items-start">
-            <div class="flex gap-3">
-              <p class="font-bold">{{ post.community.name }}</p>
+  <!-- Konten Postingan -->
+  <div v-if="activeTab === 'postingan'" class="flex gap-5">
+    <div class="flex flex-col w-3/4 space-y-4">
+      <div
+        class="flex gap-3 bg-white p-5 rounded-3xl dark:bg-[#000000]"
+        v-for="(post, index) in postList"
+        :key="post.id"
+        v-if="useAuth().userToken.value"
+      >
+        <div class="space-y-2">
+          <BaseCommunityIcon :image="[post.community_image]" />
+          <BaseImageIcon :image="[post.user_profile]" />
+        </div>
+        <div class="flex flex-col w-full dark:text-white">
+          <div class="flex justify-between">
+            <div class="flex flex-col items-start">
+              <div class="flex gap-3">
+                <p class="font-bold">{{ post.community.name }}</p>
+              </div>
+              <p class="text-sm">
+                Dikirim oleh <span class="font-bold"> {{ post.user.username }}</span>
+              </p>
             </div>
-            <p class="text-sm">
-              Dikirim oleh <span class="font-bold"> {{ post.user.username }}</span>
-            </p>
+            <div>
+              <p>{{ dayjs(post.created_at).fromNow() }}</p>
+            </div>
           </div>
-          <div>
-            <p>{{ dayjs(post.created_at).fromNow() }}</p>
+          <p class="mt-2">{{ post.description }}</p>
+          <div v-if="post.image" class="flex mb-3">
+            <BaseImagePost :images="[post.image]" />
+          </div>
+          <div v-if="post.attachment">
+            <BaseFilePreview :documents="[post.attachment]" />
+          </div>
+          <div class="flex items-end justify-end">
+            <BaseDropdownIconDropdown :icon="Option" :dropdownItems="getDropdownItems(post)" />
           </div>
         </div>
-        <p class="mt-2">{{ post.description }}</p>
-        <div v-if="post.image" class="flex mb-3">
-          <BaseImagePost :images="[post.image]" />
-        </div>
-        <div v-if="post.attachment">
-          <BaseFilePreview :documents="[post.attachment]" />
-        </div>
-        <div class="flex items-end justify-end">
-          <BaseDropdownIconDropdown :icon="Option" :dropdownItems="getDropdownItems(post)" />
-        </div>
+      </div>
+      <!-- Jika tidak ada postingan -->
+      <div v-if="activeTab === 'postingan' && (!postList || postList.length === 0)" class="flex flex-col items-center text-gray-500 mt-10">
+        Tidak ada Postingan untuk ditampilkan.
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sticky flex flex-col gap-5 top-4 w-1/3 max-h-fit dark:bg-gray-800 dark:text-white">
+      <div class="bg-white rounded-3xl p-5">
+        <h3 class="font-bold text-lg mb-2">Peraturan Komunitas</h3>
+        <p>{{ komunitasRules || 'Belum ada Peraturan yang dibuat' }}</p>
+      </div>
+      <div class="bg-white rounded-3xl p-5">
+        <h3 class="font-bold text-lg mb-2">Kontributor Teratas</h3>
       </div>
     </div>
   </div>
-  <div class="sticky flex flex-col gap-5 top-4 w-1/3 max-h-fit  dark:bg-gray-800 dark:text-white">
-    <div class="bg-white rounded-3xl p-5">
-      <h3 class="font-bold text-lg mb-2">Peraturan Komunitas</h3>
-      <p>{{ komunitasRules || 'Belum ada Peraturan yang dibuat' }}</p>
+
+  <div v-if="activeTab === 'anggota'">
+    <div class="ms-2 font-bold">
+      <p>Anggota - {{ komunitasMembers_count }}</p>
     </div>
-    <div class="bg-white rounded-3xl p-5">
-      <h3 class="font-bold text-lg mb-2">Konstributor Teratas</h3>
+    <div class="flex items-center gap-3 bg-white mt-5 p-3 rounded-3xl" v-for="(members) in komunitasMembers" :key="members.id">
+      <BaseImageIcon :image="members.profile_photo ? `http://192.168.19.251:8000${members.profile_photo}` : defaultImage"/>
+      <div>
+        <p class="font-bold">{{members.username}}</p>
+        <p>{{members.bio}}</p>
+      </div>
     </div>
   </div>
-</div>
 
-
-  <div
-    v-if="!postList || postList.length === 0"
-    class="flex flex-col items-center text-gray-500"
-  >
-    Tidak ada Postingan untuk ditampilkan.
-  </div>
 
   <BaseLoading :isLoading="loading" />
 
@@ -122,6 +137,7 @@
     :message="alertMessage"
     :type="alertColor"
   />
+
   <ModalAlertModal
     buttonName="Tetap Gabung"
     header="Yakin ingin bergabung?"
@@ -148,6 +164,8 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useAuth } from "~/stores/Auth";
 import { ref, computed, onMounted } from "vue";
+import defaultImage from '/public/assets/default_user_profile_photo.jpg';
+
 
 const postStore = usePosts();
 const postList = ref([]);
@@ -160,6 +178,8 @@ const komunitasRules = ref("");
 const komunitasBanner = ref("");
 const komunitasDescription = ref("");
 const komunitasImage = ref("");
+const komunitasMembers = ref("");
+const komunitasMembers_count = ref("");
 const authStore = useAuth();
 const account = ref(null);
 const currentUserId = computed(() => account.value?.id || null);
@@ -169,7 +189,8 @@ const alertColor = ref("");
 dayjs.extend(relativeTime);
 const modalRef = ref(null);
 const selectedKomunitasId = ref(null);
-const modalDeleteRef = ref(null);
+const modalDeleteRef = ref(null)
+const activeTab = ref("postingan");
 
 const openModal = (komunitasId) => {
   selectedKomunitasId.value = komunitasId;
@@ -197,6 +218,8 @@ const fetchKomunitasDetails = async () => {
       komunitasRules.value = komunitas.rules;
       komunitasId.value = komunitas.id;
       komunitasDescription.value = komunitas.description;
+      komunitasMembers.value = komunitas.members;
+      komunitasMembers_count.value = komunitas.members_count;
       komunitasImage.value = komunitas.image
         ? `http://192.168.19.251:8000/${komunitas.image}`
         : "";
