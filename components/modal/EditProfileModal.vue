@@ -79,8 +79,12 @@ const openModal = async () => {
     const auth = useAuth();
     const response = await auth.profile();
     user.value = { ...response };
-    if (user.value.profile_photo) imageUrl.value = `http://192.168.19.251:8000${user.value.profile_photo}`;
-    if (user.value.banner) bannerUrl.value = `http://192.168.19.251:8000${user.value.banner}`;
+    imageUrl.value = user.value.profile_photo 
+    ? `http://192.168.19.251:8000${user.value.profile_photo}`
+    : "/assets/default_user_profile_photo.jpg";
+    bannerUrl.value = user.value.banner 
+    ? `http://192.168.19.251:8000${user.value.banner}` 
+    : "/assets/default_banner.jpg";
 };
 
 const handleBannerUpload = (event) => {
@@ -101,8 +105,9 @@ const handleImageUpload = (event) => {
 
 const removeBanner = () => {
     bannerFile.value = null;
-    bannerUrl.value = null;
+    bannerUrl.value = null; 
 };
+
 
 const removeImage = () => {
     imageFile.value = null;
@@ -153,6 +158,7 @@ const updateProfile = async () => {
         console.error("Error update profile:", error);
     }
 };
+
 
 onMounted(async () => {
     const response = await useAuth().profile();
