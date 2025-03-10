@@ -1,26 +1,33 @@
 <template>
-    <div class="p-4 max-w-md mx-auto bg-white shadow-lg rounded-2xl">
-      <h2 class="text-xl font-bold mb-4">Daftar Dokumen</h2>
-      <ul>
-        <li v-for="doc in documents" :key="doc.id" class="flex justify-between items-center mb-2">
-          <span>{{ doc.name }}</span>
-          <a :href="doc.url" download
-             class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
-            Download
-          </a>
-        </li>
-      </ul>
+  <div class="rounded-2xl">
+
+    <div v-if="documents && isVideo(documents)" class=" bg-black rounded-lg overflow-hidden">
+      <video 
+        class="w-full h-full object-fill" 
+        :src="documents" 
+        controls 
+        autoplay 
+        loop 
+        muted>
+      </video>
     </div>
+
+    <p v-else class="text-gray-500 text-center">Tidak ada video yang valid.</p>
+  </div>
 </template>
 
 <script>
-  export default {
+export default {
   props: {
     documents: {
-      type: Array,
+      type: String,
       required: true
     }
-},
-
+  },
+  methods: {
+    isVideo(fileUrl) {
+      return fileUrl && /\.(mp4|webm|ogg|mov|avi|mkv)$/i.test(fileUrl);
+    }
+  }
 };
 </script>

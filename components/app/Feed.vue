@@ -34,7 +34,8 @@
         <BaseImagePost :images="[post.image]" />
       </div>
       <div v-if="post.attachment">
-        <BaseFilePreview :documents="[post.attachment]" />
+       <BaseFilePreview :documents="post.attachment" />
+
       </div>
       <div class="flex items-end justify-end">
         <BaseDropdownIconDropdown :icon="Option" :dropdownItems="getDropdownItems(post)" />

@@ -120,11 +120,16 @@
     <div class="ms-2 font-bold">
       <p>Anggota - {{ komunitasMembers_count }}</p>
     </div>
-    <div class="flex items-center gap-3 bg-white mt-5 p-3 rounded-3xl" v-for="(members) in komunitasMembers" :key="members.id">
-      <BaseImageIcon :image="members.profile_photo ? `http://192.168.19.251:8000${members.profile_photo}` : defaultImage"/>
-      <div>
-        <p class="font-bold">{{members.username}}</p>
-        <p>{{members.bio}}</p>
+    <div class="flex bg-white mt-5 justify-between items-center p-3  rounded-3xl" v-for="(members) in komunitasMembers" :key="members.id">
+      <div class="flex items-center gap-3 ">
+        <BaseImageIcon :image="members.profile_photo ? `http://192.168.19.251:8000${members.profile_photo}` : defaultImage"/>
+        <div>
+          <p class="font-bold">{{members.username}}</p>
+          <p>{{members.bio}}</p>
+        </div>
+      </div>
+      <div v-for="(members_role) in members.role_detail.filter(role => role.community === komunitasId)" :key="index">
+        <p class="font-bold mx-4  ">{{ members_role.role }}</p>
       </div>
     </div>
   </div>
@@ -179,6 +184,7 @@ const komunitasBanner = ref("");
 const komunitasDescription = ref("");
 const komunitasImage = ref("");
 const komunitasMembers = ref("");
+const komunitasMembersRole = ref("");
 const komunitasMembers_count = ref("");
 const authStore = useAuth();
 const account = ref(null);
@@ -226,6 +232,7 @@ const fetchKomunitasDetails = async () => {
       komunitasBanner.value = komunitas.banner
         ? `http://192.168.19.251:8000/${komunitas.banner}`
         : "";
+        console.log(komunitasMembersRole.value)
     } else {
       komunitasNama.value = "Komunitas Tidak Ditemukan";
       komunitasImage.value = null;

@@ -26,7 +26,7 @@
             </div>
 
             <div class="flex gap-3">
-                <input type="file" accept=".pdf,.doc,.docx,.txt" hidden ref="docInput" @change="(e) => handleFileSelect('attachment', e)" />
+                <input type="file" accept=".pdf,.doc,.docx,.txt, video/*" hidden ref="docInput" @change="(e) => handleFileSelect('attachment', e)" />
                 <BaseButtonIconButton :icon="Attachment" @click="openDocPicker" class="text-[#3D3BF3]" />
                 <input type="file" accept="image/*" hidden ref="imageInput" @change="(e) => handleFileSelect('image', e)" />
                 <BaseButtonIconButton :icon="Image" @click="openImagePicker" class="text-[#3D3BF3]" />  

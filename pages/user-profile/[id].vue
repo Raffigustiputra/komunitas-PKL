@@ -17,7 +17,7 @@
                             <p class="text-gray-500">{{ user.email }}</p>
                         </div>
                         <p class="text-gray-600 text-sm">{{ user.bio || 'Belum ada bio.' }}</p>
-                        <p>{{ formatTime(user.created_at) }}</p>
+                        <p>Bergabung pada {{ formatTime(user.created_at) }}</p>
                         <div class="mt-4 flex justify-start gap-3 text-sm font-semibold text-gray-700">
                             <span>{{ user.followers || 0 }} Pengikut</span>
                             <span>{{ user.following || 0 }} Ngikutin</span>
