@@ -4,7 +4,7 @@
       <img
         :src="komunitasBanner"
         alt=""
-        class="max-h-64 w-full rounded-3xl object-cover"
+        class="min-h-64 max-h-64 w-full rounded-3xl object-cover"
       />
       <div class="absolute -bottom-11 left-8">
         <img
@@ -30,6 +30,10 @@
             :dropdownItems="getDropdown(komunitasId)"
           />
           <BaseButtonIconButton :icon="Notification" />
+          <BaseButtonOutlinedButton
+            buttonName="Edit"
+            @click="openEditModal(komunitasId)"
+          />
           <BaseButtonOutlinedButton
             buttonName="Chat"
             @click="goToDetail(komunitasId)"
@@ -157,6 +161,9 @@
     ref="modalDeleteRef"
     :clicking="confirmDeleteCommunity"
   />
+  <ModalEditCommunityModal
+    ref="modalEditRef"
+  />
 </template>
 
 <script setup>
@@ -194,6 +201,7 @@ const alertMessage = ref("");
 const alertColor = ref("");
 dayjs.extend(relativeTime);
 const modalRef = ref(null);
+const modalEditRef = ref(null);
 const selectedKomunitasId = ref(null);
 const modalDeleteRef = ref(null)
 const activeTab = ref("postingan");
@@ -202,6 +210,20 @@ const openModal = (komunitasId) => {
   selectedKomunitasId.value = komunitasId;
   modalRef.value.openModal();
 };
+
+const openEditModal = (id) => {
+  selectedKomunitasId.value = id;
+  modalEditRef.value.openModal({
+    id: komunitasId.value,
+    name: komunitasNama.value,
+    rules: komunitasRules.value,
+    description: komunitasDescription.value,
+    image: komunitasImage.value,
+    banner: komunitasBanner.value,
+  });
+};
+
+
 
 const fetchAccount = async () => {
   try {
@@ -217,8 +239,7 @@ const fetchKomunitasDetails = async () => {
   try {
     const communities = await komunitasStore.fetchKomunitas();
     const komunitas = communities.find((k) => k.id == komunitasId.value);
-    console.log(komunitasId); // Debugging
-
+    
     if (komunitas) {
       komunitasNama.value = komunitas.name;
       komunitasRules.value = komunitas.rules;
@@ -228,11 +249,13 @@ const fetchKomunitasDetails = async () => {
       komunitasMembers_count.value = komunitas.members_count;
       komunitasImage.value = komunitas.image
         ? `http://192.168.19.251:8000/${komunitas.image}`
-        : "";
+        : "../assets/default_user_profile_photo.jpg";
+      
       komunitasBanner.value = komunitas.banner
         ? `http://192.168.19.251:8000/${komunitas.banner}`
-        : "";
-        console.log(komunitasMembersRole.value)
+        : "../assets/default_banner.jpg";
+
+      console.log("Banner komunitas:", komunitasBanner.value); // Debugging
     } else {
       komunitasNama.value = "Komunitas Tidak Ditemukan";
       komunitasImage.value = null;
@@ -241,6 +264,7 @@ const fetchKomunitasDetails = async () => {
     console.error("Error fetching komunitas:", error);
   }
 };
+
 
 const fetchPosts = async () => {
   try {

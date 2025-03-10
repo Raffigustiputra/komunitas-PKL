@@ -1,20 +1,14 @@
-<template>
-    <div class="my-5 dark:text-white">
-        <div class="flex flex-col gap-3 rounded-3xl">
-            <div class="bg-white dark:bg-black rounded-xl w-full overflow-hidden">
-                <img :src="user.banner ? `http://192.168.19.251:8000${user.banner}` : defaultImage" alt="Banner"
-                    class="max-h-40 min-w-full object-cover" />
-                <div class="px-6 -mt-12 flex items-center gap-4 justify-between">
-                    <img :src="user.profile_photo ? `http://192.168.19.251:8000${user.profile_photo}` : defaultImage"
-                        class="w-28 h-28 rounded-full border-4 border-white shadow-md object-cover"
-                        alt="Profile Photo" />
-                    <BaseButtonOutlinedButton buttonName="Edit Profile" @click="openModal" class="mt-16" />
-                </div>
-                <div class="p-7">
-                    <div class="flex-1">
-                        <h1 class="text-xl font-semibold">{{ user.username }}</h1>
-                        <p>{{ user.user_banner }}</p>
-                        <p class="text-gray-500">{{ user.email }}</p>
+    <template>
+        <div class="my-5 dark:text-white">
+            <div class="flex flex-col gap-3 rounded-3xl">
+                <div class="bg-white dark:bg-black rounded-xl w-full overflow-hidden">
+                    <img :src="user.banner ? `http://192.168.19.251:8000${user.banner}` : defaultImage" alt="Banner"
+                        class="max-h-40 min-w-full object-cover" />
+                    <div class="px-6 -mt-12 flex items-center gap-4 justify-between">
+                        <img :src="user.profile_photo ? `http://192.168.19.251:8000${user.profile_photo}` : defaultImage"
+                            class="w-28 h-28 rounded-full border-4 border-white shadow-md object-cover"
+                            alt="Profile Photo" />
+                        <BaseButtonOutlinedButton buttonName="Edit Profile" @click="openModal" class="mt-16" />
                     </div>
                     <div class="p-7">
                         <div class="flex-1">
@@ -31,56 +25,50 @@
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="flex justify-center space-x-10 my-5">
-            <SecondaryButton class="text-lg" buttonName="Postingan" @click="activeTab = 'postingan'"
-                :class="{ 'focus': activeTab === 'postingan' }" />
-            <SecondaryButton class="text-lg" buttonName="Balasan" @click="activeTab = 'balasan'" />
-            <SecondaryButton class="text-lg" buttonName="Komunitas" @click="activeTab = 'komunitas'" />
-        </div>
-
-        <div v-if="activeTab === 'postingan'" v-for="post in postList" :key="post.id"
-            class="flex gap-3 mt-4 bg-white p-5 rounded-3xl dark:bg-[#000000]">
-            <div class="space-y-2">
-                <BaseCommunityIcon :image="[post.community_image]" />
-                <BaseImageIcon :image="[post.user_profile]" />
+            <div class="flex justify-center space-x-10 my-5">
+                <SecondaryButton class="text-lg" buttonName="Postingan" @click="activeTab = 'postingan'"
+                    :class="{ 'focus': activeTab === 'postingan' }" />
+                <SecondaryButton class="text-lg" buttonName="Balasan" @click="activeTab = 'balasan'" />
+                <SecondaryButton class="text-lg" buttonName="Komunitas" @click="activeTab = 'komunitas'" />
             </div>
-            <div class="flex flex-col w-full dark:text-white">
-                <div class="flex justify-between">
-                    <div class="flex flex-col items-start">
-                        <div class="flex gap-3">
-                            <p class="font-bold">{{ post.community?.name || 'Komunitas Tidak Diketahui' }}</p>
+
+            <div v-if="activeTab === 'postingan'" v-for="post in postList" :key="post.id"
+                class="flex gap-3 mt-4 bg-white p-5 rounded-3xl dark:bg-[#000000]">
+                <div class="space-y-2">
+                    <BaseCommunityIcon :image="[post.community_image]" />
+                    <BaseImageIcon :image="[post.user_profile]" />
+                </div>
+                <div class="flex flex-col w-full dark:text-white">
+                    <div class="flex justify-between">
+                        <div class="flex flex-col items-start">
+                            <div class="flex gap-3">
+                                <p class="font-bold">{{ post.community?.name || 'Komunitas Tidak Diketahui' }}</p>
+                            </div>
+                            <p class="text-sm">Dikirim oleh <span class="font-bold"> {{ post.user?.username ||
+                                'Pengguna'
+                                    }}</span></p>
                         </div>
-                        <p class="text-sm">Dikirim oleh <span class="font-bold"> {{ post.user?.username || 'Pengguna' }}</span></p>
+                        <div>
+                            <p>{{ dayjs(post.created_at).fromNow() }}</p>
+                        </div>
                     </div>
-                    <div>
-                        <p>{{ dayjs(post.created_at).fromNow() }}</p>
+                    <p class="mt-2">{{ post.description || 'Tidak ada deskripsi.' }}</p>
+                    <div v-if="post.image" class="flex mb-3">
+                        <BaseImagePost :images="[post.image]" />
                     </div>
-                </div>
-                <p class="mt-2">{{ post.description || 'Tidak ada deskripsi.' }}</p>
-                <div v-if="post.image" class="flex mb-3">
-                    <BaseImagePost :images="[post.image]" />
-                </div>
-                <div v-if="post.attachment">
-                    <BaseFilePreview :documents="[post.attachment]" />
-                </div>
-                <div class="flex items-end justify-end">
-                    <BaseDropdownIconDropdown :icon="Option" :dropdownItems="getDropdownItems(post)" />
+                    <div v-if="post.attachment">
+                        <BaseFilePreview :documents="[post.attachment]" />
+                    </div>
+                    <div class="flex items-end justify-end">
+                        <BaseDropdownIconDropdown :icon="Option" :dropdownItems="getDropdownItems(post)" />
+                    </div>
                 </div>
             </div>
+
+            <EditProfileModal ref="modalRef" />
         </div>
-
-        <div v-if="activeTab === 'komunitas'" class="mt-4">
-            <div class=" dark:bg-[#000000] p-5 rounded-3xl flex flex-col gap-3">
-                <AppCommunityList />
-            </div>
-        </div>
-
-        <EditProfileModal ref="modalRef" />
-    </div>
-</template>
-
+    </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';

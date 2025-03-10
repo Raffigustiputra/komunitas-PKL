@@ -1,4 +1,4 @@
-<template>
+    <template>
     <div v-if="isOpen" @click.self="closeModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
         <div class="bg-white dark:bg-[#1A1A1A] p-6 rounded-3xl w-[350px] md:w-[450px] lg:w-[500px] shadow-lg flex flex-col">
             <div class= "flex flex-col gap-4">

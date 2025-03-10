@@ -206,30 +206,48 @@ async function fetchKomunitas() {
   }
 
   // Fungsi untuk mengedit komunitas berdasarkan ID
-  async function editKomunitas(komunitasId, updatedData) {
-    console.log("editKomunitas", komunitasId, updatedData);
-    try {
-      const response = await fetch(
-        `http://192.168.19.251:8000/api/communities/${komunitasId}/`,
-        {
-          method: "PUT",
-          body: updatedData,
-          headers: {
-            Authorization: `Token ${useAuth().userToken.value}`,
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`Gagal mengedit komunitas. Status: ${response.status}`);
-      }
-      const data = await response.json();
-      console.log("Data after update:", data);
-      return data;
-    } catch (err) {
-      console.error(`Error updating community with ID ${komunitasId}:`, err);
-      throw err;
+async function editKomunitas(komunitasId, updatedData) {
+  console.log("editKomunitas", komunitasId, updatedData);
+
+  try {
+    const formData = new FormData();
+    formData.append("name", updatedData.name);
+    formData.append("description", updatedData.description);
+    formData.append("rules", updatedData.rules);
+    formData.append("category", updatedData.category);
+    formData.append("visibility", updatedData.visibility);
+
+    if (updatedData.image) {
+      formData.append("image", updatedData.image);
     }
+    if (updatedData.banner) {
+      formData.append("banner", updatedData.banner);
+    }
+
+    const response = await fetch(
+      `http://192.168.19.251:8000/api/communities/${komunitasId}/`,
+      {
+        method: "PUT",
+        body: formData,
+        headers: {
+          Authorization: `Token ${useAuth().userToken.value}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Gagal mengedit komunitas. Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log("Data after update:", data);
+    return data;
+  } catch (err) {
+    console.error(`Error updating community with ID ${komunitasId}:`, err);
+    throw err;
   }
+}
+
 
   // Fungsi untuk menghapus gambar komunitas berdasarkan ID
   async function removeImage(komunitasId) {
