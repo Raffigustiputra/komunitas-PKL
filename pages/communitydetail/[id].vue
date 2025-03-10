@@ -18,7 +18,7 @@
       <div class="flex items-end justify-between gap-7">
         <div class="space-y-3">
           <h1 class="font-bold text-xl">{{ komunitasNama }}</h1>
-          <p>{{ komunitasDescription }}</p>
+          <p>{{ komunitasDescription || 'Belum ada Deskripsi.'}}</p>
           <div class="flex gap-3 font-bold">
             <span>0 Admin</span>
             <span>0 Bergabung</span>
