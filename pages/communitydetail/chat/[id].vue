@@ -2,7 +2,7 @@
   <title>Chat / KomunitasApp</title>
   <div class="container mx-auto p-5 h-screen flex flex-col">
     <div
-      class="bg-white rounded-3xl p-4 flex items-center justify-between shadow"
+      class="bg-white rounded-3xl p-4 flex items-center justify-between shadow dark:bg-black dark:text-white"
     >
       <div class="flex items-center gap-2">
         <BaseButtonIconButton
@@ -45,7 +45,7 @@
         :class="
               chat.user_id === account.id
               ? 'bg-[#3D3BF3] text-white'
-              : 'bg-white text-gray-900'"
+              : 'bg-white text-gray-900 dark:bg-black dark:text-white'"
           >
           <p class="font-bold">{{ chat.username }}</p>
           <div class="flex items-end gap-3">
@@ -60,7 +60,7 @@
       </div>
     </div>
 
-    <div class="p-4 flex items-center gap-2 bg-white rounded-3xl shadow">
+    <div class="p-4 flex items-center gap-2 bg-white rounded-3xl shadow dark:bg-black dark:text-white">
       <div class="flex gap-2">
         <input
           type="file"

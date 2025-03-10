@@ -1,22 +1,18 @@
-<template>
-  <button
-    @click="toggleDarkMode"
-    class="mt-4 px-4 py-2 bg-blue-500 dark:bg-yellow-500 text-white dark:text-black rounded-lg transition-colors"
-  >
-    Toggle Dark Mode
-  </button>
-</template>
-
 <script setup>
-import { onMounted } from "vue";
-const toggleDarkMode = () => {
-  document.documentElement.classList.toggle("dark"); 
-  localStorage.setItem("theme", document.documentElement.classList.contains("dark") ? "dark" : "light");
-};
+import { useThemeStore } from "@/stores/theme";
 
-onMounted(() => {
-  if (localStorage.getItem("theme") === "dark") {
-    document.documentElement.classList.add("dark");
-  }
-});
+const themeStore = useThemeStore();
 </script>
+
+<template>
+  <div class="p-6">
+
+    <button
+      @click="themeStore.toggleDarkMode"
+      class="mt-4 px-4 py-2 rounded-full transition-colors duration-300"
+      :class="themeStore.isDarkMode ? 'bg-yellow-500 text-black' : 'bg-blue-500 text-white'"
+    >
+      Toggle Dark Mode
+    </button>
+  </div>
+</template>

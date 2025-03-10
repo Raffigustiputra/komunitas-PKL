@@ -1,5 +1,5 @@
 <template>
-  <div class="relative max-w-72 bg-[#F4F7FD] rounded-xl overflow-hidden  dark:bg-[#1d1d25]">
+  <div class="relative max-w-72 bg-[#F4F7FD] rounded-xl overflow-hidden transition-colors duration-300 dark:bg-black">
     <div class="relative">
       <img :src="bannerImage" alt="" class="max-h-[8vh] object-cover min-w-full" />
       <div class="absolute -bottom-6 left-4">
@@ -9,16 +9,15 @@
     <div class="p-4 pt-8">
       <div class="flex items-start justify-between">
         <div>
-          <a class="text-lg font-bold" @click="headerClick">
+          <a class="text-lg font-bold dark:text-white" @click="headerClick">
             {{ communityName }}
           </a>
           <div class="flex items-center gap-2 my-2">
             <BaseButtonCategoryButton @click="categoryClick" :buttonName="Category" />
             <BaseButtonCategoryButton :buttonName="Member" />
           </div>
-          <p class="text-sm text-gray-600">
-            {{ description.slice(0, 50)
-            }}{{ description.length > 50 ? "..." : "" }}
+          <p class="text-sm text-gray-600 dark:text-gray-300">
+            {{ description.slice(0, 50) }}{{ description.length > 50 ? "..." : "" }}
           </p>
         </div>
         <BaseButtonOutlinedButton buttonName="Lihat" @click="buttonClick" />
@@ -26,6 +25,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 import defaultImage from '/public/assets/default_user_profile_photo.jpg';
