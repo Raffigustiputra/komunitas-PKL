@@ -5,7 +5,7 @@
 
             <form @submit.prevent="handleLogin">
                 <div class="mt-4">
-                    <BaseInput placeholder="Masukkan username atau Username" type="text" id="username" v-model="identifier" />
+                    <BaseInput placeholder="Masukkan Email atau Username" type="text" id="username" v-model="identifier" />
                 </div>
                 <div class="mt-4 relative">
                     <BaseInput 
