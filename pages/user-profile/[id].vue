@@ -35,9 +35,11 @@
 
         <div class="flex justify-center space-x-10 my-5">
             <SecondaryButton class="text-lg" buttonName="Postingan" @click="activeTab = 'postingan'"
-                :class="{ 'focus': activeTab === 'postingan' }" />
-            <SecondaryButton class="text-lg" buttonName="Balasan" @click="activeTab = 'balasan'" />
-            <SecondaryButton class="text-lg" buttonName="Komunitas" @click="activeTab = 'komunitas'" />
+            :class="{ 'text-gray-500': activeTab === 'postingan' }" />
+            <SecondaryButton class="text-lg" buttonName="Balasan" @click="activeTab = 'balasan'" 
+            :class="{ 'text-gray-500': activeTab === 'balasan' }"/>
+            <SecondaryButton class="text-lg" buttonName="Komunitas" @click="activeTab = 'komunitas'" 
+            :class="{ 'text-gray-500': activeTab === 'komunitas' }"/>
         </div>
 
         <div v-if="activeTab === 'postingan'" v-for="post in postList" :key="post.id"
@@ -52,7 +54,8 @@
                         <div class="flex gap-3">
                             <p class="font-bold">{{ post.community?.name || 'Komunitas Tidak Diketahui' }}</p>
                         </div>
-                        <p class="text-sm">Dikirim oleh <span class="font-bold"> {{ post.user?.username || 'Pengguna' }}</span></p>
+                        <p class="text-sm">Dikirim oleh <span class="font-bold"> {{ post.user?.username || 'Pengguna'
+                                }}</span></p>
                     </div>
                     <div>
                         <p>{{ dayjs(post.created_at).fromNow() }}</p>
@@ -65,13 +68,17 @@
                 <div v-if="post.attachment">
                     <BaseFilePreview :documents="[post.attachment]" />
                 </div>
-                <div class="flex items-end justify-end">
+                <div class="flex items-end justify-between mt-5">
+                    <BaseButtonIconButton :icon="Like" />
+                    <BaseButtonIconButton :icon="Bookmark" />
+                    <BaseButtonIconButton :icon="Comment" />
+                    <BaseButtonIconButton :icon="Send" />
                     <BaseDropdownIconDropdown :icon="Option" :dropdownItems="getDropdownItems(post)" />
                 </div>
             </div>
         </div>
 
-        <div v-if="activeTab === 'komunitas'" class="mt-4">
+        <div v-if="activeTab === 'komunitas'" class="mt-4 dark:text-white">
             <div class=" dark:bg-[#000000] p-5 rounded-3xl flex flex-col gap-3">
                 <AppCommunityList />
             </div>
@@ -91,6 +98,10 @@ import SecondaryButton from '~/components/base/button/SecondaryButton.vue';
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import Option from "@/components/icons/Option.vue";
+import Like from "@/components/icons/Like.vue";
+import Bookmark from "@/components/icons/Bookmark.vue";
+import Comment from "@/components/icons/Comment.vue";
+import Send from "@/components/icons/Send.vue";
 import EditProfileModal from "@/components/modal/EditProfileModal.vue"; import { useRoute } from 'vue-router';
 import { watch } from 'vue';
 
@@ -119,16 +130,16 @@ const formatTime = (timestamp) => {
 };
 
 
-    const fetchUser = async () => {
-        try {
-            const userId = route.params.id;
-            console.log("Fetching user with ID:", userId); // Debugging
-            user.value = await authStore.profile(userId);
-            console.log("User data:", user.value); // Debugging
-        } catch (error) {
-            console.error("Error fetching user profile:", error);
-        }
-    };
+const fetchUser = async () => {
+    try {
+        const userId = route.params.id;
+        console.log("Fetching user with ID:", userId); // Debugging
+        user.value = await authStore.profile(userId);
+        console.log("User data:", user.value); // Debugging
+    } catch (error) {
+        console.error("Error fetching user profile:", error);
+    }
+};
 
 const fetchPosts = async () => {
     try {

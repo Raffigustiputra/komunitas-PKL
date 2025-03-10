@@ -1,8 +1,16 @@
 <template>
   <button
-    class="flex bg-transparent items-center gap-5 p-3 rounded-full hover:bg-[#ECECEC] transition-all ease-in-out dark:text-white dark:hover:bg-slate-800"
-    :class="{ 'text-[#3D3BF3] font-bold': isActive, 'dark:bg-slate-800': isActive }"
-    :style="{ backgroundColor: isActive ? '#ECECEC' : '' }"
+    class="flex bg-transparent items-center gap-5 p-3 rounded-full transition-all ease-in-out"
+    :class="[
+      'hover:bg-[#ECECEC] dark:hover:bg-gray-700', 
+      { 
+        'text-[#3D3BF3] font-bold': isActive, 
+        'dark:bg-slate-800': isActive,
+        'dark:text-white': true, // Pastikan tetap putih di dark mode
+        'dark:hover:text-white': isActive // Teks tetap putih saat hover
+      }
+    ]"
+    :style="{ backgroundColor: isActive ? '#ECECEC' : '', color: isActive ? '#3D3BF3' : '' }"
     @click="handleClick"
   >
     <component :is="icon" class="w-6 h-6" />

@@ -31,9 +31,7 @@
           <p class="font-bold dark:text-white">{{ account.username }}</p>
           <p class="text-sm text-gray-500">{{ account.email }}</p>
         </div>
-        <div>
-          <BaseButtonIconButton :icon="Option" />
-        </div>
+        
       </NuxtLink>
     </div>
 
@@ -48,7 +46,7 @@ import Bookmark from "~/components/icons/Bookmark.vue";
 import Notification from "~/components/icons/Notification.vue";
 import Setting from "~/components/icons/Setting.vue";
 import Logout from "~/components/icons/Logout.vue";
-import Option from "~/components/icons/Option.vue";
+
 import Add from "~/components/icons/Add.vue";
 import BaseLoading from "@/components/base/Loading.vue";
 import CreatePostModal from "@/components/modal/CreatePostModal.vue";

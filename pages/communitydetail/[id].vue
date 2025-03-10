@@ -1,43 +1,26 @@
 <template>
-  <div class="flex flex-col bg-white p-6 rounded-3xl overflow-hidden mt-8">
+  <div class="flex flex-col bg-white p-6 rounded-3xl overflow-hidden mt-8 dark:bg-black dark:text-white">
     <div class="relative">
-      <img
-        :src="komunitasBanner"
-        alt=""
-        class="max-h-64 w-full rounded-3xl object-cover"
-      />
+      <img :src="komunitasBanner" alt="" class="max-h-64 w-full rounded-3xl object-cover" />
       <div class="absolute -bottom-11 left-8">
-        <img
-          :src="komunitasImage"
-          alt=""
-          class="w-28 h-28 rounded border-4 border-white shadow-md object-cover"
-        />
+        <img :src="komunitasImage" alt="" class="w-28 h-28 rounded border-4 border-white shadow-md object-cover" />
       </div>
     </div>
     <div class="p-4 pt-16">
       <div class="flex items-end justify-between gap-7">
         <div class="space-y-3">
-          <h1 class="font-bold text-xl">{{ komunitasNama }}</h1>
-          <p>{{ komunitasDescription || 'Belum ada Deskripsi.'}}</p>
+          <h1 class="font-bold text-xl dark:text-white">{{ komunitasNama }}</h1>
+          <p class="dark:text-gray-300">{{ komunitasDescription || 'Belum ada Deskripsi.' }}</p>
           <div class="flex gap-3 font-bold">
             <span>0 Admin</span>
             <span>0 Bergabung</span>
           </div>
         </div>
         <div class="flex items-center gap-3">
-          <BaseDropdownIconDropdown
-            :icon="Option"
-            :dropdownItems="getDropdown(komunitasId)"
-          />
+          <BaseDropdownIconDropdown :icon="Option" :dropdownItems="getDropdown(komunitasId)" />
           <BaseButtonIconButton :icon="Notification" />
-          <BaseButtonOutlinedButton
-            buttonName="Chat"
-            @click="goToDetail(komunitasId)"
-          />
-          <BaseButtonOutlinedButton
-            buttonName="Bergabung"
-            @click="openModal(komunitasId)"
-          />
+          <BaseButtonOutlinedButton buttonName="Chat" @click="goToDetail(komunitasId)" />
+          <BaseButtonOutlinedButton buttonName="Bergabung" @click="openModal(komunitasId)" />
         </div>
       </div>
     </div>
@@ -45,123 +28,106 @@
 
   <!-- Tabs -->
   <div class="flex justify-center space-x-10 my-5">
-    <BaseButtonSecondaryButton
-      class="text-lg"
-      buttonName="Postingan"
-      @click="activeTab = 'postingan'"
-      :class="{ focus: activeTab === 'postingan' }"
-    />
-    <BaseButtonSecondaryButton
-      class="text-lg"
-      buttonName="Anggota"
-      @click="activeTab = 'anggota'"
-      :class="{ focus: activeTab === 'anggota' }"
-    />
+    <BaseButtonSecondaryButton class="text-lg dark:text-white" buttonName="Postingan" @click="activeTab = 'postingan'"
+      :class="{ 'text-gray-500': activeTab === 'postingan' }" />
+    <BaseButtonSecondaryButton class="text-lg dark:text-white" buttonName="Anggota" @click="activeTab = 'anggota'"
+      :class="{ 'text-gray-500': activeTab === 'anggota' }" />
   </div>
 
   <!-- Konten Postingan -->
   <div v-if="activeTab === 'postingan'" class="flex gap-5">
     <div class="flex flex-col w-3/4 space-y-4">
-      <div
-        class="flex gap-3 bg-white p-5 rounded-3xl dark:bg-[#000000]"
-        v-for="(post, index) in postList"
-        :key="post.id"
-        v-if="useAuth().userToken.value"
-      >
+      <div class="flex gap-3 bg-white p-5 rounded-3xl dark:bg-black dark:text-white" v-for="(post, index) in postList"
+        :key="post.id" v-if="useAuth().userToken.value">
         <div class="space-y-2">
           <BaseCommunityIcon :image="[post.community_image]" />
           <BaseImageIcon :image="[post.user_profile]" />
         </div>
-        <div class="flex flex-col w-full dark:text-white">
+        <div class="flex flex-col w-full">
           <div class="flex justify-between">
             <div class="flex flex-col items-start">
               <div class="flex gap-3">
-                <p class="font-bold">{{ post.community.name }}</p>
+                <p class="font-bold dark:text-white">{{ post.community.name }}</p>
               </div>
-              <p class="text-sm">
+              <p class="text-sm dark:text-gray-300">
                 Dikirim oleh <span class="font-bold"> {{ post.user.username }}</span>
               </p>
             </div>
             <div>
-              <p>{{ dayjs(post.created_at).fromNow() }}</p>
+              <p class="dark:text-gray-400">{{ dayjs(post.created_at).fromNow() }}</p>
             </div>
           </div>
-          <p class="mt-2">{{ post.description }}</p>
+          <p class="mt-2 dark:text-gray-300">{{ post.description }}</p>
           <div v-if="post.image" class="flex mb-3">
             <BaseImagePost :images="[post.image]" />
           </div>
           <div v-if="post.attachment">
             <BaseFilePreview :documents="[post.attachment]" />
           </div>
-          <div class="flex items-end justify-end">
+          <div class="flex items-end justify-between mt-5">
+            <BaseButtonIconButton :icon="Like" />
+            <BaseButtonIconButton :icon="Bookmark" />
+            <BaseButtonIconButton :icon="Comment" />
+            <BaseButtonIconButton :icon="Send" />
             <BaseDropdownIconDropdown :icon="Option" :dropdownItems="getDropdownItems(post)" />
           </div>
         </div>
       </div>
       <!-- Jika tidak ada postingan -->
-      <div v-if="activeTab === 'postingan' && (!postList || postList.length === 0)" class="flex flex-col items-center text-gray-500 mt-10">
+      <div v-if="activeTab === 'postingan' && (!postList || postList.length === 0)"
+        class="flex flex-col items-center text-gray-500 mt-10 dark:text-gray-400">
         Tidak ada Postingan untuk ditampilkan.
       </div>
     </div>
 
     <!-- Sidebar -->
-    <div class="sticky flex flex-col gap-5 top-4 w-1/3 max-h-fit dark:bg-gray-800 dark:text-white">
-      <div class="bg-white rounded-3xl p-5">
+    <div class="sticky flex flex-col gap-5 top-4 w-1/3 max-h-fit bg-white dark:bg-black dark:text-white rounded-3xl p-5">
+      <div>
         <h3 class="font-bold text-lg mb-2">Peraturan Komunitas</h3>
-        <p>{{ komunitasRules || 'Belum ada Peraturan yang dibuat' }}</p>
+        <p class="dark:text-gray-300">{{ komunitasRules || 'Belum ada Peraturan yang dibuat' }}</p>
       </div>
-      <div class="bg-white rounded-3xl p-5">
+      <div>
         <h3 class="font-bold text-lg mb-2">Kontributor Teratas</h3>
       </div>
     </div>
   </div>
 
   <div v-if="activeTab === 'anggota'">
-    <div class="ms-2 font-bold">
+    <div class="ms-2 font-bold dark:text-white">
       <p>Anggota - {{ komunitasMembers_count }}</p>
     </div>
-    <div class="flex bg-white mt-5 justify-between items-center p-3  rounded-3xl" v-for="(members) in komunitasMembers" :key="members.id">
-      <div class="flex items-center gap-3 ">
-        <BaseImageIcon :image="members.profile_photo ? `http://192.168.19.251:8000${members.profile_photo}` : defaultImage"/>
+    <div class="flex bg-white dark:bg-black dark:text-white mt-5 justify-between items-center p-3 rounded-3xl" v-for="(members) in komunitasMembers"
+      :key="members.id">
+      <div class="flex items-center gap-3">
+        <BaseImageIcon
+          :image="members.profile_photo ? `http://192.168.19.251:8000${members.profile_photo}` : defaultImage" />
         <div>
-          <p class="font-bold">{{members.username}}</p>
-          <p>{{members.bio}}</p>
+          <p class="font-bold dark:text-white">{{ members.username }}</p>
+          <p class="dark:text-gray-300">{{ members.bio }}</p>
         </div>
       </div>
       <div v-for="(members_role) in members.role_detail.filter(role => role.community === komunitasId)" :key="index">
-        <p class="font-bold mx-4  ">{{ members_role.role }}</p>
+        <p class="font-bold mx-4 dark:text-white">{{ members_role.role }}</p>
       </div>
     </div>
   </div>
 
-
   <BaseLoading :isLoading="loading" />
-
-  <BaseAlertPrimaryAlert
-    v-if="alertVisible"
-    :message="alertMessage"
-    :type="alertColor"
-  />
-
-  <ModalAlertModal
-    buttonName="Tetap Gabung"
-    header="Yakin ingin bergabung?"
-    paragraph="Isinya orang jamet  "
-    ref="modalRef"
-    :clicking="JoinCommunity"
-  />
-  <ModalAlertModal
-    buttonName="Hapus"
-    header="Konfirmasi Hapus"
-    paragraph="Apakah Anda yakin ingin menghapus komunitas ini?"
-    ref="modalDeleteRef"
-    :clicking="confirmDeleteCommunity"
-  />
+  <BaseAlertPrimaryAlert v-if="alertVisible" :message="alertMessage" :type="alertColor" />
+  <ModalAlertModal buttonName="Tetap Gabung" header="Yakin ingin bergabung?" paragraph="Isinya orang jamet "
+    ref="modalRef" :clicking="JoinCommunity" />
+  <ModalAlertModal buttonName="Hapus" header="Konfirmasi Hapus"
+    paragraph="Apakah Anda yakin ingin menghapus komunitas ini?" ref="modalDeleteRef"
+    :clicking="confirmDeleteCommunity" />
 </template>
 
 <script setup>
 import Option from "~/components/icons/Option.vue";
 import Notification from "~/components/icons/Notification.vue";
+import Like from "@/components/icons/Like.vue";
+import Bookmark from "@/components/icons/Bookmark.vue";
+import Comment from "@/components/icons/Comment.vue";
+import Send from "@/components/icons/Send.vue";
 import { useRoute, useRouter } from "vue-router";
 import { useKomunitas } from "~/stores/Komunitas.js";
 import { usePosts } from "~/stores/Posts.js";
@@ -232,7 +198,7 @@ const fetchKomunitasDetails = async () => {
       komunitasBanner.value = komunitas.banner
         ? `http://192.168.19.251:8000/${komunitas.banner}`
         : "";
-        console.log(komunitasMembersRole.value)
+      console.log(komunitasMembersRole.value)
     } else {
       komunitasNama.value = "Komunitas Tidak Ditemukan";
       komunitasImage.value = null;

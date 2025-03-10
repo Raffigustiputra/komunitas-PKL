@@ -15,7 +15,7 @@
       <div class="flex justify-between">
         <div class="flex flex-col items-start">
           <div class="flex gap-3">
-            <a @click="goToCommunityPage(post.community.id)" class="font-bold cursor-pointer text-black no-underline">
+            <a @click="goToCommunityPage(post.community.id)" class="font-bold cursor-pointer text-black no-underline dark:text-white">
               {{ post.community.name }}
             </a>
             <BaseButtonSecondaryButton buttonName="Gabung" v-if="!isUserJoined(post.community.id)"
@@ -35,10 +35,15 @@
       </div>
       <div v-if="post.attachment">
        <BaseFilePreview :documents="post.attachment" />
-
       </div>
-      <div class="flex items-end justify-end">
-        <BaseDropdownIconDropdown :icon="Option" :dropdownItems="getDropdownItems(post)" />
+
+      <div class="flex items-end justify-between mt-5">
+      <BaseButtonIconButton :icon="Like" />
+      <BaseButtonIconButton :icon="Bookmark" />
+      <BaseButtonIconButton :icon="Comment" />
+      <BaseButtonIconButton :icon="Send" />
+
+      <BaseDropdownIconDropdown :icon="Option" :dropdownItems="getDropdownItems(post)" />
       </div>
     </div>
   </div>
@@ -62,6 +67,10 @@ import { useKomunitas } from "~/stores/Komunitas.js";
 import BaseImagePost from "~/components/base/ImagePost.vue";
 import BaseLoading from "@/components/base/Loading.vue";
 import Option from "@/components/icons/Option.vue";
+import Like from "@/components/icons/Like.vue";
+import Bookmark from "@/components/icons/Bookmark.vue";
+import Comment from "@/components/icons/Comment.vue";
+import Send from "@/components/icons/Send.vue";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useRouter } from 'vue-router';

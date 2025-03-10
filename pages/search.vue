@@ -2,16 +2,17 @@
     <div class="mt-2 dark:text-white">
         <div class="flex flex-col gap-3 p-8 rounded-3xl">
             <div class="flex items-center justify-between">
-                <h3 class="font-bold">Cari Komunitas</h3>
-                <BaseButtonIconButton :icon="Search" @click="toggleSearch" />
+                <h1 class="text-2xl font-bold text-center my-6">Semua Komunitas</h1>
+                <div class="justify-center flex items-center gap-1">
+                    <input v-if="isSearching" v-model="searchQuery" type="text" placeholder="Cari komunitas..."
+                        class="p-2 border rounded-lg" />
+                    <BaseButtonIconButton :icon="Search" @click="toggleSearch" />
+                </div>
             </div>
-
-            <input v-if="isSearching" v-model="searchQuery" type="text" placeholder="Cari komunitas..."
-                class="p-2 border rounded-lg w-full" />
 
             <!-- Looping komunitas dari API dalam grid 2 kolom -->
             <div class="grid grid-cols-2 gap-4">
-                <AppCardCommunityCard v-for="community in filteredCommunities" :key="community.id"
+                <AppCardCommunityCard v-for="community in filteredCommunities" :key="community.id" class="bg-white"
                     :communityName="community.name || 'Nama Komunitas'"
                     :description="community.description || 'Belum ada Deskripsi.'"
                     :iconImage="getCommunityIcon(community.icon)" :bannerImage="getCommunityBanner(community.banner)"
