@@ -1,12 +1,12 @@
 <template>
-  <div class="relative max-w-72 bg-[#F4F7FD] rounded-xl overflow-hidden transition-colors duration-300 dark:bg-black">
+  <div class="max-w-72 bg-[#F4F7FD] rounded-xl overflow-hidden transition-colors duration-300  dark:bg-[#1d1d25]">
     <div class="relative">
       <img :src="bannerImage" alt="" class="max-h-[8vh] object-cover min-w-full" />
       <div class="absolute -bottom-6 left-4">
         <BaseImageIcon :image="iconImage" />
       </div>
     </div>
-    <div class="p-4 pt-8">
+    <div class="p-4 pt-8 ">
       <div class="flex items-start justify-between">
         <div>
           <a class="text-lg font-bold dark:text-white" @click="headerClick">

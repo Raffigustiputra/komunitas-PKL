@@ -5,7 +5,7 @@
 
             <form @submit.prevent="handleLogin">
                 <div class="mt-4">
-                    <BaseInput placeholder="Masukkan Email atau Username" type="text" id="username" v-model="identifier" />
+                    <BaseInput placeholder="Masukkan Email atau Username" type="text" id="identifier" v-model="identifier" />
                 </div>
                 <div class="mt-4 relative">
                     <BaseInput 
@@ -54,7 +54,7 @@ import { Eye, EyeOff } from "lucide-vue-next";
 const { login } = useAuth();
 const router = useRouter();
 
-const identifier = ref(""); // Bisa berupa username atau username
+const identifier = ref(""); // Bisa berupa username atau email
 const password = ref("");
 const showPassword = ref(false);
 
@@ -69,7 +69,7 @@ definePageMeta({
 
 const handleLogin = async () => {
     if (!identifier.value || !password.value) {
-        showAlert("Harap isi username/username dan password!", "error");
+        showAlert("Harap isi email atau username dan password!", "error");
         return;
     }
 
@@ -83,15 +83,18 @@ const handleLogin = async () => {
             // Menentukan jenis error berdasarkan respon server
             if (result.error_code === "WRONG_PASSWORD") {
                 showAlert("Password salah, silakan coba lagi", "error");
+                password.value = ""; // Reset password field
             } else if (result.error_code === "USER_NOT_FOUND") {
-                showAlert("Gmail salah, silakan coba lagi", "error");
+                showAlert("Email atau username salah, silakan coba lagi", "error");
             } else {
-                showAlert("username atau password salah, silakan coba lagi", "error");
+                showAlert("Email atau username atau password salah, silakan coba lagi", "error");
+                password.value = ""; // Reset password field
             }
         }
     } catch (error) {
         console.error("Error during login:", error);
         showAlert("Terjadi kesalahan saat login.", "error");
+        password.value = ""; // Reset password field in case of error
     }
 };
 

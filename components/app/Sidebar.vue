@@ -11,7 +11,7 @@
       <BaseButtonSidebarButton :onClick="() => navigateTo('/community-list')" buttonName="Komunitas" :icon="Community"
         path="/community-list" />
       <BaseButtonSidebarButton :onClick="() => navigateTo('/search')" path="/search" buttonName="Pencarian" :icon="Search" />
-      <BaseButtonSidebarButton buttonName="Bookmark" :icon="Bookmark" />
+      <BaseButtonSidebarButton :onClick="() => navigateTo('/bookmark')" path="/bookmark" buttonName="Bookmark" :icon="Bookmark" />
       <BaseButtonSidebarButton buttonName="Notifikasi" :icon="Notification" />
       <BaseButtonSidebarButton :onClick="() => navigateTo('/pengaturan')" path="/pengaturan" buttonName="Pengaturan"
         :icon="Setting" />
