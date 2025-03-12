@@ -33,6 +33,8 @@
           <BaseButtonIconButton :icon="Attachment" @click="openDocPicker" />
           <input type="file" accept="image/*" hidden ref="imageInput" @change="(e) => handleFileSelect('image', e)" />
           <BaseButtonIconButton :icon="Image" @click="openImagePicker" />
+          <input type="file" accept="image/*" hidden ref="imageInput" @change="(e) => handleFileSelect('image', e)" />
+          <BaseButtonIconButton :icon="Calender" />
         </div>
         <div class="flex gap-3">
           <BaseButtonSecondaryButton buttonName="Drafts" v-if="isDropdownVisible" />
@@ -47,6 +49,7 @@
 import { ref, onMounted, computed } from "vue";
 import Attachment from "~/components/icons/Attachment.vue";
 import Image from "~/components/icons/Image.vue";
+import Calender from "~/components/icons/Calender.vue";
 import { useAuth } from "~/stores/Auth.js";
 import { useKomunitas } from '../stores/Komunitas';
 import { usePosts } from '../stores/Posts';

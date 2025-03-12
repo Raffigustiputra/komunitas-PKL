@@ -1,15 +1,14 @@
 <template>
     <title>Homepage / KomunitasApp</title>
     <div class="flex flex-col gap-5">
-             <AppTopbar />
-             <AppFeedInput />   
-             <AppFeed />
+        <AppTopbar />
+        <AppFeedInput />
+        <AppFeed />
     </div>
 </template>
 
 <script setup>
-    definePageMeta({
-        middleware: "auth",
-    });
+definePageMeta({
+    middleware: "auth",
+});
 </script>
-

@@ -24,12 +24,12 @@
 
           <div class="space-y-4">
             <div>
-              <label for="name">Nama Komunitas</label>
+              <label for="name" class="dark:text-white">Nama Komunitas</label>
               <BaseInput v-model="name" placeholder="Apa nama dari komunitas ini?" />
             </div>
 
             <div>
-              <label for="description">Deskripsi</label>
+              <label for="description" class="dark:text-white">Deskripsi</label>
               <BaseInputTextArea v-model="description" placeholder="Opsional, Anda bisa mengubahnya nanti" />
             </div>
 

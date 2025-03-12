@@ -4,8 +4,9 @@
     fill="none"
     viewBox="0 0 24 24"
     stroke-width="1.5"
-    stroke="currentColor"
-    class="size-6"
+    :stroke="isClicked ? 'purple' : 'currentColor'"
+    class="size-6 cursor-pointer"
+    @click="toggleColor"
   >
     <path
       stroke-linecap="round"
@@ -14,3 +15,12 @@
     />
   </svg>
 </template>
+
+<script setup>
+import { ref } from 'vue';
+
+const isClicked = ref(false);
+const toggleColor = () => {
+  isClicked.value = !isClicked.value;
+};
+</script>

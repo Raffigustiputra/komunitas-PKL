@@ -15,7 +15,8 @@
       <div class="flex justify-between">
         <div class="flex flex-col items-start">
           <div class="flex gap-3">
-            <a @click="goToCommunityPage(post.community.id)" class="font-bold cursor-pointer text-black no-underline dark:text-white">
+            <a @click="goToCommunityPage(post.community.id)"
+              class="font-bold cursor-pointer text-black no-underline dark:text-white">
               {{ post.community.name }}
             </a>
             <BaseButtonSecondaryButton buttonName="Gabung" v-if="!isUserJoined(post.community.id)"
@@ -34,16 +35,16 @@
         <BaseImagePost :images="[post.image]" />
       </div>
       <div v-if="post.attachment">
-       <BaseFilePreview :documents="post.attachment" />
+        <BaseFilePreview :documents="post.attachment" />
       </div>
 
       <div class="flex items-end justify-between mt-5">
-      <BaseButtonIconButton :icon="Like" />
-      <BaseButtonIconButton :icon="Bookmark" />
-      <BaseButtonIconButton :icon="Comment" />
-      <BaseButtonIconButton :icon="Send" />
+        <BaseButtonIconButton :icon="Like" />
+        <BaseButtonIconButton :icon="Bookmark" />
+        <BaseButtonIconButton :icon="Comment" />
+        <BaseButtonIconButton :icon="Send" />
 
-      <BaseDropdownIconDropdown :icon="Option" :dropdownItems="getDropdownItems(post)" />
+        <BaseDropdownIconDropdown :icon="Option" :dropdownItems="getDropdownItems(post)" />
       </div>
     </div>
   </div>
@@ -57,6 +58,9 @@
   <BaseAlertPrimaryAlert v-if="alertVisible" :message="alertMessage" :type="alertColor" />
   <ModalAlertModal buttonName="Tetap Gabung" header="Yakin ingin bergabung?" paragraph="Isinya orang jamet  "
     ref="modalRef" :clicking="JoinCommunity" />
+  <ModalAlertModal buttonName="Hapus" header="Konfirmasi Hapus"
+    paragraph="Apakah Anda yakin ingin menghapus postingan ini?" ref="modalDeleteRef" :clicking="confirmDeletePost" />
+
 </template>
 
 <script setup>
@@ -90,6 +94,9 @@ const account = ref(null);
 const currentUserId = computed(() => account.value?.id || null);
 const modalRef = ref(null);
 const selectedKomunitasId = ref(null);
+const modalDeleteRef = ref(null);
+const selectedPostId = ref(null);
+
 
 const openModal = (komunitasId) => {
   selectedKomunitasId.value = komunitasId;
@@ -147,17 +154,50 @@ const goToUserProfile = (userId) => {
   router.push(`#`);
 };
 
+const openDeleteModal = (postId) => {
+  selectedPostId.value = postId;
+  modalDeleteRef.value.openModal();
+};
+
+const confirmDeletePost = async () => {
+  if (!selectedPostId.value) return;
+
+  try {
+    const success = await postStore.removePost(selectedPostId.value);
+    if (success) {
+      postList.value = postList.value.filter((post) => post.id !== selectedPostId.value);
+      alertMessage.value = "Berhasil menghapus Postingan.";
+      alertColor.value = "success";
+      alertVisible.value = true;
+    } else {
+      alertMessage.value = "Gagal menghapus Postingan.";
+      alertColor.value = "error";
+      alertVisible.value = true;
+    }
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    alertMessage.value = "Terjadi kesalahan saat menghapus.";
+    alertColor.value = "error";
+    alertVisible.value = true;
+  } finally {
+    setTimeout(() => {
+      alertVisible.value = false;
+    }, 3000);
+  }
+};
+
 
 const getDropdownItems = (post) => {
   let items = [{ label: "Laporkan", onClick: () => console.log("Laporkan diklik") }];
   if (post.user_id === currentUserId.value) {
     items.push({
       label: "Hapus",
-      onClick: () => handleDeleted(post.id),
+      onClick: () => openDeleteModal(post.id),
     });
   }
   return items;
 };
+
 
 const handleDeleted = async (id) => {
   try {
