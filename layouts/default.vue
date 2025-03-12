@@ -1,10 +1,10 @@
 <template>
-  <div class="flex justify-center transition-colors duration-300 dark:bg-[#000000]">
-    <aside class="w-[290px] px-4" v-if="useAuth().userToken.value">
+  <div class="flex flex-col-reverse md:flex-row justify-center transition-colors duration-300 dark:bg-[#000000]">
+    <aside class="w-full md:w-[290px] px-4" v-if="useAuth().userToken.value">
       <AppSidebar />
     </aside>
 
-    <main class="w-[670px] min-h-screen px-3 bg-[#F4F7FD] dark:bg-[#1d1d25] relative">
+    <main class="w-full max-w-2xl min-h-screen px-3 bg-[#F4F7FD] dark:bg-[#1d1d25] relative">
       <slot />
     </main>
 
