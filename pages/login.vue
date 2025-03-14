@@ -1,13 +1,13 @@
 <template>
-    <div class="flex flex-col items-center justify-center fixed inset-0">
-        <div class="w-full max-w-lg bg-white p-20 rounded-3xl shadow dark:bg-[#1A1625] dark:text-white">
-            <h1 class="text-4xl p-5 font-bold text-center text-[#3D3BF3] mb-8">Sign In Here</h1>
+    <div class="flex flex-col items-center justify-center fixed inset-0 px-4">
+        <div class="w-full max-w-sm sm:max-w-md lg:max-w-lg bg-white p-10 sm:p-14 lg:p-20 rounded-3xl shadow dark:bg-[#1A1625] dark:text-white">
+            <h1 class="text-3xl sm:text-4xl p-3 sm:p-5 font-bold text-center text-[#3D3BF3] mb-6 sm:mb-8">Sign In Here</h1>
 
             <form @submit.prevent="handleLogin">
-                <div class="mt-4">
+                <div class="mt-3 sm:mt-4">
                     <BaseInput placeholder="Masukkan Email atau Username" type="text" id="identifier" v-model="identifier" />
                 </div>
-                <div class="mt-4 relative">
+                <div class="mt-3 sm:mt-4 relative">
                     <BaseInput 
                         :type="showPassword ? 'text' : 'password'"
                         placeholder="Masukkan Password Anda"
@@ -24,15 +24,15 @@
                         <EyeOff v-else class="w-5 h-5" />
                     </button>
                 </div>
-                <p class="mt-2">
+                <p class="mt-2 text-center sm:text-left">
                     <a href="/forgot-password" class="text-blue-500 hover:underline text-xs">Lupa Password?</a>
                 </p>
-                <div class="text-xs text-center text-gray-600 mt-7">
+                <div class="text-xs text-center text-gray-600 mt-5 sm:mt-7">
                     <p>Belum punya akun?
                         <a href="/register" class="text-blue-500 hover:underline">Daftar</a>
                     </p>
                 </div>
-                <div class="my-5 flex flex-col">
+                <div class="my-4 sm:my-5 flex flex-col">
                     <BaseButtonPrimaryButton type="submit" buttonName="Login" class="text-lg" />
                 </div>
             </form>
@@ -44,6 +44,7 @@
         :type="alertColor"
     />
 </template>
+
 
 <script setup>
 import { ref } from "vue";
