@@ -1,5 +1,5 @@
 <template>
-  <div v-if="useAuth().userToken.value" class="bg-white/80 backdrop-blur-sm dark:bg-black rounded-b-3xl sticky top-0 z-10">
+  <div v-if="useAuth().userToken.value" class="bg-white/80 backdrop-blur-sm dark:bg-black/50 rounded-b-3xl sticky top-0 z-10">
     
     <!-- Navigasi (Blur Effect) -->
     <div class="dark:bg-black/80 rounded-b-3xl">

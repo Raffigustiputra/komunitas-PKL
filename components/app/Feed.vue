@@ -47,12 +47,18 @@
       <hr>
       <div class="flex justify-between mt-5 mx-2">
         <div class="flex gap-4 sm:gap-12 flex-wrap">
-          <div class="flex items-center gap-1">
-            <BaseButtonFeedButton :icon="Like" />
-            <p>12</p>
+          <div class="flex items-center hover:text-red-500 focus:text-red-500" @click="LikingPost(post.id)">
+            <BaseButtonFeedButton :icon="Like"  />
+            <p>{{ post.likes }}</p>
           </div>
-          <BaseButtonFeedButton :icon="Bookmark" />
-          <BaseButtonFeedButton :icon="Comment" />
+          <div class="flex items-center hover:text-red-500 focus:text-red-500">
+            <BaseButtonFeedButton :icon="Bookmark" class />
+            <p>{{ post.bookmarks }}</p>
+          </div>
+          <div class="flex items-center hover:text-red-500 focus:text-red-500">
+            <BaseButtonFeedButton :icon="Comment" />
+            <p>{{ post.comments }}</p>
+          </div>
           <BaseButtonFeedButton :icon="Send" />
         </div>
         <div>
@@ -151,6 +157,9 @@ const fetchData = async () => {
       visibility: item.visibility,
       created_at: item.created_at,
       updated_at: item.updated_at,
+      likes: item.likes_count,
+      bookmarks: item.bookmarks_count,
+      comments: item.comments_count,
     }));
   } catch (error) {
     console.error("Error fetching posts:", error);
@@ -248,9 +257,18 @@ const JoinCommunity = async () => {
   }
 };
 
+const LikingPost = async () => {
+  try {
+    await postStore.fetchCreateLikes()
+  } catch (error) {
+    console.error("gagal membuat like", error)
+  }
+}
+
 const isUserJoined = (communityId) => {
   return account.value?.role_detail?.some(role => role.community === communityId);
 };
+
 
 onMounted(async () => {
   await fetchAccount();
