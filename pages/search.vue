@@ -11,7 +11,7 @@
             </div>
 
             <!-- Looping komunitas dari API dalam grid 2 kolom -->
-            <div class="grid grid-cols-2 gap-4">
+            <div class=" grid grid-cols-1 mb-12 my-10 px-3 gap-4 sm:grid-cols-2">
                 <AppCardCommunityCard v-for="community in filteredCommunities" :key="community.id" class="bg-white dark:bg-black"   
                     :communityName="community.name || 'Nama Komunitas'"
                     :description="community.description || 'Belum ada Deskripsi.'"

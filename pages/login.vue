@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-col min-h-[45vh] items-center justify-center fixed inset-0">
-        <div class="w-full max-w-lg bg-white p-20 rounded-3xl shadow">
+        <div class="w-full max-w-lg bg-white p-20 rounded-3xl shadow dark:bg-[#1A1625] dark:text-white">
             <h1 class="text-4xl p-5 font-bold text-center text-[#3D3BF3] mb-8">Sign In Here</h1>
 
             <form @submit.prevent="handleLogin">
