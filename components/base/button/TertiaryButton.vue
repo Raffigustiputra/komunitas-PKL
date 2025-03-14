@@ -1,5 +1,5 @@
 <template>
-  <button class="flex bg-transparent items-center p-2 rounded-full dark:hover:bg-gray-700 dark:text-white hover:cursor-pointer hover:bg-gray-200" @click="handleClick">
+  <button class="flex bg-transparent justify-center items-center p-2 rounded-full dark:hover:bg-gray-700 dark:text-white hover:cursor-pointer hover:bg-gray-200" @click="handleClick">
     <component :is="icon" class="w-6 h-6 mr-2" />
     {{ buttonName }}
   </button>

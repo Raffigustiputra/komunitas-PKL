@@ -35,17 +35,17 @@
       </div>
     </div>
   </nav>
+  <div v-if="showSlideMenu" class="fixed inset-0 bg-black/50 z-20" @click="toggleSlideMenu"></div>
 
-     <transition name="slide">
-    <div v-if="showSlideMenu" class="fixed inset-0 bg-black/50 z-20" @click="toggleSlideMenu">
-      <div class="bg-white dark:bg-gray-800 w-64 h-full p-5 shadow-lg relative" @click.stop>
-        <button @click="toggleSlideMenu" class="absolute top-5 right-5 text-xl">✖</button>
-        <div class="mt-10 flex flex-col gap-4">
-          <BaseButtonPrimaryButton :onClick="() => navigateTo('/login')" buttonName="Sign In" class="px-4 py-2" />
-          <BaseButtonTertiaryButton :onClick="() => navigateTo('/register')" buttonName="Sign Up" class="px-4 py-2" />
-          
-          <!-- Dark Mode Toggle -->
-          
+    <transition name="slide">
+    <div v-if="showSlideMenu" class="fixed inset-0 z-20" @click="toggleSlideMenu">
+      <div class="flex flex-col">
+        <div class="bg-white dark:bg-gray-800 p-5 shadow-lg" @click.stop>
+          <button @click="toggleSlideMenu" class="absolute top-5 right-5 text-xl">✖</button>
+          <div class="mt-12 flex flex-col gap-4">
+            <BaseButtonPrimaryButton :onClick="() => navigateTo('/login')" buttonName="Sign In" class="px-4 py-2" />
+            <BaseButtonTertiaryButton :onClick="() => navigateTo('/register')" buttonName="Sign Up" class="px-4 py-2" />
+          </div>
         </div>
       </div>
     </div>
@@ -206,11 +206,11 @@ definePageMeta({
 <style>
 .slide-enter-active,
 .slide-leave-active {
-  transition: transform 0.1s ease-out;
+  transition: transform 0.3s ease-out;
 }
 
 .slide-enter-from,
 .slide-leave-to {
-  transform: translate(100%);
+  transform: translateY(-100%);
 }
 </style>
