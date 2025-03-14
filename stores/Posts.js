@@ -20,7 +20,36 @@ export const usePosts = defineStore("Posts", () => {
     }
   }
 
-  async function fetchUserPosts() {
+async function fetchCreateLikes(postId, userId) {
+  const formData = new FormData();
+  formData.append("post", postId);
+  formData.append("user", userId);
+
+  try {
+    const response = await fetch(
+      `http://192.168.19.251:8000/api/posts/${postId}/likes/`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+        body: formData, // Pastikan FormData dikirim sebagai body
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Gagal menambahkan like. Status: ${response.status}`);
+    }
+
+    return true;
+  } catch (err) {
+    console.error("Error saat menambahkan like:", err);
+    throw err;
+  }
+}
+
+
+  async function fetchUserPosts() {  
     try {
       const response = await fetch("http://192.168.19.251:8000/api/posts/users/", {
         headers: {
@@ -131,6 +160,7 @@ export const usePosts = defineStore("Posts", () => {
 
   return {
     fetchPosts,
+    fetchCreateLikes,
     fetchUserPosts,
     createPost,
     removePost,

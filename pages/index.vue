@@ -53,10 +53,10 @@
 
   <!-- Hero Section -->
   <div class="flex flex-col md:flex-row items-center justify-evenly mt-20 md:mt-36 px-4 md:px-0">
-    <div class="space-y-5 text-center md:text-left ">
+    <div class="flex flex-col md:items-start items-center text-center md:text-left ">
       <BaseButtonOutlinedButton
         buttonName="The World Most Stunning App."
-        class="px-8 md:px-12 text-[#96E2AF] border-[#96E2AF]"
+        class="px-8 md:px-12 text-[#96E2AF] border-[#96E2AF] w-84 md:w-96 mb-5"
       />
       <h1
         class="text-5xl md:text-8xl max-w-[80vh] font-bold bg-gradient-to-r from-[#96E2AF] to-[#3D3BF3] bg-clip-text text-transparent"
@@ -64,7 +64,7 @@
         Build Your Community
       </h1>
     </div>
-    <div class="space-y-10 mt-10 md:mt-0 text-center md:text-left">
+    <div class="flex flex-col items-center md:items-start gap-6 mt-10 md:mt-0 text-center md:text-left">
       <h1 class="text-xl md:text-2xl max-w-[60vh] text-[#ababab]">
         We’ve Created The most useful application for your community, and making it accessible to
         everyone.
@@ -72,7 +72,7 @@
       <BaseButtonOutlinedButton
         buttonName="Get Started"
         :onClick="() => navigateTo('/login')"
-        class="py-3 md:py-5 px-8 md:px-12"
+        class="py-3 md:py-5 px-8 md:px-1 md:w-96"
       />
     </div>
   </div>
