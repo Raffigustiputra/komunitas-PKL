@@ -7,7 +7,13 @@
         <AppLogo class="text-3xl md:text-4xl" />
       </div>
 
-      <label class="relative inline-flex items-center cursor-pointer mt-4">
+      
+      <!-- Hamburger Button -->
+      <Menu @click="toggleSlideMenu" class="cursor-pointer md:hidden dark:text-white" />
+      
+      <!-- Menu Items -->
+      <div class="hidden md:flex gap-3 md:gap-5 items-center">
+        <label class="relative flex items-center cursor-pointer ">
             <input type="checkbox" class="sr-only peer" v-model="isDark" />
             <div
               class="w-14 h-7 bg-gray-300 rounded-full peer-checked:bg-blue-600 relative transition-colors duration-300 flex items-center px-1"
@@ -25,31 +31,25 @@
               </div>
             </div>
           </label>
-      <!-- Hamburger Button -->
-      <Menu @click="toggleSlideMenu" class="cursor-pointer md:hidden dark:text-white" />
-      
-      <!-- Menu Items -->
-      <div class="hidden md:flex gap-3 md:gap-5 items-center">
         <BaseButtonPrimaryButton :onClick="() => navigateTo('/login')" buttonName="Sign In" class="px-4 md:px-5" />
         <BaseButtonTertiaryButton :onClick="() => navigateTo('/register')" buttonName="Sign Up" class="p-2 md:p-3" />
+          
       </div>
     </div>
   </nav>
 
-     <transition name="slide">
-    <div v-if="showSlideMenu" class="fixed inset-0 bg-black/50 z-20" @click="toggleSlideMenu">
-      <div class="bg-white dark:bg-gray-800 w-64 h-full p-5 shadow-lg relative" @click.stop>
-        <button @click="toggleSlideMenu" class="absolute top-5 right-5 text-xl">✖</button>
-        <div class="mt-10 flex flex-col gap-4">
-          <BaseButtonPrimaryButton :onClick="() => navigateTo('/login')" buttonName="Sign In" class="px-4 py-2" />
-          <BaseButtonTertiaryButton :onClick="() => navigateTo('/register')" buttonName="Sign Up" class="px-4 py-2" />
+  <transition name="slide">
+  <div v-if="showSlideMenu" class="fixed inset-0 bg-black/50 z-20" @click="toggleSlideMenu">
+    <div class="bg-white dark:bg-gray-800 w-64 h-full p-5 shadow-lg relative right-0" @click.stop>
+      <button @click="toggleSlideMenu" class="absolute top-5 right-5 text-xl">✖</button>
+      <div class="mt-10 flex flex-col gap-4">
+        <BaseButtonPrimaryButton :onClick="() => navigateTo('/login')" buttonName="Sign In" class="px-4 py-2" />
+        <BaseButtonTertiaryButton :onClick="() => navigateTo('/register')" buttonName="Sign Up" class="px-4 py-2" />
           
-          <!-- Dark Mode Toggle -->
-          
-        </div>
       </div>
     </div>
-  </transition>
+  </div>
+</transition>
 
   <!-- Hero Section -->
   <div class="flex flex-col md:flex-row items-center justify-evenly mt-20 md:mt-36 px-4 md:px-0">
@@ -78,40 +78,42 @@
   </div>
 
   <!-- Features Section -->
-  <div class="flex flex-col md:flex-row justify-center items-start gap-8 mt-20 md:mt-28 p-4 md:p-40">
-    <div
-      class="bg-gray-100 mt-14 rounded-2xl shadow p-6 md:p-10 py-16 md:py-32 w-full md:w-80 hover:shadow-md transition dark:bg-[#1A1625]"
-    >
-      <h2 class="text-2xl md:text-3xl font-bold text-[#3D3BF3] mb-4">Make Profit</h2>
-      <p class="text-gray-500 dark:text-gray-400">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-        <em>do eiusmod tempor incididunt</em> ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam
-      </p>
-    </div>
-
-    <div
-      class="bg-gray-100 rounded-2xl shadow p-6 md:p-10 py-12 md:py-24 w-full md:w-80 hover:shadow-md transition dark:bg-[#1A1625]"
-    >
-      <h2 class="text-2xl md:text-3xl font-bold text-[#3D3BF3] mb-4">Build Community</h2>
-      <p class="text-gray-500 dark:text-gray-400">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-        <em>do eiusmod tempor incididunt</em> ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam
-      </p>
-    </div>
-
-    <div
-      class="bg-gray-100 mt-14 rounded-2xl shadow p-6 md:p-10 py-16 md:py-32 w-full md:w-80 hover:shadow-md transition dark:bg-[#1A1625]"
-    >
-      <h2 class="text-2xl md:text-3xl font-bold text-[#3D3BF3] mb-4">Make Friends</h2>
-      <p class="text-gray-500 dark:text-gray-400">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-        <em>do eiusmod tempor incididunt</em> ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam
-      </p>
-    </div>
+  <!-- Features Section -->
+<!-- Features Section -->
+<div class="flex flex-col md:flex-row justify-center items-start gap-8 mt-20 md:mt-28 p-4 md:p-40">
+  <div
+    class="bg-gray-100 mt-14 rounded-2xl shadow p-6 md:p-10 py-16 md:py-32 w-full hover:shadow-md transition dark:bg-[#1A1625]"
+  >
+    <h2 class="text-2xl md:text-3xl font-bold text-[#3D3BF3] mb-4">Make Profit</h2>
+    <p class="text-gray-500 dark:text-gray-400">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+      <em>do eiusmod tempor incididunt</em> ut labore et dolore magna aliqua. Ut enim ad minim
+      veniam
+    </p>
   </div>
+
+  <div
+    class="bg-gray-100 rounded-2xl shadow p-6 md:p-10 py-12 md:py-24 w-full hover:shadow-md transition dark:bg-[#1A1625]"
+  >
+    <h2 class="text-2xl md:text-3xl font-bold text-[#3D3BF3] mb-4">Build Community</h2>
+    <p class="text-gray-500 dark:text-gray-400">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+      <em>do eiusmod tempor incididunt</em> ut labore et dolore magna aliqua. Ut enim ad minim
+      veniam
+    </p>
+  </div>
+
+  <div
+    class="bg-gray-100 mt-14 rounded-2xl shadow p-6 md:p-10 py-16 md:py-32 w-full hover:shadow-md transition dark:bg-[#1A1625]"
+  >
+    <h2 class="text-2xl md:text-3xl font-bold text-[#3D3BF3] mb-4">Make Friends</h2>
+    <p class="text-gray-500 dark:text-gray-400">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+      <em>do eiusmod tempor incididunt</em> ut labore et dolore magna aliqua. Ut enim ad minim
+      veniam
+    </p>
+  </div>
+</div>  
 
   <!-- Footer -->
   <footer class="bg-[#1A1625] text-white py-10 mt-20 md:mt-32 dark:bg-[#1A1625]">
@@ -204,6 +206,13 @@ definePageMeta({
 </script>
 
 <style>
+@media (max-width: 768px) {
+  .card {
+    width: 100%; /* Card akan memenuhi lebar layar pada layar kecil */
+    margin-bottom: 1rem; /* Jarak antar card pada layar kecil */
+  }
+}
+
 .slide-enter-active,
 .slide-leave-active {
   transition: transform 0.1s ease-out;
@@ -211,6 +220,6 @@ definePageMeta({
 
 .slide-enter-from,
 .slide-leave-to {
-  transform: translate(100%);
+  transform: translateX(100%);
 }
 </style>

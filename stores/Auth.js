@@ -156,7 +156,7 @@ export const useAuth = () => {
             // Hapus userToken.value setelah logout berhasil
             userToken.value = null;
             userData.value = null;
-            return navigateTo("/login");
+            return navigateTo("/");
         } catch (error) {
             return { success: false, message: error.message };
         }
