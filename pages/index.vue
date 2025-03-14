@@ -1,98 +1,55 @@
 <template>
   <title>Landing Page / KomunitasApp</title>
   <!-- Navbar -->
-  <nav
-    class="flex flex-col p-4 md:p-7 bg-white/80 dark:bg-black/50 backdrop-blur shadow sticky top-0 z-1"
-  >
+  <nav class="flex flex-col p-4 md:p-7 bg-white/80 dark:bg-black/50 backdrop-blur shadow sticky top-0 z-10">
     <div class="flex justify-between items-center">
-      <!-- Logo -->
       <div>
         <AppLogo class="text-3xl md:text-4xl" />
       </div>
 
-      <!-- Hamburger Button (Visible on Mobile) -->
-      <button @click="toggleMenu" class="md:hidden p-2 focus:outline-none">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6 dark:text-white"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h16m-7 6h7"
-          />
-        </svg>
-      </button>
-
-      <!-- Menu Items (Hidden on Mobile by Default) -->
-      <div
-        :class="isMenuOpen ? 'flex' : 'hidden'"
-        class="flex-col md:flex-row md:flex gap-3 md:gap-5 items-center mt-4 md:mt-0"
-      >
-        <!-- Sign In Button -->
-        <BaseButtonPrimaryButton
-          :onClick="() => navigateTo('/login')"
-          buttonName="Sign In"
-          class="px-4 md:px-5"
-        />
-
-        <!-- Sign Up Button -->
-        <BaseButtonTertiaryButton
-          buttonName="Sign Up"
-          class="p-2 md:p-3"
-          :onClick="() => navigateTo('/register')"
-        />
-
-        <!-- Dark Mode Toggle -->
-        <label class="relative inline-flex items-center cursor-pointer">
-          <input type="checkbox" class="sr-only peer" v-model="isDark" />
-          <div
-            class="w-14 h-7 bg-gray-300 rounded-full peer-checked:bg-blue-600 relative transition-colors duration-300 flex items-center px-1"
-          >
+      <label class="relative inline-flex items-center cursor-pointer mt-4">
+            <input type="checkbox" class="sr-only peer" v-model="isDark" />
             <div
-              class="w-5 h-5 bg-white rounded-full transition-transform duration-300 ease-in-out flex items-center justify-center shadow-md"
-              :class="isDark ? 'translate-x-7' : 'translate-x-0'"
+              class="w-14 h-7 bg-gray-300 rounded-full peer-checked:bg-blue-600 relative transition-colors duration-300 flex items-center px-1"
             >
-              <svg
-                v-if="!isDark"
-                class="w-4 h-4 text-yellow-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
+              <div
+                class="w-5 h-5 bg-white rounded-full transition-transform duration-300 ease-in-out flex items-center justify-center shadow-md"
+                :class="isDark ? 'translate-x-7' : 'translate-x-0'"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"
-                />
-              </svg>
-              <svg
-                v-if="isDark"
-                class="w-4 h-4 text-yellow-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"
-                />
-              </svg>
+                <svg v-if="!isDark" class="w-4 h-4 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+                </svg>
+                <svg v-if="isDark" class="w-4 h-4 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+                </svg>
+              </div>
             </div>
-          </div>
-        </label>
+          </label>
+      <!-- Hamburger Button -->
+      <Menu @click="toggleSlideMenu" class="cursor-pointer md:hidden dark:text-white" />
+      
+      <!-- Menu Items -->
+      <div class="hidden md:flex gap-3 md:gap-5 items-center">
+        <BaseButtonPrimaryButton :onClick="() => navigateTo('/login')" buttonName="Sign In" class="px-4 md:px-5" />
+        <BaseButtonTertiaryButton :onClick="() => navigateTo('/register')" buttonName="Sign Up" class="p-2 md:p-3" />
       </div>
     </div>
   </nav>
+
+     <transition name="slide">
+    <div v-if="showSlideMenu" class="fixed inset-0 bg-black/50 z-20" @click="toggleSlideMenu">
+      <div class="bg-white dark:bg-gray-800 w-64 h-full p-5 shadow-lg relative" @click.stop>
+        <button @click="toggleSlideMenu" class="absolute top-5 right-5 text-xl">✖</button>
+        <div class="mt-10 flex flex-col gap-4">
+          <BaseButtonPrimaryButton :onClick="() => navigateTo('/login')" buttonName="Sign In" class="px-4 py-2" />
+          <BaseButtonTertiaryButton :onClick="() => navigateTo('/register')" buttonName="Sign Up" class="px-4 py-2" />
+          
+          <!-- Dark Mode Toggle -->
+          
+        </div>
+      </div>
+    </div>
+  </transition>
 
   <!-- Hero Section -->
   <div class="flex flex-col md:flex-row items-center justify-evenly mt-20 md:mt-36 px-4 md:px-0">
@@ -226,6 +183,7 @@
 import { ref } from "vue";
 import { useThemeStore } from "@/stores/theme";
 import { computed } from "vue";
+import Menu from "~/components/icons/Menu.vue";
 
 const themeStore = useThemeStore();
 const isDark = computed({
@@ -233,14 +191,26 @@ const isDark = computed({
   set: (value) => themeStore.toggleDarkMode(),
 });
 
-// Hamburger Menu Logic
-const isMenuOpen = ref(false);
-const toggleMenu = () => {
-  isMenuOpen.value = !isMenuOpen.value;
+const showSlideMenu = ref(false);
+const toggleSlideMenu = () => {
+  showSlideMenu.value = !showSlideMenu.value;
 };
+
 
 definePageMeta({
   middleware: "guest",
   layout: "base",
 });
 </script>
+
+<style>
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.1s ease-out;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translate(100%);
+}
+</style>
