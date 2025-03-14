@@ -1,7 +1,7 @@
 <template>
   <div>
     <img
-      class="min-w-12 rounded-full size-12 object-cover hover:cursor-pointer border transition-all hover:border-gray-400"
+      class="min-w-11 min-h-10 rounded-full size-11 object-cover hover:cursor-pointer border transition-all hover:border-gray-400"
       :src="image"
       alt="Profile"
     />

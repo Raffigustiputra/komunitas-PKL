@@ -1,67 +1,80 @@
 <template>
   <div class="flex gap-3 bg-white p-5 rounded-3xl dark:bg-[#000000]" v-for="(post, index) in postList" :key="post.id"
     v-if="useAuth().userToken.value">
-    <div class="space-y-2">
-      <div @click="goToCommunityPage(post.community.id)" class="cursor-pointer">
-        <BaseCommunityIcon :image="[post.community_image]" />
-      </div>
-      <div @click="goToUserProfile(post.user.id)" class="cursor-pointer">
-        <BaseImageIcon :image="[post.user_profile]" />
-      </div>
-
-    </div>
 
     <div class="flex flex-col w-full dark:text-white">
       <div class="flex justify-between">
         <div class="flex flex-col items-start">
           <div class="flex gap-3">
-            <a @click="goToCommunityPage(post.community.id)"
-              class="font-bold cursor-pointer text-black no-underline dark:text-white">
-              {{ post.community.name }}
-            </a>
-            <BaseButtonSecondaryButton buttonName="Gabung" v-if="!isUserJoined(post.community.id)"
-              @click="openModal(post.community.id)" />
+            <div @click="goToCommunityPage(post.community.id)" class="cursor-pointer">
+              <BaseCommunityIcon :image="[post.community_image]" />
+            </div>
+            <div class="flex flex-col">
+              <div class="flex flex-wrap items-center">
+                <a @click="goToCommunityPage(post.community.id)"
+                  class="font-bold cursor-pointer text-black no-underline dark:text-white me-3">
+                  {{ post.community.name }}
+                </a>
+                <BaseButtonSecondaryButton buttonName="Gabung" v-if="!isUserJoined(post.community.id)"
+                  @click="openModal(post.community.id)" />
+              </div>
+              <p class="text-sm">Dikirim oleh <span class="font-bold"> {{ post.user.username }}</span></p>
+            </div>
           </div>
-          <p class="text-sm">Dikirim oleh <span class="font-bold"> {{ post.user.username }}</span></p>
         </div>
         <div>
           <p>{{ dayjs(post.created_at).fromNow() }}</p>
         </div>
       </div>
-      <p class="mt-2">
-        {{ post.description }}
-      </p>
-      <div v-if="post.image" class="flex mb-3">
-        <BaseImagePost :images="[post.image]" />
-      </div>
-      <div v-if="post.attachment">
-        <BaseFilePreview :documents="post.attachment" />
-      </div>
+      <hr class="my-2 mt-3 ">
 
-      <div class="flex items-end justify-between mt-5">
-        <BaseButtonIconButton :icon="Like" />
-        <BaseButtonIconButton :icon="Bookmark" />
-        <BaseButtonIconButton :icon="Comment" />
-        <BaseButtonIconButton :icon="Send" />
-
-        <BaseDropdownIconDropdown :icon="Option" :dropdownItems="getDropdownItems(post)" />
+      <div class="flex gap-2">
+        <div @click="goToUserProfile(post.user.id)" class="cursor-pointer me-3">
+          <BaseImageIcon :image="[post.user_profile]" class="w-8 h-8" />
+        </div>
+        <div>
+          <div v-if="post.image" class="flex mb-3">
+            <BaseImagePost :images="[post.image]" />
+          </div>
+          <div v-if="post.attachment">
+            <BaseFilePreview :documents="post.attachment" />
+          </div>
+          <p class="mt-2 mb-5">
+            {{ post.description }}
+          </p>
+        </div>
+      </div>
+      <hr>
+      <div class="flex justify-between mt-5 mx-2">
+        <div class="flex gap-4 sm:gap-12 flex-wrap">
+          <div class="flex items-center gap-1">
+            <BaseButtonFeedButton :icon="Like" />
+            <p>12</p>
+          </div>
+          <BaseButtonFeedButton :icon="Bookmark" />
+          <BaseButtonFeedButton :icon="Comment" />
+          <BaseButtonFeedButton :icon="Send" />
+        </div>
+        <div>
+          <BaseDropdownIconDropdown :icon="Option" :dropdownItems="getDropdownItems(post)" />
+        </div>
       </div>
     </div>
   </div>
 
   <div v-if="!postList || postList.length === 0" class="flex flex-col items-center text-gray-500">
     Tidak ada Postingan untuk ditampilkan.
+    <BaseLoading :isLoading="loading" />
   </div>
 
-  <BaseLoading :isLoading="loading" />
-
   <BaseAlertPrimaryAlert v-if="alertVisible" :message="alertMessage" :type="alertColor" />
-  <ModalAlertModal buttonName="Tetap Gabung" header="Yakin ingin bergabung?" paragraph="Isinya orang jamet  "
+  <ModalAlertModal buttonName="Tetap Gabung" header="Yakin ingin bergabung?" paragraph="Isinya orang jamet"
     ref="modalRef" :clicking="JoinCommunity" />
   <ModalAlertModal buttonName="Hapus" header="Konfirmasi Hapus"
     paragraph="Apakah Anda yakin ingin menghapus postingan ini?" ref="modalDeleteRef" :clicking="confirmDeletePost" />
-
 </template>
+
+
 
 <script setup>
 import { ref, computed, onMounted } from "vue";

@@ -4,7 +4,7 @@
       <AppSidebar />
     </aside>
 
-    <main class="w-full max-w-2xl min-h-screen px-3 bg-[#F4F7FD] dark:bg-[#1d1d25] relative">
+    <main class="w-full max-w-2xl min-h-screen px-3 bg-[#F4F7FD] dark:bg-[#1d1d25]">
       <slot />
     </main>
 
