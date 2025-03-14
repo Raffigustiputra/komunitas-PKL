@@ -64,6 +64,7 @@ import Profile from "~/components/icons/Profile.vue";
 import Notification from "~/components/icons/Notification.vue";
 import Setting from "~/components/icons/Setting.vue";
 import Logout from "~/components/icons/Logout.vue";
+import Bookmark from "~/components/icons/Bookmark.vue";
 import Add from "~/components/icons/Add.vue";
 
 import BaseLoading from "@/components/base/Loading.vue";
