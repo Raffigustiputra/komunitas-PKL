@@ -39,16 +39,6 @@
   </nav>
   <div v-if="showSlideMenu" class="fixed inset-0 bg-black/50 z-20" @click="toggleSlideMenu"></div>
 
-<<<<<<< HEAD
-  <transition name="slide">
-  <div v-if="showSlideMenu" class="fixed inset-0 bg-black/50 z-20" @click="toggleSlideMenu">
-    <div class="bg-white dark:bg-gray-800 w-64 h-full p-5 shadow-lg relative right-0" @click.stop>
-      <button @click="toggleSlideMenu" class="absolute top-5 right-5 text-xl">✖</button>
-      <div class="mt-10 flex flex-col gap-4">
-        <BaseButtonPrimaryButton :onClick="() => navigateTo('/login')" buttonName="Sign In" class="px-4 py-2" />
-        <BaseButtonTertiaryButton :onClick="() => navigateTo('/register')" buttonName="Sign Up" class="px-4 py-2" />
-          
-=======
     <transition name="slide">
     <div v-if="showSlideMenu" class="fixed inset-0 z-20" @click="toggleSlideMenu">
       <div class="flex flex-col">
@@ -59,10 +49,8 @@
             <BaseButtonTertiaryButton :onClick="() => navigateTo('/register')" buttonName="Sign Up" class="px-4 py-2" />
           </div>
         </div>
->>>>>>> 4ba9d26c87e895d318fc601c46fc75730fef94e4
       </div>
     </div>
-  </div>
 </transition>
 
   <!-- Hero Section -->
@@ -94,9 +82,9 @@
   <!-- Features Section -->
   <!-- Features Section -->
 <!-- Features Section -->
-<div class="flex flex-col md:flex-row justify-center items-start gap-8 mt-20 md:mt-28 p-4 md:p-40">
+<div class="flex flex-col md:flex-row justify-center items-start gap-8 mt-20 md:mt-28 p-4 md:p-40 md:text-left text-center">
   <div
-    class="bg-gray-100 mt-14 rounded-2xl shadow p-6 md:p-10 py-16 md:py-32 w-full hover:shadow-md transition dark:bg-[#1A1625]"
+    class="bg-gray-100  md:mt-14 rounded-2xl shadow p-6 md:p-10 py-16 md:py-32 w-full hover:shadow-md transition dark:bg-[#1A1625]"
   >
     <h2 class="text-2xl md:text-3xl font-bold text-[#3D3BF3] mb-4">Make Profit</h2>
     <p class="text-gray-500 dark:text-gray-400">
@@ -118,7 +106,7 @@
   </div>
 
   <div
-    class="bg-gray-100 mt-14 rounded-2xl shadow p-6 md:p-10 py-16 md:py-32 w-full hover:shadow-md transition dark:bg-[#1A1625]"
+    class="bg-gray-100 lg:mt-14 md:mt-14 rounded-2xl shadow p-6 md:p-10 py-16 md:py-32 w-full hover:shadow-md transition dark:bg-[#1A1625]"
   >
     <h2 class="text-2xl md:text-3xl font-bold text-[#3D3BF3] mb-4">Make Friends</h2>
     <p class="text-gray-500 dark:text-gray-400">
@@ -161,8 +149,8 @@
       </button>
     </div>
 
-    <div class="flex flex-col md:flex-row justify-between items-start mt-12 px-4 md:px-16 flex-wrap">
-      <div class="w-full md:w-auto mb-6 md:mb-0">
+    <div class="flex flex-col md:flex-row justify-center md:justify-between items-center mt-12 px-4 md:px-16 flex-wrap gap-6">
+      <div class="w-full md:w-auto mb-6 md:mb-0 flex flex-col items-center md:items-start">
         <h3 class="text-lg font-bold mb-4">Location</h3>
         <ul class="space-y-2 text-gray-400">
           <li>Location</li>
@@ -171,7 +159,7 @@
         </ul>
       </div>
 
-      <div class="w-full md:w-auto mb-6 md:mb-0">
+      <div class="w-full md:w-auto mb-6 md:mb-0 flex flex-col items-center md:items-start">
         <h3 class="text-lg font-bold mb-4">Social Media</h3>
         <ul class="space-y-2 text-gray-400">
           <li>Social Media</li>
@@ -180,7 +168,7 @@
         </ul>
       </div>
 
-      <div class="w-full md:w-auto mb-6 md:mb-0">
+      <div class="w-full md:w-auto mb-6 md:mb-0  flex flex-col items-center md:items-start">
         <h3 class="text-lg font-bold mb-4">Contact Us</h3>
         <ul class="space-y-2 text-gray-400">
           <li>Contact Us</li>
@@ -234,10 +222,6 @@ definePageMeta({
 
 .slide-enter-from,
 .slide-leave-to {
-<<<<<<< HEAD
-  transform: translateX(100%);
-=======
   transform: translateY(-100%);
->>>>>>> 4ba9d26c87e895d318fc601c46fc75730fef94e4
 }
 </style>
