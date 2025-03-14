@@ -47,7 +47,7 @@
       <button @click="navigateTo('/search')" class="flex flex-col items-center">
         <Search class="w-8 h-8 text-gray-600 dark:text-white" />
       </button>
-      <button @click="navigateTo('/bookmark')" class="flex flex-col items-center">
+      <button @click="navigateTo(`/user-profile/${account.id}` )" class="flex flex-col items-center">
         <Profile class="w-8 h-8 text-gray-600 dark:text-white" />
       </button>
     </nav>
@@ -60,6 +60,7 @@
 import Homepage from "~/components/icons/Homepage.vue";
 import Community from "~/components/icons/Community.vue";
 import Search from "~/components/icons/Search.vue";
+import Bookmark from "../icons/Bookmark.vue";
 import Profile from "~/components/icons/Profile.vue";
 import Notification from "~/components/icons/Notification.vue";
 import Setting from "~/components/icons/Setting.vue";
