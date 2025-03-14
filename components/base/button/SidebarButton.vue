@@ -6,7 +6,7 @@
       { 
         'text-[#3D3BF3] font-bold': isActive, 
         'dark:bg-slate-800': isActive,
-        'dark:text-white': true,
+       
         'dark:hover:text-white': isActive 
       }
     ]"
@@ -14,7 +14,7 @@
     @click="handleClick"
   >
     <component :is="icon" class="w-6 h-6" />
-    <span class="hidden sm:block">{{ buttonName }}</span>
+    <span>{{ buttonName }}</span>
   </button>
 </template>
 

@@ -17,7 +17,7 @@
             <div class="flex mb-4 gap-4">
                 <BaseImageIcon
                     :image="account.profile_photo ? `http://192.168.19.251:8000${account.profile_photo}` : '/assets/default_user_profile_photo.jpg'" />
-                <BaseInputTextArea :rows="3" placeholder="Ada Keseruan apa hari ini ??" v-model="description" />
+                <BaseInputTextArea :rows="3" placeholder="Ada Keseruan apa hari ini ??" v-model="description" class="dark:text-white"/>
             </div>
 
             <div v-if="imagePreview || attachment" class="mb-4">
